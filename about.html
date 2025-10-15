@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inspiro — About</title>
+<link rel="icon" href="inspiro.png" type="image/png">
+<style>
+/* Reset & Base */
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+body { background: linear-gradient(135deg, #6a11cb, #2575fc); color:#fff; scroll-behavior: smooth; }
+
+/* Header / Navbar */
+.navbar {
+  width:100%; background: rgba(0,0,0,0.3);
+  display:flex; justify-content: space-between; align-items:center;
+  padding:15px 20px; position: sticky; top:0; z-index:100; backdrop-filter: blur(5px);
+  flex-wrap: wrap;
+}
+.navbar h1 {
+  display:flex; align-items:center; gap:10px; font-size:1.8rem;
+}
+.navbar h1 img { height:35px; width:35px; border-radius:5px; }
+.navbar .links { display:flex; flex-wrap:wrap; margin-top:5px; }
+.navbar .links a { color:#fff; margin-left:15px; text-decoration:none; font-size:1rem; transition:0.3s; }
+.navbar .links a:hover { color:#ffd700; }
+
+/* Sections */
+.section { padding: 60px 20px; max-width:900px; margin:0 auto; }
+.about-text { background: rgba(0,0,0,0.2); padding:30px; border-radius:20px; line-height:1.6; font-size:1.1rem; }
+
+/* Footer */
+.footer { text-align:center; margin-top:50px; padding:20px; opacity:0.8; font-size:0.9rem; }
+
+/* Mobile Responsive */
+@media(max-width:600px){
+  .navbar h1{ font-size:1.5rem; justify-content:center; width:100%; margin-bottom:5px; }
+  .navbar .links { justify-content:center; width:100%; }
+  .navbar .links a{ margin-left:10px; font-size:0.9rem; margin-bottom:5px; }
+  .section{ padding:50px 15px; }
+  .about-text{ padding:20px; font-size:1rem; }
+}
+</style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="navbar">
+    <h1><img src="inspiro.png" alt="Inspiro Logo"> Inspiro</h1>
+    <div class="links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+    </div>
+  </div>
+
+  <!-- About Inspiro Section -->
+  <div class="section">
+    <h2 style="text-align:center; margin-bottom:30px;">About Inspiro</h2>
+    <div class="about-text">
+      Inspiro is a modern quote generator designed to inspire and motivate you every day.  
+      You can scroll through 10 carefully selected quotes, and they update automatically or manually.  
+      Inspiro helps you stay positive, focused, and motivated throughout your day.
+    </div>
+  </div>
+
+  <!-- About Solvoro Section -->
+  <div class="section">
+    <h2 style="text-align:center; margin-bottom:30px;">About Solvoro</h2>
+    <div class="about-text">
+      Inspiro is proudly powered by <strong>Solvoro</strong>, a creative platform providing website design, branding, and digital solutions.  
+      Solvoro helps bring ideas to life with clean, modern, and user-friendly designs.
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    © 2025 Inspiro — Powered by Solvoro
+  </div>
+
+</body>
+</html>
