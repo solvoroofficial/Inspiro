@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inspiro — Home</title>
+<link rel="icon" href="inspiro.png" type="image/png">
+<style>
+/* Reset & Base */
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+body { background: linear-gradient(135deg, #6a11cb, #2575fc); color:#fff; scroll-behavior: smooth;}
+
+/* Header / Navbar */
+.navbar {
+  width:100%; background: rgba(0,0,0,0.3);
+  display:flex; justify-content: space-between; align-items:center;
+  padding:15px 20px; position: sticky; top:0; z-index:100; backdrop-filter: blur(5px);
+  flex-wrap: wrap;
+}
+.navbar h1 {
+  display:flex; align-items:center; gap:10px; font-size:1.8rem;
+}
+.navbar h1 img { height:35px; width:35px; border-radius:5px; }
+.navbar .links { display:flex; flex-wrap:wrap; margin-top:5px; }
+.navbar .links a { color:#fff; margin-left:15px; text-decoration:none; font-size:1rem; transition:0.3s; }
+.navbar .links a:hover { color:#ffd700; }
+
+/* Sections */
+.section { padding: 60px 20px; max-width:900px; margin:0 auto; }
+.quote-card {
+  background: rgba(255,255,255,0.1); padding:35px 25px; border-radius:20px;
+  text-align:center; font-size:1.4rem; font-style:italic; margin-bottom:25px;
+  box-shadow:0 8px 20px rgba(0,0,0,0.3); backdrop-filter: blur(5px);
+  transition: opacity 1s ease-in-out; min-height:120px; display:flex;
+  align-items:center; justify-content:center;
+}
+.button { padding:12px 22px; font-size:1rem; border:none; border-radius:50px;
+  cursor:pointer; background:#fff; color:#2575fc; box-shadow:0 4px 10px rgba(0,0,0,0.2);
+  transition:0.3s; }
+.button:hover { transform: scale(1.05); background:#f0f0f0; }
+
+/* Info Section */
+.about-text { background: rgba(0,0,0,0.2); padding:25px; border-radius:20px; line-height:1.6; font-size:1.1rem; }
+
+/* Footer */
+.footer { text-align:center; margin-top:50px; padding:20px; opacity:0.8; font-size:0.9rem; }
+
+/* Mobile Responsive */
+@media(max-width:600px){
+  .navbar h1{ font-size:1.5rem; justify-content:center; width:100%; margin-bottom:5px; }
+  .navbar .links { justify-content:center; width:100%; }
+  .navbar .links a{ margin-left:10px; font-size:0.9rem; margin-bottom:5px; }
+  .quote-card{ font-size:1.2rem; padding:25px 20px; }
+  .section{ padding:50px 15px; }
+  .about-text{ padding:20px; font-size:1rem; }
+  .button{ padding:10px 20px; font-size:0.95rem; }
+}
+</style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="navbar">
+    <h1><img src="inspiro.png" alt="Inspiro Logo"> Inspiro</h1>
+    <div class="links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+    </div>
+  </div>
+
+  <!-- Quote Section -->
+  <div class="section" id="quotes">
+    <h2 style="text-align:center; margin-bottom:30px;">Your Daily Inspiration</h2>
+    <div class="quote-card" id="quoteCard">Click the button to get inspired!</div>
+    <div style="text-align:center;">
+      <button class="button" onclick="nextQuote()">Next Quote</button>
+    </div>
+  </div>
+
+  <!-- Info Section -->
+  <div class="section" id="info">
+    <h2 style="text-align:center; margin-bottom:20px;">Why Inspiro?</h2>
+    <div class="about-text">
+      Inspiro is designed to give you a daily dose of motivation and wisdom. Scroll through 10 hand-picked quotes and keep your mind inspired.
+      <br><br>
+      Enjoy the smooth scrollable interface and auto-updating quotes. Perfect for quick inspiration breaks or starting your day positively.
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    © 2025 Inspiro — Powered by Solvoro
+  </div>
+
+<script>
+const quotes = [
+  "The best way to predict the future is to invent it. – Alan Kay",
+  "Life is 10% what happens to us and 90% how we react to it. – Charles R. Swindoll",
+  "Do not watch the clock. Do what it does. Keep going. – Sam Levenson",
+  "Success is not in what you have, but who you are. – Bo Bennett",
+  "Your limitation—it’s only your imagination.",
+  "Push yourself, because no one else is going to do it for you.",
+  "Great things never come from comfort zones.",
+  "Dream it. Wish it. Do it.",
+  "Little things make big days.",
+  "Don’t stop when you’re tired. Stop when you’re done."
+];
+
+let index = 0;
+function nextQuote() {
+  const quoteCard = document.getElementById('quoteCard');
+  quoteCard.style.opacity = 0;
+  setTimeout(() => {
+    quoteCard.innerText = quotes[index];
+    quoteCard.style.opacity = 1;
+    index = (index + 1) % quotes.length;
+  }, 500);
+}
+
+// Automatic quote update every 7 seconds
+setInterval(nextQuote, 7000);
+</script>
+
+</body>
+</html>
