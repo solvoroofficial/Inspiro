@@ -2,742 +2,582 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Inspiro — Pocket Inspiration Hub</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="inspiro.png" type="image/png">
-
   <style>
+    /* -------------------------
+       Mobile-first base styles
+       ------------------------- */
     :root{
-      --bg-1: #07060a;
-      --bg-2: #0d0d1a;
+      --bg-1:#07060a; --bg-2:#0d0d1a;
       --glass: rgba(255,255,255,0.04);
-      --accent-1: #00f0ff;
-      --accent-2: #9b5cff;
-      --muted: rgba(255,255,255,0.72);
-      --card-glow: 0 8px 30px rgba(155,92,255,0.08);
-      --radius: 16px;
-      --trans: 300ms;
-      --text-color: #ffffff;
-      --card-bg: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      --card-border: rgba(255,255,255,0.03);
+      --accent-1:#00f0ff; --accent-2:#9b5cff;
+      --muted: rgba(255,255,255,0.88);
+      --card-glow: 0 10px 36px rgba(155,92,255,0.08);
+      --radius:14px; --trans:260ms; --text-color:#fff;
     }
-
-    /* Light-ish / energetic mode (used by the toggle) */
     body.energetic {
-      --bg-1: #fafafa;
-      --bg-2: #f2f2f8;
-      --glass: rgba(0, 0, 0, 0.05);
-      --accent-1: #0066ff;
-      --accent-2: #9b5cff;
-      --muted: rgba(10, 10, 10, 0.85);
-      --card-glow: 0 8px 30px rgba(0,102,255,0.08);
-      --text-color: #111111;
-      --card-bg: #ffffff;
-      --card-border: rgba(0,0,0,0.08);
+      --bg-1:#fafafa; --bg-2:#f2f5fb;
+      --glass: rgba(0,0,0,0.05);
+      --accent-1:#0066ff; --accent-2:#ff6ec7;
+      --muted: rgba(20,20,20,0.88);
+      --card-glow: 0 12px 36px rgba(0,102,255,0.08);
+      --text-color:#111;
     }
 
-    /* base */
-    *{box-sizing:border-box; margin:0; padding:0; font-family:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,Arial;}
-    html,body{height:100%;}
+    *{box-sizing:border-box;margin:0;padding:0;font-family:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,Arial;}
+    html,body{height:100%;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
     body{
-      background: radial-gradient(circle at 10% 10%, rgba(155,92,255,0.06), transparent 15%),
-                  radial-gradient(circle at 90% 80%, rgba(0,240,255,0.04), transparent 15%),
-                  linear-gradient(180deg,var(--bg-1), var(--bg-2));
+      background:
+        radial-gradient(circle at 10% 10%, rgba(155,92,255,0.06), transparent 15%),
+        radial-gradient(circle at 90% 80%, rgba(0,240,255,0.04), transparent 15%),
+        linear-gradient(180deg,var(--bg-1),var(--bg-2));
       color:var(--muted);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      overflow-x:hidden;
       transition: background var(--trans), color var(--trans);
-      padding-bottom:40px;
+      padding-bottom:48px;
+      -webkit-text-size-adjust:100%;
     }
 
-    /* Header (glassy) */
-    .navbar{
-      position:sticky; top:12px; margin:12px auto 0; z-index:40;
-      width:92%; max-width:1200px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
-      border-radius:14px; display:flex; align-items:center; justify-content:space-between;
-      padding:12px 18px; gap:12px; backdrop-filter: blur(8px);
-      box-shadow: 0 6px 30px rgba(0,0,0,0.5);
-      border: 1px solid var(--card-border);
+    /* -------------------------
+       Header (mobile-first)
+       ------------------------- */
+    .site-wrap{ width:100%; max-width:1100px; margin:0 auto; padding:10px 14px; }
+    header.topbar{
+      width:100%; display:flex; align-items:center; justify-content:space-between;
+      gap:10px; margin-top:8px;
     }
-    .brand{ display:flex; gap:12px; align-items:center; }
-    .brand img{width:44px; height:44px; border-radius:8px; object-fit:cover; box-shadow:0 6px 18px rgba(155,92,255,0.12);}
-    .brand h1{font-size:1.1rem; letter-spacing:0.6px; color: var(--text-color); margin:0;}
-    .nav-links{display:flex; gap:14px; align-items:center;}
-    .nav-links a{
-      color:var(--text-color); text-decoration:none; font-weight:600; font-size:0.95rem; position:relative;
-      padding:6px 6px; border-radius:8px;
-    }
-    .nav-links a::after{
-      content:""; position:absolute; left:10%; right:10%; bottom:-6px; height:2px;
-      background: linear-gradient(90deg,var(--accent-1),var(--accent-2));
-      transform:scaleX(0); transform-origin:left center; transition:transform var(--trans);
-      opacity:0.95;
-    }
-    .nav-links a:hover{ color:#fff; }
-    .nav-links a:hover::after{ transform:scaleX(1); }
+    .brand { display:flex; align-items:center; gap:10px; }
+    .brand img{ width:44px; height:44px; border-radius:9px; object-fit:cover; box-shadow: 0 6px 18px rgba(155,92,255,0.10); }
+    .brand h1{ font-size:1.05rem; color:var(--text-color); line-height:1; font-weight:700;}
+    .brand p { font-size:0.75rem; color:var(--muted); margin-top:2px; }
 
-    /* Mode toggle */
-    .controls{display:flex; gap:12px; align-items:center;}
-    .toggle {
-      display:inline-flex; align-items:center; gap:8px; background:var(--glass);
-      padding:6px 10px; border-radius:999px; border:1px solid var(--card-border);
-      cursor:pointer; user-select:none;
-    }
-    .toggle .dot{
-      width:16px; height:16px; border-radius:50%; background:var(--accent-1); box-shadow:0 6px 18px rgba(0,240,255,0.07);
-      transition: transform 260ms;
-    }
-    .toggle small{ font-size:0.8rem; color:var(--text-color); letter-spacing:0.2px; }
+    /* hamburger + nav */
+    .menu-toggle{ width:44px; height:44px; display:flex; align-items:center; justify-content:center; border-radius:10px; background:var(--glass); border:1px solid rgba(255,255,255,0.04); cursor:pointer; }
+    .menu-toggle svg { width:20px; height:20px; color:var(--text-color); }
+    nav.mobile-nav{ display:none; width:100%; margin-top:10px; }
+    nav.mobile-nav.open{ display:block; }
+    nav.mobile-nav a{ display:block; padding:12px 14px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01)); border-radius:10px; margin-bottom:8px; color:var(--text-color); text-decoration:none; font-weight:600; }
 
-    /* Hero */
+    /* hero */
     .hero {
-      width:92%; max-width:1200px; margin:28px auto 18px; display:flex; gap:18px; align-items:center;
-      padding:30px; border-radius:18px; position:relative; overflow:visible;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      box-shadow: var(--card-glow);
+      margin:14px 0; padding:18px; border-radius:16px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.03); box-shadow: var(--card-glow);
     }
-    .hero-left{flex:1; min-width:220px;}
-    .hero-left h2{font-size:1.9rem; color:var(--text-color); letter-spacing:0.2px; margin-bottom:6px;}
-    .hero-left p{opacity:0.9; margin-bottom:12px; color:var(--text-color);}
-    .hero-cta{display:flex; gap:10px; align-items:center; margin-top:6px;}
-    .btn-cta{background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#071226; border:none; padding:10px 16px; border-radius:999px; font-weight:700; cursor:pointer; box-shadow:0 10px 30px rgba(155,92,255,0.12);}
+    .hero-top { display:flex; gap:12px; align-items:center; justify-content:space-between; }
+    .hero-title { font-size:1.4rem; color:var(--text-color); font-weight:700; }
+    .hero-sub { font-size:0.95rem; color:var(--muted); margin-top:8px; }
+    .hero-cta { margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; }
+    .btn-cta{ padding:12px 14px; border-radius:12px; border:none; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#071226; font-weight:700; cursor:pointer; flex:1; text-align:center; }
 
-    /* Animated display mock screen on right */
-    .hero-right{width:360px; max-width:42%; display:flex; justify-content:center; align-items:center; position:relative;}
-    .screen {
-      width:320px; height:200px; border-radius:18px; overflow:hidden;
-      background: linear-gradient(180deg, rgba(0,0,0,0.12), rgba(255,255,255,0.02));
-      border: 1px solid rgba(255,255,255,0.04);
-      display:flex; align-items:center; justify-content:center; text-align:center; padding:18px;
-      box-shadow: 0 18px 48px rgba(0,0,0,0.12), 0 0 40px rgba(0,240,255,0.03) inset;
-      position:relative;
+    /* small hero screen display to impress users on mobile */
+    .mini-screen {
+      margin-top:14px; border-radius:12px; overflow:hidden; height:140px; display:flex; align-items:center; justify-content:center;
+      background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.005)); border:1px solid rgba(255,255,255,0.03);
+      padding:12px;
     }
-    .screen .screen-inner{
-      width:100%; height:100%; border-radius:12px; background: linear-gradient(120deg, rgba(0,0,0,0.06), rgba(255,255,255,0.01));
-      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:12px;
-      position:relative; overflow:hidden;
-    }
-    .screen .glow-ring{
-      position:absolute; width:220px; height:220px; left:50%; top:50%; transform:translate(-50%,-50%) rotate(0deg);
-      border-radius:50%; background: conic-gradient(from 120deg, rgba(0,240,255,0.12), rgba(155,92,255,0.12));
-      filter: blur(28px); opacity:0.6; mix-blend-mode:screen; animation:spin 14s linear infinite;
-    }
-    .screen h3{font-size:1.06rem; color:var(--text-color); letter-spacing:0.2px; text-shadow: 0 0 8px rgba(0,240,255,0.04); }
-    .screen p{font-size:0.95rem; opacity:0.95; font-style:italic; color:var(--text-color);}
+    .mini-screen h3 { font-size:1rem; color:var(--text-color); text-align:center; margin-bottom:6px; }
+    .mini-screen p { font-size:0.85rem; color:var(--muted); text-align:center; }
 
-    @keyframes spin { from{transform:translate(-50%,-50%) rotate(0deg)} to{transform:translate(-50%,-50%) rotate(360deg)} }
+    /* particles hidden on very small devices for clarity */
+    .particle { display:none; }
 
-    /* Particles (decorative) */
-    .particle {
-      position:absolute; width:10px; height:10px; border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,0.2));
-      opacity:0.12; pointer-events:none; filter:blur(2px);
-      animation: floaty 8s ease-in-out infinite;
-    }
-    @keyframes floaty {
-      0%{transform:translateY(0) translateX(0); opacity:0.12;}
-      50%{transform:translateY(-40px) translateX(20px); opacity:0.18;}
-      100%{transform:translateY(0) translateX(0); opacity:0.12;}
-    }
-
-    /* Generators grid */
-    .grid {
-      width:92%; max-width:1200px; margin:22px auto 8px;
-      display:grid; gap:18px; grid-template-columns: repeat(3, 1fr);
-      align-items:start;
-    }
+    /* generators: stacked single-column mobile-first */
+    .grid { display:grid; gap:14px; margin-top:12px; }
     .card {
-      background: var(--card-bg);
-      border-radius:var(--radius); padding:16px; min-height:140px;
-      border:1px solid var(--card-border); box-shadow: var(--card-glow);
-      display:flex; flex-direction:column; gap:12px;
+      border-radius:14px; padding:14px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.03); box-shadow: var(--card-glow);
+      display:flex; flex-direction:column; gap:10px;
     }
-    .card h4{margin:0; color:var(--text-color);}
+    .card h4 { font-size:1rem; color:var(--text-color); margin-bottom:4px; }
     .result {
-      flex:1; display:flex; align-items:center; justify-content:center; text-align:center;
-      padding:12px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
-      font-style:italic; font-size:1rem; line-height:1.3; color:var(--text-color);
-      box-shadow: inset 0 2px 8px rgba(0,0,0,0.05);
-      transition: transform 340ms, opacity 340ms;
-      position:relative;
+      min-height:92px; display:flex; align-items:center; justify-content:center; text-align:center;
+      padding:12px; border-radius:10px; font-style:italic; font-size:1rem; color:var(--text-color);
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
     }
-    .result.fade { transform: translateY(-8px); opacity:0; }
-    .card .controls { display:flex; gap:8px; align-items:center; justify-content:center; }
+    .controls { display:flex; gap:8px; margin-top:6px; flex-wrap:wrap; }
+    .btn { flex:1; padding:12px; border-radius:12px; border:none; background:var(--glass); color:var(--muted); font-weight:700; cursor:pointer; min-width:96px; text-align:center; }
+    .btn.primary { background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#071226; box-shadow:0 8px 20px rgba(0,0,0,0.08); }
 
-    .btn { padding:8px 12px; border-radius:10px; border:none; cursor:pointer; font-weight:600; background:var(--glass); color:var(--muted); }
-    .btn.primary { background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#071226; box-shadow:0 8px 22px rgba(155,92,255,0.08); }
-    .btn.ghost { background:transparent; border:1px solid var(--card-border); color:var(--muted); }
+    /* favorites small overlay */
+    #favOverlay { position:fixed; inset:0; display:none; align-items:flex-end; justify-content:center; background:linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6)); padding:12px; z-index:60; }
+    #favOverlay .fav-panel { width:100%; max-width:720px; background:var(--card-bg, rgba(255,255,255,0.02)); border-radius:12px 12px 0 0; padding:14px; border:1px solid rgba(255,255,255,0.03); }
 
-    .small{font-size:0.82rem; color:var(--muted); text-align:center; margin-top:6px;}
+    /* about & contact - mobile optimized */
+    .about, .contact { margin-top:12px; padding:14px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.03); box-shadow: var(--card-glow); }
+    .about h3, .contact h3 { font-size:1.05rem; color:var(--text-color); margin-bottom:8px; }
+    .about p, .contact p { color:var(--muted); line-height:1.45; font-size:0.95rem; }
 
-    /* About & Contact specific */
-    .about {
-      width:92%; max-width:1200px; margin:22px auto 8px; padding:18px; border-radius:14px; background: var(--card-bg); border:1px solid var(--card-border); box-shadow: var(--card-glow);
-    }
-    .about h3{ color:var(--text-color); margin-bottom:8px; }
-    .about p{ color:var(--text-color); opacity:0.95; line-height:1.45; }
-
-    .contact {
-      width:92%; max-width:900px; margin:22px auto 24px; padding:18px; border-radius:14px; background: var(--card-bg); border:1px solid var(--card-border); box-shadow: var(--card-glow);
-    }
-    .form-row{ display:flex; gap:12px; margin-bottom:12px; flex-wrap:wrap; }
-    .form-input, .form-textarea {
-      width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--card-border);
-      background: transparent; color: var(--text-color); outline:none;
-    }
-    body.energetic .form-input, body.energetic .form-textarea { background: #fff; color:var(--text-color); }
-
+    .form-row { display:flex; gap:8px; flex-direction:column; margin-top:8px; }
+    .form-input, .form-textarea { width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:var(--text-color); font-size:0.95rem; }
     .form-textarea { min-height:120px; resize:vertical; }
-    .form-submit { padding:10px 16px; border-radius:10px; border:none; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#071226; font-weight:700; cursor:pointer; }
 
-    .form-message { margin-top:10px; color:var(--text-color); opacity:0.95; }
+    .form-submit { margin-top:10px; padding:12px; border-radius:10px; border:none; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#071226; font-weight:700; width:100%; }
 
-    /* footer */
-    .footer {
-      width:92%; max-width:1200px; margin:28px auto; padding:14px 18px; border-radius:12px;
-      display:flex; justify-content:space-between; align-items:center; gap:12px;
-      background: var(--card-bg);
-      border:1px solid var(--card-border); color:var(--text-color);
+    .form-message { margin-top:8px; color:var(--text-color); font-size:0.92rem; }
+
+    /* footer - compact */
+    footer.footer { margin-top:18px; padding:12px; display:flex; flex-direction:column; gap:8px; align-items:center; color:var(--muted); }
+    footer .brand { display:flex; gap:8px; align-items:center; }
+    footer .brand img{ width:28px;height:28px;border-radius:8px; }
+
+    /* -------------------------
+       Larger screens (tablet & up)
+       ------------------------- */
+    @media(min-width:720px){
+      .site-wrap{ padding:18px; }
+      header.topbar{ margin-top:12px; }
+      nav.mobile-nav{ display:block; width:auto; background:transparent; margin-top:0; }
+      nav.mobile-nav a{ display:inline-block; padding:6px 8px; background:transparent; margin:0 6px; border-radius:8px; }
+      .menu-toggle{ display:none; }
+
+      /* hero becomes two-column */
+      .hero{ display:flex; align-items:center; gap:18px; }
+      .mini-screen{ width:42%; height:180px; margin-top:0; }
+      .hero-left{ width:58%; }
+      .particle { display:block; position:absolute; width:10px; height:10px; border-radius:50%; background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,0.2)); opacity:0.12; filter:blur(2px); }
+      .grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:18px; }
+      .btn { min-width:unset; }
+      footer.footer{ flex-direction:row; justify-content:space-between; padding:14px 18px; }
+      #favOverlay { align-items:center; }
+      #favOverlay .fav-panel { border-radius:12px; }
     }
-    .footer .brand{display:flex; gap:8px; align-items:center;}
-    .footer .links{display:flex; gap:12px; align-items:center;}
 
-    /* responsive */
-    @media (max-width:1024px){
-      .grid{ grid-template-columns: repeat(2, 1fr); }
-      .hero-right{ display:none; }
-    }
-    @media (max-width:720px){
-      .grid{ grid-template-columns: 1fr; }
-      .navbar{ padding:12px; width:95%;}
-      .hero{ flex-direction:column; align-items:flex-start; gap:14px; padding:16px; width:95%;}
-      .hero-left h2{font-size:1.4rem;}
-      .brand img{width:36px; height:36px;}
-      .form-row { flex-direction:column; }
+    @media(min-width:1024px){
+      .site-wrap{ max-width:1100px; margin:0 auto; }
+      .hero-title{ font-size:1.6rem; }
+      .mini-screen h3{ font-size:1.12rem; }
     }
 
-    /* tiny */
-    .muted{ color: rgba(255,255,255,0.6); font-size:0.9rem; }
-    .fav { color: var(--accent-2); font-weight:700; }
+    /* helper classes */
+    .muted{ color:var(--muted); font-size:0.92rem; }
+    .sr-only{ position:absolute; left:-9999px; }
+    .fade{ animation: fadeUp 260ms ease; }
+    @keyframes fadeUp{ from{transform:translateY(6px);opacity:0} to{transform:translateY(0);opacity:1} }
   </style>
 </head>
 <body>
+  <div class="site-wrap">
 
-  <!-- HEADER -->
-  <header class="navbar" role="banner">
-    <div class="brand" aria-hidden="false">
-      <img src="inspiro.png" alt="Inspiro logo">
-      <div>
-        <h1>Inspiro</h1>
-        <div class="muted" style="font-size:0.78rem">Pocket Inspiration Hub</div>
-      </div>
-    </div>
-
-    <nav class="nav-links" aria-label="Main navigation">
-      <a href="#generators">Generators</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </nav>
-
-    <div class="controls">
-      <div id="modeToggle" class="toggle" title="Toggle Inspiration Mode" role="button" tabindex="0" aria-pressed="false">
-        <div class="dot" id="modeDot"></div>
-        <small id="modeLabel">Calm</small>
-      </div>
-      <button class="btn ghost" id="favoritesBtn" title="View Favorites">Favorites</button>
-    </div>
-  </header>
-
-  <!-- HERO -->
-  <section class="hero" role="region" aria-label="Intro">
-    <div class="hero-left">
-      <h2>Ignite a little sparkle — every day.</h2>
-      <p>Multiple quick generators for quotes, goals, affirmations, ideas, and mood boosters — all mobile-friendly and ready to lift your spirit.</p>
-      <div class="hero-cta">
-        <button class="btn-cta" id="startNow">Open Generators</button>
-        <button class="btn" id="shareApp" title="Share">Share</button>
-      </div>
-      <div class="small">Tip: Tap <strong>Copy</strong> to quickly save a generated line to your clipboard. Use <strong>Speak</strong> for voice playback.</div>
-    </div>
-
-    <div class="hero-right" aria-hidden="true">
-      <div class="screen" aria-hidden="true">
-        <div class="glow-ring" aria-hidden="true"></div>
-        <div class="screen-inner">
-          <h3 id="heroLine">"Dream big. Start small."</h3>
-          <p id="heroSub">Quick sparks that light your day.</p>
+    <!-- HEADER -->
+    <header class="topbar" role="banner" aria-label="Top Bar">
+      <div class="brand" aria-hidden="false">
+        <img src="inspiro.png" alt="Inspiro logo">
+        <div>
+          <h1>Inspiro</h1>
+          <p class="muted" style="margin-top:2px">Pocket Inspiration Hub</p>
         </div>
       </div>
-    </div>
 
-    <!-- decorative -->
-    <div class="particle" style="left:6%; top:14%; width:12px; height:12px; animation-duration:9s;"></div>
-    <div class="particle" style="left:88%; top:66%; width:10px; height:10px; animation-duration:11s; opacity:0.08;"></div>
-    <div class="particle" style="left:50%; top:84%; width:14px; height:14px; animation-duration:12s; opacity:0.06;"></div>
-  </section>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <nav id="nav" class="mobile-nav" aria-label="Primary">
+          <a href="#generators">Generators</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </nav>
 
-  <!-- Generators Grid -->
-  <main id="generators" class="grid" role="main" aria-label="Generators">
-    <!-- Quote Generator -->
-    <div class="card" id="quoteCard">
-      <h4>Quote Generator</h4>
-      <div class="result" id="quoteResult">Tap <strong>Generate</strong> to get a motivating quote.</div>
-      <div class="controls">
-        <button class="btn primary" data-gen="quote">Generate</button>
-        <button class="btn" data-copy="quote">Copy</button>
-        <button class="btn" data-speak="quote">Speak</button>
-        <button class="btn" data-fav="quote">☆ Fav</button>
+        <button id="favoritesBtn" class="menu-toggle" title="Favorites" aria-label="Open favorites">
+          <!-- star icon -->
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 17.3l6.18 3.73-1.64-7.03L21 9.24l-7.19-.62L12 2.5 10.19 8.62 3 9.24l4.46 4.76L5.82 21z" fill="currentColor"/></svg>
+        </button>
+
+        <button id="hamburger" class="menu-toggle" aria-label="Open menu" title="Menu">
+          <!-- hamburger -->
+          <svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
       </div>
-    </div>
+    </header>
 
-    <!-- Goal Generator -->
-    <div class="card" id="goalCard">
-      <h4>Goal Generator</h4>
-      <div class="result" id="goalResult">Get a short, actionable goal to try today.</div>
-      <div class="controls">
-        <button class="btn primary" data-gen="goal">Generate</button>
-        <button class="btn" data-copy="goal">Copy</button>
-        <button class="btn" data-speak="goal">Speak</button>
-        <button class="btn" data-fav="goal">☆ Fav</button>
-      </div>
-    </div>
+    <!-- HERO -->
+    <section class="hero" role="region" aria-label="Intro">
+      <div class="hero-left">
+        <div class="hero-top">
+          <div>
+            <div class="hero-title">Ignite a little sparkle — every day.</div>
+            <div class="hero-sub">Quick generators for quotes, goals, affirmations, creative ideas and mood boosters — made for phones first.</div>
+          </div>
+        </div>
 
-    <!-- Affirmation Generator -->
-    <div class="card" id="affirmCard">
-      <h4>Affirmation Generator</h4>
-      <div class="result" id="affirmResult">Short affirmations to boost confidence.</div>
-      <div class="controls">
-        <button class="btn primary" data-gen="affirm">Generate</button>
-        <button class="btn" data-copy="affirm">Copy</button>
-        <button class="btn" data-speak="affirm">Speak</button>
-        <button class="btn" data-fav="affirm">☆ Fav</button>
-      </div>
-    </div>
-
-    <!-- Idea Generator -->
-    <div class="card" id="ideaCard">
-      <h4>Idea Generator</h4>
-      <div class="result" id="ideaResult">Creative prompts or micro-project ideas to explore.</div>
-      <div class="controls">
-        <button class="btn primary" data-gen="idea">Generate</button>
-        <button class="btn" data-copy="idea">Copy</button>
-        <button class="btn" data-speak="idea">Speak</button>
-        <button class="btn" data-fav="idea">☆ Fav</button>
-      </div>
-    </div>
-
-    <!-- Mood Booster -->
-    <div class="card" id="moodCard">
-      <h4>Mood Booster</h4>
-      <div class="result" id="moodResult">A quick emoji + line to brighten your mood.</div>
-      <div class="controls">
-        <button class="btn primary" data-gen="mood">Generate</button>
-        <button class="btn" data-copy="mood">Copy</button>
-        <button class="btn" data-speak="mood">Speak</button>
-        <button class="btn" data-fav="mood">☆ Fav</button>
-      </div>
-    </div>
-
-    <!-- Inspiration Mode quick card -->
-    <div class="card" id="modeInfo" style="grid-column: 1/-1;">
-      <h4>Inspiration Mode</h4>
-      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
-        <div class="muted">Calm — soft, reflective prompts. </div>
-        <div class="muted">Energetic — punchy, high-energy prompts and brighter accents.</div>
-        <button class="btn" id="resetFavs" title="Clear favorites">Reset Favorites</button>
-      </div>
-    </div>
-  </main>
-
-  <!-- ABOUT (new) -->
-  <section id="about" class="about" aria-label="About Inspiro">
-    <h3>About Inspiro</h3>
-    <p>
-      Inspiro is your pocket-sized inspiration hub — a place to generate quick motivational quotes,
-      actionable micro-goals, confidence-boosting affirmations, and creative sparks. Built with a
-      mobile-first mindset and a focus on calm, usable design.
-    </p>
-    <p style="margin-top:12px;">
-      <strong>Mission:</strong> Help people find small, repeatable moments of progress every day.
-      <br>
-      <strong>Built by:</strong> Solvoro — <span class="muted">design-forward micro-tools</span>
-    </p>
-
-    <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap;">
-      <div style="flex:1; min-width:200px; padding:14px; border-radius:12px; background:rgba(255,255,255,0.02); border:1px solid var(--card-border);">
-        <strong style="color:var(--text-color)">How it works</strong>
-        <div class="muted" style="margin-top:8px">Tap generate on any card to get a fresh line. Save favorites and review them later.</div>
-      </div>
-      <div style="flex:1; min-width:200px; padding:14px; border-radius:12px; background:rgba(255,255,255,0.02); border:1px solid var(--card-border);">
-        <strong style="color:var(--text-color)">Privacy</strong>
-        <div class="muted" style="margin-top:8px">No tracking. Favorites are stored locally in your browser.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT (new) -->
-  <section id="contact" class="contact" aria-label="Contact Inspiro">
-    <h3>Contact</h3>
-    <p class="muted" style="margin-bottom:12px">Have feedback, a partnership idea, or a bug to report? Send us a message — we'll reply to the email you provide.</p>
-
-    <form id="contactForm" action="https://formspree.io/f/xgvndqjr" method="POST" accept-charset="utf-8" >
-      <!-- Hidden subject, optional honeypot -->
-      <input type="hidden" name="_subject" value="New contact from Inspiro site">
-      <input type="hidden" name="_gotcha" style="display:none">
-
-      <div class="form-row">
-        <input class="form-input" type="text" name="name" id="contactName" placeholder="Your name" required>
-        <input class="form-input" type="email" name="email" id="contactEmail" placeholder="Your email" required>
+        <div class="hero-cta">
+          <button id="startNow" class="btn-cta">Open Generators</button>
+          <button id="shareApp" class="btn" style="background:var(--glass); color:var(--muted);">Share</button>
+        </div>
       </div>
 
-      <div>
-        <textarea class="form-textarea" name="message" id="contactMessage" placeholder="Your message" required></textarea>
+      <div class="mini-screen" aria-hidden="true">
+        <div style="width:100%">
+          <h3 id="heroLine">"Dream big. Start small."</h3>
+          <p id="heroSub" class="muted">Quick sparks that light your day.</p>
+        </div>
       </div>
 
-      <div style="display:flex; gap:10px; align-items:center; margin-top:12px;">
-        <button type="submit" class="form-submit">Send Message</button>
+      <!-- decorative particles (appear on wider screens) -->
+      <div class="particle" style="left:8%; top:12%;"></div>
+      <div class="particle" style="left:84%; top:62%;"></div>
+    </section>
+
+    <!-- Generators Grid -->
+    <main id="generators" class="grid" role="main" aria-label="Generators">
+
+      <!-- Quote Generator -->
+      <section class="card" id="quoteCard" aria-labelledby="quoteTitle">
+        <h4 id="quoteTitle">Quote</h4>
+        <div class="result" id="quoteResult">Tap Generate to get a motivating quote.</div>
+        <div class="controls">
+          <button class="btn primary" data-gen="quote">Generate</button>
+          <button class="btn" data-copy="quote">Copy</button>
+          <button class="btn" data-speak="quote">Speak</button>
+          <button class="btn" data-fav="quote">☆ Fav</button>
+        </div>
+      </section>
+
+      <!-- Goal Generator -->
+      <section class="card" id="goalCard" aria-labelledby="goalTitle">
+        <h4 id="goalTitle">Goal</h4>
+        <div class="result" id="goalResult">Tap Generate for a short actionable goal.</div>
+        <div class="controls">
+          <button class="btn primary" data-gen="goal">Generate</button>
+          <button class="btn" data-copy="goal">Copy</button>
+          <button class="btn" data-speak="goal">Speak</button>
+          <button class="btn" data-fav="goal">☆ Fav</button>
+        </div>
+      </section>
+
+      <!-- Affirmation -->
+      <section class="card" id="affirmCard" aria-labelledby="affirmTitle">
+        <h4 id="affirmTitle">Affirmation</h4>
+        <div class="result" id="affirmResult">Tap Generate for a confidence boost.</div>
+        <div class="controls">
+          <button class="btn primary" data-gen="affirm">Generate</button>
+          <button class="btn" data-copy="affirm">Copy</button>
+          <button class="btn" data-speak="affirm">Speak</button>
+          <button class="btn" data-fav="affirm">☆ Fav</button>
+        </div>
+      </section>
+
+      <!-- Idea -->
+      <section class="card" id="ideaCard" aria-labelledby="ideaTitle">
+        <h4 id="ideaTitle">Idea</h4>
+        <div class="result" id="ideaResult">Tap Generate to spark creativity.</div>
+        <div class="controls">
+          <button class="btn primary" data-gen="idea">Generate</button>
+          <button class="btn" data-copy="idea">Copy</button>
+          <button class="btn" data-speak="idea">Speak</button>
+          <button class="btn" data-fav="idea">☆ Fav</button>
+        </div>
+      </section>
+
+      <!-- Mood -->
+      <section class="card" id="moodCard" aria-labelledby="moodTitle">
+        <h4 id="moodTitle">Mood Booster</h4>
+        <div class="result" id="moodResult">Tap Generate for a quick mood lift.</div>
+        <div class="controls">
+          <button class="btn primary" data-gen="mood">Generate</button>
+          <button class="btn" data-copy="mood">Copy</button>
+          <button class="btn" data-speak="mood">Speak</button>
+          <button class="btn" data-fav="mood">☆ Fav</button>
+        </div>
+      </section>
+
+      <!-- Mode & extras -->
+      <section class="card" id="modeInfo" style="display:flex; flex-direction:column; gap:10px; align-items:stretch;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <strong style="color:var(--text-color); font-size:0.98rem">Inspiration Mode</strong>
+            <div class="muted" style="font-size:0.88rem">Calm or Energetic — change tone and accents.</div>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <div id="modeToggle" class="menu-toggle" title="Toggle mode" role="button" tabindex="0" aria-pressed="false" style="width:auto;padding:8px 10px;border-radius:999px;">
+              <span id="modeLabel" style="font-weight:700;color:var(--text-color)">Calm</span>
+            </div>
+            <button id="resetFavs" class="btn" style="padding:10px 12px;">Reset Favorites</button>
+          </div>
+        </div>
+        <div class="muted" style="font-size:0.9rem">Tip: Use Copy to save lines, Speak for voice playback, and ☆ Fav to collect favorites.</div>
+      </section>
+    </main>
+
+    <!-- About -->
+    <section id="about" class="about" aria-label="About">
+      <h3>About Inspiro</h3>
+      <p>
+        Inspiro is a pocket-sized hub of quick inspiration — quotes, micro-goals, affirmations, idea prompts and mood boosters — designed for people who mostly open on mobile.
+      </p>
+      <p style="margin-top:8px" class="muted">
+        Built by Solvoro. Favorites are stored locally and your messages are sent to the contact email via Formspree.
+      </p>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="contact" aria-label="Contact">
+      <h3>Contact</h3>
+      <p class="muted">Feedback, partnership ideas, bugs or press — send us a message and we'll reply to your email.</p>
+
+      <form id="contactForm" action="https://formspree.io/f/xgvndqjr" method="POST" accept-charset="utf-8" novalidate>
+        <input type="hidden" name="_subject" value="New contact from Inspiro site">
+        <input type="text" name="_gotcha" style="display:none">
+
+        <div class="form-row">
+          <input class="form-input" type="text" name="name" id="contactName" placeholder="Your name" required autocomplete="name">
+        </div>
+        <div class="form-row">
+          <input class="form-input" type="email" name="email" id="contactEmail" placeholder="Your email" required autocomplete="email">
+        </div>
+        <div class="form-row">
+          <textarea class="form-textarea" name="message" id="contactMessage" placeholder="Your message" required></textarea>
+        </div>
+
+        <button class="form-submit" type="submit">Send Message</button>
         <div id="formStatus" class="form-message" aria-live="polite"></div>
-      </div>
-    </form>
-  </section>
+      </form>
+    </section>
 
-  <!-- Footer -->
-  <footer class="footer" role="contentinfo">
-    <div class="brand">
-      <img src="inspiro.png" alt="" style="width:30px;height:30px;border-radius:6px;opacity:0.9">
-      <div>
-        <div style="font-weight:700;color:var(--text-color)">Inspiro</div>
-        <div class="muted" style="font-size:0.85rem">Small tools. Big sparks.</div>
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+      <div class="brand" style="gap:8px;">
+        <img src="inspiro.png" alt="">
+        <div style="text-align:left;">
+          <div style="font-weight:700;color:var(--text-color)">Inspiro</div>
+          <div class="muted" style="font-size:0.85rem">Small tools. Big sparks.</div>
+        </div>
       </div>
-    </div>
-    <div class="links muted">
-      © <strong>Inspiro</strong> — Powered by Solvoro • <a href="#contact" style="color:inherit; text-decoration:underline;">Contact</a>
-    </div>
-  </footer>
+      <div style="font-size:0.9rem; color:var(--muted); margin-top:6px;">© Inspiro — Powered by Solvoro</div>
+    </footer>
 
-  <!-- Favorites overlay (unchanged) -->
-  <div id="favOverlay" aria-hidden="true" style="position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(2,2,6,0.6); z-index:60;">
-    <div style="width:92%; max-width:520px; background:rgba(255,255,255,0.02); padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.03);">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <strong style="color:var(--text-color)">Favorites</strong>
-        <button class="btn" id="closeFav">Close</button>
-      </div>
-      <div id="favList" style="min-height:80px; color:var(--muted)"></div>
-      <div style="text-align:right; margin-top:12px;">
-        <button class="btn primary" id="copyAllFavs">Copy All</button>
+    <!-- Favorites overlay -->
+    <div id="favOverlay" aria-hidden="true">
+      <div class="fav-panel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <strong style="color:var(--text-color)">Favorites</strong>
+          <div style="display:flex; gap:8px;">
+            <button id="copyAllFavs" class="btn">Copy All</button>
+            <button id="closeFav" class="btn">Close</button>
+          </div>
+        </div>
+        <div id="favList" style="min-height:80px; color:var(--muted)"></div>
       </div>
     </div>
+
   </div>
 
-<script>
-/* ---------------------------
-   Existing generator data + helpers (unchanged)
-   --------------------------- */
-const DATA = {
-  quote: [
-    "The best way to predict the future is to invent it. – Alan Kay",
-    "Life is 10% what happens and 90% how you react to it. – Charles R. Swindoll",
-    "Do what you can, with what you have, where you are. – Theodore Roosevelt",
-    "Great things never come from comfort zones.",
-    "Dream it. Wish it. Do it.",
-    "You are your best investment."
-  ],
-  goal: [
-    "Spend 15 minutes planning tomorrow's top 3 tasks.",
-    "Write a 200-word idea about something you care about.",
-    "Unfollow any 3 accounts that don't add value this week.",
-    "Learn one keyboard shortcut and use it daily.",
-    "Declutter one small area for 10 minutes today.",
-    "Reach out to someone you admire and ask one question."
-  ],
-  affirm: [
-    "I grow stronger and wiser every day.",
-    "I choose progress over perfection.",
-    "I am worthy of my dreams.",
-    "I am focused, calm, and capable.",
-    "I attract opportunities and positivity."
-  ],
-  idea: [
-    "Make a 'how I did it' micro-video about a daily habit.",
-    "Start a 7-day prompt challenge on social with a unique twist.",
-    "Create a mini checklist product people can download and use.",
-    "Design a one-page website showing a side-project idea.",
-    "Combine two hobbies to make a new creative product.",
-    "Map your morning routine and test one tiny improvement."
-  ],
-  mood: [
-    "😊 Take 60 seconds to breathe deeply.",
-    "🌤️ Write one thing you're grateful for right now.",
-    "🎵 Play a 2-minute upbeat song and move.",
-    "☕ Make your favorite drink and enjoy it slowly.",
-    "🌿 Step outside for a minute and notice the sky."
-  ]
-};
+  <!-- ---------------------------
+       Scripts (generators, UI)
+       --------------------------- -->
+  <script>
+    /* Data */
+    const DATA = {
+      quote: [
+        "The best way to predict the future is to invent it. – Alan Kay",
+        "Life is 10% what happens and 90% how you react to it. – Charles R. Swindoll",
+        "Do what you can, with what you have, where you are. – Theodore Roosevelt",
+        "Great things never come from comfort zones.",
+        "Dream it. Wish it. Do it.",
+        "You are your best investment."
+      ],
+      goal: [
+        "Spend 15 minutes planning tomorrow's top 3 tasks.",
+        "Write a 200-word idea about something you care about.",
+        "Unfollow any 3 accounts that don't add value this week.",
+        "Learn one keyboard shortcut and use it daily.",
+        "Declutter one small area for 10 minutes today.",
+        "Reach out to someone you admire and ask one question."
+      ],
+      affirm: [
+        "I grow stronger and wiser every day.",
+        "I choose progress over perfection.",
+        "I am worthy of my dreams.",
+        "I am focused, calm, and capable.",
+        "I attract opportunities and positivity."
+      ],
+      idea: [
+        "Make a 'how I did it' micro-video about a daily habit.",
+        "Start a 7-day prompt challenge on social with a unique twist.",
+        "Create a mini checklist product people can download and use.",
+        "Design a one-page website showing a side-project idea.",
+        "Combine two hobbies to make a new creative product.",
+        "Map your morning routine and test one tiny improvement."
+      ],
+      mood: [
+        "😊 Take 60 seconds to breathe deeply.",
+        "🌤️ Write one thing you're grateful for right now.",
+        "🎵 Play a 2-minute upbeat song and move.",
+        "☕ Make your favorite drink and enjoy it slowly.",
+        "🌿 Step outside for a minute and notice the sky."
+      ]
+    };
 
-function chooseRandom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-function flashResult(el, text){ el.classList.add('fade'); setTimeout(()=> { el.textContent = text; el.classList.remove('fade'); }, 260); }
+    function chooseRandom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+    function flashResult(el,text){ el.classList.add('fade'); setTimeout(()=> { el.textContent = text; el.classList.remove('fade'); }, 220); }
 
-const mapping = {
-  quote: { btn: document.querySelector('[data-gen="quote"]'), result: document.getElementById('quoteResult') },
-  goal:  { btn: document.querySelector('[data-gen="goal"]'),  result: document.getElementById('goalResult') },
-  affirm:{ btn: document.querySelector('[data-gen="affirm"]'), result: document.getElementById('affirmResult') },
-  idea:  { btn: document.querySelector('[data-gen="idea"]'),  result: document.getElementById('ideaResult') },
-  mood:  { btn: document.querySelector('[data-gen="mood"]'),  result: document.getElementById('moodResult') }
-};
+    /* mapping */
+    const mapping = {
+      quote: { btn: document.querySelector('[data-gen="quote"]'), result: document.getElementById('quoteResult') },
+      goal:  { btn: document.querySelector('[data-gen="goal"]'),  result: document.getElementById('goalResult') },
+      affirm:{ btn: document.querySelector('[data-gen="affirm"]'), result: document.getElementById('affirmResult') },
+      idea:  { btn: document.querySelector('[data-gen="idea"]'),  result: document.getElementById('ideaResult') },
+      mood:  { btn: document.querySelector('[data-gen="mood"]'),  result: document.getElementById('moodResult') }
+    };
 
-/* hero rotating text */
-const heroLines = [
-  '"Dream big. Start small."',
-  '"One step today beats perfect tomorrow."',
-  '"Make space for ideas."',
-  '"Progress is a collection of tiny wins."',
-  '"Create something kind for someone."'
-];
-let heroIndex = 0;
-const heroH = document.getElementById('heroLine');
-setInterval(()=> {
-  if(!heroH) return;
-  heroH.style.opacity = 0;
-  setTimeout(()=> {
-    heroH.textContent = heroLines[heroIndex];
-    heroH.style.opacity = 1;
-    heroIndex = (heroIndex+1) % heroLines.length;
-  }, 360);
-}, 4200);
+    /* init hero rotation */
+    const heroLines = [
+      '"Dream big. Start small."',
+      '"One step today beats perfect tomorrow."',
+      '"Make space for ideas."',
+      '"Progress is a collection of tiny wins."',
+      '"Create something kind for someone."'
+    ];
+    let heroIndex = 0;
+    const heroH = document.getElementById('heroLine');
+    setInterval(()=> {
+      if(!heroH) return;
+      heroH.style.opacity = 0;
+      setTimeout(()=> {
+        heroH.textContent = heroLines[heroIndex];
+        heroH.style.opacity = 1;
+        heroIndex = (heroIndex+1) % heroLines.length;
+      }, 320);
+    }, 4200);
 
-/* Core: bind generate buttons */
-Object.keys(mapping).forEach(key => {
-  const obj = mapping[key];
-  if(!obj || !obj.btn) return;
-  obj.btn.addEventListener('click', ()=> {
-    const candidate = chooseRandom(DATA[key]);
-    flashResult(obj.result, candidate);
-    lastGenerated = { type:key, text:candidate };
-  });
-});
-
-/* Copy / Speak / Fav controls (delegation) */
-document.addEventListener('click', (e)=>{
-  const copyKey = e.target.getAttribute('data-copy');
-  const speakKey = e.target.getAttribute('data-speak');
-  const favKey = e.target.getAttribute('data-fav');
-
-  if(copyKey){
-    const sel = mapping[copyKey].result.textContent;
-    if(!sel) return;
-    navigator.clipboard?.writeText(sel).then(()=> { showTinyFeedback(e.target, 'Copied'); }).catch(()=> showTinyFeedback(e.target,'Copy'));
-  }
-
-  if(speakKey){
-    const text = mapping[speakKey].result.textContent;
-    if(!text) return;
-    speakText(text);
-    showTinyFeedback(e.target, 'Speaking');
-  }
-
-  if(favKey){
-    const text = mapping[favKey].result.textContent;
-    if(!text || text.includes('Generate') || text.includes('Tap')) return;
-    saveFavorite({type:favKey, text, time:Date.now()});
-    showTinyFeedback(e.target, 'Saved');
-  }
-});
-
-function showTinyFeedback(btn, msg){
-  const orig = btn.innerHTML;
-  btn.innerHTML = msg;
-  setTimeout(()=> btn.innerHTML = orig, 900);
-}
-
-/* Speech */
-function speakText(txt){
-  if(!('speechSynthesis' in window)) return;
-  const s = new SpeechSynthesisUtterance(txt);
-  s.rate = 1; s.pitch = 1; s.lang = 'en-US';
-  window.speechSynthesis.cancel(); window.speechSynthesis.speak(s);
-}
-
-/* Favorites (localStorage) */
-const FAV_KEY = 'inspiro_favs_v1';
-function loadFavorites(){ try{ return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); }catch(e){ return []; } }
-function saveFavorite(item){ const list = loadFavorites(); if(list.some(x=>x.text === item.text)) return; list.unshift(item); localStorage.setItem(FAV_KEY, JSON.stringify(list.slice(0,50))); }
-function clearFavorites(){ localStorage.removeItem(FAV_KEY); }
-
-/* Favorites overlay UI */
-const favBtn = document.getElementById('favoritesBtn');
-const favOverlay = document.getElementById('favOverlay');
-const favList = document.getElementById('favList');
-const closeFav = document.getElementById('closeFav');
-const copyAllFavs = document.getElementById('copyAllFavs');
-
-favBtn?.addEventListener('click', ()=> openFavs());
-closeFav?.addEventListener('click', ()=> closeFavs());
-copyAllFavs?.addEventListener('click', ()=> {
-  const all = loadFavorites().map(f=>`[${f.type}] ${f.text}`).join('\n\n');
-  navigator.clipboard?.writeText(all).then(()=> showTinyFeedback(copyAllFavs,'Copied'));
-});
-
-function openFavs(){
-  const list = loadFavorites();
-  favList.innerHTML = list.length ? list.map(it => `<div style="margin-bottom:10px;padding:8px;border-radius:8px;background:rgba(255,255,255,0.02)"><div style="font-weight:700;color:var(--text-color)">${it.text}</div><div style="font-size:0.8rem;color:var(--muted)">Type: ${it.type}</div></div>`).join('') : '<div class="muted">No favorites yet — save any card by tapping ☆ Fav</div>';
-  favOverlay.style.display = 'flex';
-  favOverlay.setAttribute('aria-hidden','false');
-}
-function closeFavs(){ favOverlay.style.display = 'none'; favOverlay.setAttribute('aria-hidden','true'); }
-
-document.getElementById('resetFavs')?.addEventListener('click', ()=> {
-  if(confirm('Clear all favorites?')){ clearFavorites(); alert('Favorites cleared'); }
-});
-
-/* quick start button scroll */
-document.getElementById('startNow')?.addEventListener('click', ()=> {
-  document.getElementById('generators').scrollIntoView({behavior:'smooth', block:'start'});
-});
-
-/* share button (web-share fallback) */
-document.getElementById('shareApp')?.addEventListener('click', async ()=>{
-  const shareData = { title:'Inspiro — Pocket Inspiration', text:'Check out Inspiro: quick quote + idea generators to lift your day.', url:location.href };
-  if(navigator.share){
-    try{ await navigator.share(shareData); }catch(e){}
-  } else {
-    navigator.clipboard?.writeText(`${shareData.title} — ${shareData.text} ${shareData.url}`);
-    alert('Link copied to clipboard');
-  }
-});
-
-/* initialization: show sample lines so cards aren't blank */
-setTimeout(()=> {
-  mapping.quote && flashResult(mapping.quote.result, chooseRandom(DATA.quote));
-  mapping.goal && flashResult(mapping.goal.result, chooseRandom(DATA.goal));
-}, 700);
-
-/* mode toggle (uses body.energetic) */
-const modeToggle = document.getElementById('modeToggle');
-const modeDot = document.getElementById('modeDot');
-const modeLabel = document.getElementById('modeLabel');
-
-function setMode(energetic){
-  if(energetic){
-    document.body.classList.add('energetic');
-    modeLabel.textContent = 'Energetic';
-    modeToggle.setAttribute('aria-pressed','true');
-    modeDot.style.transform = 'translateX(6px)';
-  } else {
-    document.body.classList.remove('energetic');
-    modeLabel.textContent = 'Calm';
-    modeToggle.setAttribute('aria-pressed','false');
-    modeDot.style.transform = 'translateX(0px)';
-  }
-}
-modeToggle?.addEventListener('click', ()=> {
-  const is = document.body.classList.contains('energetic');
-  setMode(!is);
-});
-modeToggle?.addEventListener('keydown', (e)=> { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); modeToggle.click(); } });
-document.addEventListener('keydown', (e)=> { if(e.key.toLowerCase() === 'm'){ modeToggle.click(); } });
-
-/* hero small text rotation */
-const heroTextPool = [
-  "Start small. Keep going.",
-  "One idea a day.",
-  "Tiny habits, huge gains.",
-  "A drop of progress is progress.",
-  "You are making something beautiful."
-];
-let heroRot = 0;
-setInterval(()=> {
-  const el = document.getElementById('heroSub');
-  if(!el) return;
-  el.style.opacity = 0;
-  setTimeout(()=> {
-    el.textContent = heroTextPool[heroRot];
-    el.style.opacity = 1;
-    heroRot = (heroRot + 1) % heroTextPool.length;
-  }, 320);
-}, 5200);
-
-/* animate decorative particles */
-(function animateParticles(){
-  const parts = document.querySelectorAll('.particle');
-  parts.forEach((p,i)=> {
-    const dur = 8 + (i%3)*2;
-    p.style.animationDuration = dur + 's';
-    p.style.left = (5 + Math.random()*90) + '%';
-    p.style.top = (5 + Math.random()*80) + '%';
-  });
-})();
-
-/* accessibility live region for results */
-Object.values(mapping).forEach(m => {
-  if(m && m.result){
-    m.result.setAttribute('role','status');
-    m.result.setAttribute('aria-live','polite');
-  }
-});
-
-/* restore saved mode (if any) */
-try{
-  const savedMode = localStorage.getItem('inspiro_mode');
-  if(savedMode === 'energetic') setMode(true);
-} catch(e){}
-modeToggle?.addEventListener('click', ()=> {
-  try{ localStorage.setItem('inspiro_mode', document.body.classList.contains('energetic') ? 'energetic' : 'calm'); }catch(e){}
-});
-
-/* show first sample on load for each generator */
-window.addEventListener('load', ()=> {
-  Object.keys(mapping).forEach(k => {
-    const el = mapping[k].result;
-    if(el && el.textContent && (el.textContent.includes('Tap') || el.textContent.includes('Get a'))) {
-      const txt = chooseRandom(DATA[k]);
-      el.textContent = txt;
-    }
-  });
-});
-
-/* ---------------------------
-   Contact form AJAX submit to Formspree
-   --------------------------- */
-const CONTACT_URL = 'https://formspree.io/f/xgvndqjr';
-const contactForm = document.getElementById('contactForm');
-const formStatus = document.getElementById('formStatus');
-
-contactForm?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  formStatus.textContent = 'Sending…';
-  const formData = new FormData(contactForm);
-
-  try {
-    const resp = await fetch(CONTACT_URL, {
-      method: 'POST',
-      body: formData,
-      headers: { 'Accept': 'application/json' }
+    /* bind generator events */
+    Object.keys(mapping).forEach(key=>{
+      const obj = mapping[key];
+      if(!obj || !obj.btn) return;
+      obj.btn.addEventListener('click', ()=>{
+        const candidate = chooseRandom(DATA[key]);
+        flashResult(obj.result, candidate);
+        lastGenerated = { type:key, text:candidate };
+      });
     });
 
-    if (resp.ok) {
-      formStatus.textContent = 'Thanks — your message was sent.';
-      contactForm.reset();
-    } else {
-      // Try to parse JSON error
-      let errText = 'Could not send message. Please try again.';
-      try {
-        const data = await resp.json();
-        if (data?.error) errText = data.error;
-      } catch(_) {}
-      formStatus.textContent = errText;
+    /* copy / speak / fav */
+    document.addEventListener('click', (e)=>{
+      const copyKey = e.target.getAttribute('data-copy');
+      const speakKey = e.target.getAttribute('data-speak');
+      const favKey = e.target.getAttribute('data-fav');
+
+      if(copyKey){
+        const sel = mapping[copyKey].result.textContent;
+        if(!sel) return;
+        navigator.clipboard?.writeText(sel).then(()=> showTinyFeedback(e.target,'Copied')).catch(()=> showTinyFeedback(e.target,'Copied'));
+      }
+      if(speakKey){
+        const text = mapping[speakKey].result.textContent;
+        if(!text) return; speakText(text); showTinyFeedback(e.target,'Speaking');
+      }
+      if(favKey){
+        const text = mapping[favKey].result.textContent;
+        if(!text || text.includes('Generate') || text.includes('Tap')) return;
+        saveFavorite({type:favKey, text, time:Date.now()}); showTinyFeedback(e.target,'Saved');
+      }
+    });
+
+    function showTinyFeedback(btn,msg){
+      const orig = btn.innerHTML;
+      btn.innerHTML = msg;
+      setTimeout(()=> btn.innerHTML = orig, 900);
     }
-  } catch (err) {
-    // network fallback: attempt native submit (will redirect) as fallback
-    formStatus.textContent = 'Network issue — attempting fallback...';
+
+    /* speech */
+    function speakText(txt){
+      if(!('speechSynthesis' in window)) return;
+      const s = new SpeechSynthesisUtterance(txt);
+      s.rate = 1; s.pitch = 1; s.lang = 'en-US';
+      window.speechSynthesis.cancel(); window.speechSynthesis.speak(s);
+    }
+
+    /* favorites */
+    const FAV_KEY = 'inspiro_favs_v1';
+    function loadFavorites(){ try{ return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); }catch(e){ return []; } }
+    function saveFavorite(item){ const list = loadFavorites(); if(list.some(x=>x.text===item.text)) return; list.unshift(item); localStorage.setItem(FAV_KEY, JSON.stringify(list.slice(0,50))); }
+    function clearFavorites(){ localStorage.removeItem(FAV_KEY); }
+
+    const favBtn = document.getElementById('favoritesBtn'), favOverlay = document.getElementById('favOverlay'), favList = document.getElementById('favList'), closeFav = document.getElementById('closeFav'), copyAllFavs = document.getElementById('copyAllFavs');
+
+    favBtn?.addEventListener('click', ()=> openFavs());
+    closeFav?.addEventListener('click', ()=> closeFavs());
+    copyAllFavs?.addEventListener('click', ()=> {
+      const all = loadFavorites().map(f=>`[${f.type}] ${f.text}`).join('\n\n');
+      navigator.clipboard?.writeText(all).then(()=> showTinyFeedback(copyAllFavs,'Copied'));
+    });
+
+    function openFavs(){
+      const list = loadFavorites();
+      favList.innerHTML = list.length ? list.map(it => `<div style="padding:10px;border-radius:10px;background:rgba(255,255,255,0.02);margin-bottom:8px"><div style="font-weight:700;color:var(--text-color)">${it.text}</div><div style="font-size:0.85rem;color:var(--muted)">Type: ${it.type}</div></div>`).join('') : '<div class="muted">No favorites yet — save any card by tapping ☆ Fav</div>';
+      favOverlay.style.display = 'flex'; favOverlay.setAttribute('aria-hidden','false');
+    }
+    function closeFavs(){ favOverlay.style.display = 'none'; favOverlay.setAttribute('aria-hidden','true'); }
+
+    document.getElementById('resetFavs')?.addEventListener('click', ()=> {
+      if(confirm('Clear all favorites?')){ clearFavorites(); alert('Favorites cleared'); }
+    });
+
+    /* start now */
+    document.getElementById('startNow')?.addEventListener('click', ()=> { document.getElementById('generators').scrollIntoView({behavior:'smooth', block:'start'}); });
+
+    /* share button */
+    document.getElementById('shareApp')?.addEventListener('click', async ()=>{
+      const shareData = { title:'Inspiro', text:'Check Inspiro — pocket-sized inspiration', url:location.href };
+      if(navigator.share){ try{ await navigator.share(shareData); }catch(e){} } else { navigator.clipboard?.writeText(`${shareData.title} — ${shareData.text} ${shareData.url}`); alert('Link copied'); }
+    });
+
+    /* populate initial samples so cards aren't empty */
     setTimeout(()=> {
-      contactForm.submit();
-    }, 600);
-  }
-});
-</script>
+      mapping.quote && flashResult(mapping.quote.result, chooseRandom(DATA.quote));
+      mapping.goal && flashResult(mapping.goal.result, chooseRandom(DATA.goal));
+      mapping.affirm && flashResult(mapping.affirm.result, chooseRandom(DATA.affirm));
+    }, 620);
+
+    /* mode toggle logic (uses body.energetic) */
+    const modeToggle = document.getElementById('modeToggle'), modeLabel = document.getElementById('modeLabel');
+    function setMode(energetic){
+      if(energetic){ document.body.classList.add('energetic'); modeLabel.textContent = 'Energetic'; modeToggle.setAttribute('aria-pressed','true'); } else { document.body.classList.remove('energetic'); modeLabel.textContent = 'Calm'; modeToggle.setAttribute('aria-pressed','false'); }
+      try{ localStorage.setItem('inspiro_mode', document.body.classList.contains('energetic') ? 'energetic' : 'calm'); }catch(e){}
+    }
+    // restore saved mode
+    try{ if(localStorage.getItem('inspiro_mode') === 'energetic') setMode(true); }catch(e){}
+    modeToggle?.addEventListener('click', ()=> { setMode(!document.body.classList.contains('energetic')); });
+
+    /* small hero text rotation */
+    const heroTextPool = ["Start small. Keep going.","One idea a day.","Tiny habits, huge gains.","A drop of progress is progress.","You are making something beautiful."];
+    let heroRot = 0; setInterval(()=> { const el = document.getElementById('heroSub'); if(!el) return; el.style.opacity=0; setTimeout(()=>{ el.textContent = heroTextPool[heroRot]; el.style.opacity=1; heroRot=(heroRot+1)%heroTextPool.length; },320); }, 5200);
+
+    /* hamburger menu toggle */
+    const hamburger = document.getElementById('hamburger'), nav = document.getElementById('nav');
+    hamburger?.addEventListener('click', ()=> { if(nav.classList.contains('open')) nav.classList.remove('open'); else nav.classList.add('open'); });
+
+    /* particles random placement on larger screens (non-critical) */
+    (function animateParticles(){ const parts = document.querySelectorAll('.particle'); parts.forEach((p,i)=> { p.style.animationDuration = (8 + (i%3)*2) + 's'; p.style.left = (5 + Math.random()*90) + '%'; p.style.top = (5 + Math.random()*80) + '%'; }); })();
+
+    /* aria-live for screen readers */
+    Object.values(mapping).forEach(m => { if(m && m.result){ m.result.setAttribute('role','status'); m.result.setAttribute('aria-live','polite'); } });
+
+    /* Contact form AJAX submit to Formspree */
+    const CONTACT_URL = 'https://formspree.io/f/xgvndqjr';
+    const contactForm = document.getElementById('contactForm'), formStatus = document.getElementById('formStatus');
+    contactForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      formStatus.textContent = 'Sending…';
+      const formData = new FormData(contactForm);
+      try {
+        const resp = await fetch(CONTACT_URL, { method:'POST', body:formData, headers:{ 'Accept':'application/json' } });
+        if (resp.ok) { formStatus.textContent = 'Thanks — your message was sent.'; contactForm.reset(); }
+        else {
+          let errText = 'Could not send message. Please try again later.';
+          try{ const data = await resp.json(); if(data?.error) errText = data.error; } catch(_){}
+          formStatus.textContent = errText;
+        }
+      } catch(err){
+        formStatus.textContent = 'Network issue — trying fallback...';
+        setTimeout(()=> contactForm.submit(), 600);
+      }
+    });
+
+    /* favorites overlay close on outside click */
+    favOverlay?.addEventListener('click', (e)=> { if(e.target === favOverlay) closeFavs(); });
+
+    /* small keyboard accessibility */
+    document.addEventListener('keydown', (e)=> { if(e.key === 'm') { setMode(!document.body.classList.contains('energetic')); } });
+  </script>
 </body>
 </html>
