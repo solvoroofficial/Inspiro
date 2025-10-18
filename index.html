@@ -1,293 +1,557 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inspiro — Your Pocket Inspiration</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Inspiro — Pocket Inspiration Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="icon" href="inspiro.png" type="image/png">
 <style>
-/* ---------------- Base & Theme ---------------- */
-* {
-  margin: 0; padding: 0; box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  transition: background 0.3s, color 0.3s;
-}
-:root {
-  --bg-dark: linear-gradient(135deg, #1a1a2e, #16213e);
-  --bg-light: linear-gradient(135deg, #d9e4f5, #f6f9ff);
-  --text-dark: #fff;
-  --text-light: #1a1a1a;
-  --accent: #6a11cb;
-}
-body {
-  background: var(--bg-dark);
-  color: var(--text-dark);
-  scroll-behavior: smooth;
-  overflow-x: hidden;
-}
+  /* -------------------------
+     Theme variables (dark default)
+     ------------------------- */
+  :root{
+    --bg-1: #07060a;
+    --bg-2: #0d0d1a;
+    --card-bg: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    --card-border: rgba(255,255,255,0.03);
+    --glass: rgba(255,255,255,0.04);
+    --accent-1: #00f0ff;
+    --accent-2: #9b5cff;
+    --text: #eaf7ff;
+    --muted: rgba(234,247,255,0.8);
+    --muted-weak: rgba(234,247,255,0.6);
+    --card-glow: 0 10px 36px rgba(155,92,255,0.06);
+    --radius: 14px;
+    --trans: 260ms;
+    --btn-text-dark: #071226;
+  }
 
-/* ---------------- Header ---------------- */
-.navbar {
-  width: 95%;
-  max-width: 1100px;
-  background: rgba(255,255,255,0.1);
-  margin: 15px auto;
-  border-radius: 15px;
-  padding: 15px 25px;
-  display: flex; justify-content: space-between; align-items: center;
-  backdrop-filter: blur(10px);
-  position: sticky; top: 10px; z-index: 100;
-}
-.navbar h1 {
-  display: flex; align-items: center; gap: 10px;
-  font-size: 1.6rem;
-}
-.navbar h1 img {
-  height: 35px; width: 35px; border-radius: 8px;
-}
-.nav-links a {
-  margin-left: 15px; text-decoration: none; color: inherit;
-  font-size: 1rem; transition: 0.3s;
-}
-.nav-links a:hover { color: #ffd700; }
+  /* Light theme override (toggle .light-theme on body) */
+  body.light-theme {
+    --bg-1: #f5f7fb;
+    --bg-2: #eef3fb;
+    --card-bg: #ffffff;
+    --card-border: rgba(16,24,40,0.06);
+    --glass: rgba(0,0,0,0.04);
+    --accent-1: #0066ff;
+    --accent-2: #9b5cff;
+    --text: #0b1220;
+    --muted: rgba(11,18,32,0.8);
+    --muted-weak: rgba(11,18,32,0.55);
+    --card-glow: 0 10px 36px rgba(6,80,200,0.06);
+    --btn-text-dark: #ffffff;
+  }
 
-.theme-toggle {
-  background: none; border: 2px solid rgba(255,255,255,0.3);
-  border-radius: 50%; width: 36px; height: 36px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; font-size: 1.2rem; color: inherit;
-}
+  /* -------------------------
+     Base & layout
+     ------------------------- */
+  *{box-sizing:border-box;margin:0;padding:0;font-family:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,Arial;}
+  html,body{height:100%;}
+  body{
+    background:
+      radial-gradient(circle at 10% 10%, rgba(155,92,255,0.06), transparent 14%),
+      radial-gradient(circle at 90% 80%, rgba(0,240,255,0.03), transparent 14%),
+      linear-gradient(180deg,var(--bg-1), var(--bg-2));
+    color:var(--text);
+    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    transition: background var(--trans), color var(--trans);
+    padding-bottom:44px;
+  }
 
-/* ---------------- Sections ---------------- */
-.section {
-  padding: 60px 20px;
-  max-width: 900px;
-  margin: auto;
-  text-align: center;
-}
-.section h2 { margin-bottom: 25px; font-size: 1.6rem; }
+  .wrap { width:94%; max-width:1200px; margin:12px auto; }
 
-/* ---------------- Cards ---------------- */
-.card {
-  background: rgba(255,255,255,0.1);
-  padding: 25px;
-  border-radius: 15px;
-  margin-bottom: 25px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  backdrop-filter: blur(5px);
-}
-.output {
-  min-height: 70px;
-  font-size: 1.2rem;
-  font-style: italic;
-  margin-bottom: 15px;
-  transition: opacity 0.5s;
-}
-.button {
-  background: #fff;
-  color: #2575fc;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.button:hover { transform: scale(1.05); background: #f0f0f0; }
-
-/* ---------------- About ---------------- */
-.about-text {
-  background: rgba(255,255,255,0.1);
-  padding: 25px;
-  border-radius: 15px;
-  font-size: 1.05rem;
-  line-height: 1.6;
-  text-align: left;
-}
-
-/* ---------------- Contact ---------------- */
-form {
-  display: flex; flex-direction: column; gap: 15px;
-  background: rgba(255,255,255,0.1);
-  padding: 25px;
-  border-radius: 15px;
-}
-input, textarea {
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  width: 100%;
-}
-input:focus, textarea:focus {
-  outline: 2px solid #6a11cb;
-}
-textarea { resize: none; height: 120px; }
-form button {
-  background: #6a11cb;
-  color: #fff;
-  border: none;
-  padding: 12px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-form button:hover { transform: scale(1.05); background: #580fa9; }
-
-/* ---------------- Footer ---------------- */
-.footer {
-  text-align: center;
-  padding: 25px;
-  font-size: 0.9rem;
-  opacity: 0.8;
-}
-
-/* ---------------- Responsive ---------------- */
-@media (max-width: 700px) {
+  /* -------------------------
+     Header (translucent boxed)
+     ------------------------- */
   .navbar {
-    flex-direction: column;
-    text-align: center;
-    gap: 10px;
+    width:100%; display:flex; align-items:center; justify-content:space-between;
+    padding:12px 14px; border-radius:12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border: 1px solid var(--card-border);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.18);
+    backdrop-filter: blur(8px);
+    gap:12px;
   }
-  .nav-links {
-    display: flex; justify-content: center; flex-wrap: wrap;
+  .brand { display:flex; gap:12px; align-items:center; }
+  .brand img { width:44px; height:44px; border-radius:8px; object-fit:cover; box-shadow: 0 8px 22px rgba(155,92,255,0.08); }
+  .brand h1 { font-size:1.05rem; letter-spacing:0.3px; color:var(--text); margin:0; }
+  .brand .tag { font-size:0.78rem; color:var(--muted-weak); margin-top:2px; }
+
+  .navlinks { display:flex; gap:12px; align-items:center; }
+  .navlinks a { color:var(--muted); text-decoration:none; font-weight:600; padding:6px 8px; border-radius:8px; }
+  .navlinks a:hover { color:var(--text); }
+  .navlinks a::after { content:""; display:block; height:2px; width:0; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); transition: width 240ms; border-radius:2px; margin-top:4px; }
+  .navlinks a:hover::after { width:100%; }
+
+  .header-controls { display:flex; gap:10px; align-items:center; }
+  .btn-icon {
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:8px 10px; border-radius:10px; background:var(--glass); border:1px solid var(--card-border);
+    color:var(--muted); cursor:pointer;
   }
-  .nav-links a { margin: 5px 10px; }
-  .section { padding: 45px 15px; }
-  .card { padding: 20px; }
-  .button { padding: 9px 18px; font-size: 0.95rem; }
-}
+  .theme-toggle { font-weight:700; }
+
+  /* responsive menu button (mobile) */
+  .mob-menu-btn { display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:10px; background:var(--glass); border:1px solid var(--card-border); cursor:pointer; color:var(--muted); }
+
+  /* -------------------------
+     Hero
+     ------------------------- */
+  .hero {
+    margin-top:14px; padding:18px; border-radius:12px;
+    background: var(--card-bg); border:1px solid var(--card-border); box-shadow:var(--card-glow);
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .hero h2 { font-size:1.28rem; color:var(--text); }
+  .hero p { color:var(--muted); font-size:0.95rem; }
+  .hero-cta { display:flex; gap:10px; margin-top:6px; flex-wrap:wrap; }
+  .cta-primary { background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:var(--btn-text-dark); border:none; padding:10px 14px; border-radius:999px; font-weight:700; cursor:pointer; }
+  .cta-ghost { background:transparent; border:1px solid var(--card-border); color:var(--muted); padding:8px 12px; border-radius:10px; }
+
+  .mini-screen {
+    margin-top:8px; border-radius:12px; padding:12px; display:flex; align-items:center; justify-content:center;
+    background: linear-gradient(135deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+    border:1px solid var(--card-border);
+  }
+  .mini-screen h3 { font-size:1rem; color:var(--text); margin-bottom:6px; text-align:center; }
+  .mini-screen p { color:var(--muted); font-size:0.9rem; text-align:center; }
+
+  /* -------------------------
+     Grid + cards (responsive)
+     ------------------------- */
+  .grid { display:grid; grid-template-columns: 1fr; gap:12px; margin-top:12px; }
+  .card {
+    padding:12px; border-radius:12px; background:var(--card-bg); border:1px solid var(--card-border);
+    box-shadow:var(--card-glow); display:flex; flex-direction:column; gap:10px;
+  }
+  .card h4 { font-size:1rem; color:var(--text); margin:0; }
+  .result {
+    min-height:92px; display:flex; align-items:center; justify-content:center; text-align:center;
+    padding:10px; border-radius:10px; font-style:italic; color:var(--text); background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+  }
+  .controls { display:flex; gap:8px; flex-wrap:wrap; }
+  .btn { flex:1; padding:10px; border-radius:10px; border:none; background:var(--glass); color:var(--muted); font-weight:700; cursor:pointer; min-width:84px; text-align:center; }
+  .btn.primary { background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:var(--btn-text-dark); box-shadow:0 8px 22px rgba(0,0,0,0.06); }
+
+  .muted { color:var(--muted); font-size:0.92rem; }
+
+  /* Favorites overlay */
+  #favOverlay { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(2,2,6,0.6); z-index:60; padding:14px; }
+  #favOverlay .panel { width:100%; max-width:680px; border-radius:12px; padding:12px; background:var(--card-bg); border:1px solid var(--card-border); box-shadow:var(--card-glow); }
+
+  /* About + Contact */
+  .about, .contact {
+    margin-top:12px; padding:14px; border-radius:12px; background:var(--card-bg); border:1px solid var(--card-border); box-shadow:var(--card-glow);
+  }
+  .about h3, .contact h3 { color:var(--text); }
+  .about p, .contact p { color:var(--muted); line-height:1.45; }
+
+  .form-row { display:flex; gap:8px; flex-direction:column; margin-top:8px; }
+  .form-input, .form-textarea {
+    width:100%; padding:12px; border-radius:10px; border:1px solid var(--card-border); background:transparent; color:var(--text);
+  }
+  .form-textarea { min-height:120px; resize:vertical; }
+  .form-submit { margin-top:10px; padding:12px; border-radius:10px; border:none; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:var(--btn-text-dark); font-weight:700; width:100%; cursor:pointer; }
+
+  .form-status { margin-top:8px; color:var(--muted); }
+
+  /* Footer */
+  footer.footer { margin-top:14px; padding:12px; text-align:center; color:var(--muted); border-radius:10px; }
+
+  /* -------------------------
+     Larger screens: 2 cols and 3 cols
+     ------------------------- */
+  @media (min-width:720px){
+    .grid { grid-template-columns: repeat(2,1fr); gap:14px; }
+    .hero { flex-direction:row; gap:14px; align-items:center; }
+    .mini-screen { width:40%; height:160px; }
+    .hero-left { width:58%; }
+  }
+  @media (min-width:1024px){
+    .grid { grid-template-columns: repeat(3,1fr); gap:18px; }
+    .wrap { width:92%; }
+    .mini-screen { height:200px; }
+  }
+
+  /* small UI helpers */
+  .fade { animation:fadeUp 260ms ease; }
+  @keyframes fadeUp { from{transform:translateY(8px);opacity:0} to{transform:translateY(0);opacity:1} }
+  .sr-only { position:absolute; left:-9999px; }
 </style>
 </head>
-
 <body>
-<!-- Header -->
-<div class="navbar">
-  <h1><img src="inspiro.png" alt="logo"> Inspiro</h1>
-  <div class="nav-links">
-    <a href="#home">Home</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
+  <div class="wrap">
+
+    <!-- Header (translucent box) -->
+    <header class="navbar" role="banner" aria-label="Main header">
+      <div class="brand">
+        <img src="inspiro.png" alt="Inspiro logo">
+        <div>
+          <h1>Inspiro</h1>
+          <div class="tag">Pocket Inspiration Hub</div>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:10px;">
+        <nav class="navlinks" id="mainNav" aria-label="Primary navigation">
+          <a href="#generators">Generators</a>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </nav>
+
+        <!-- header controls -->
+        <div class="header-controls" role="toolbar" aria-label="Header controls">
+          <button id="openFavBtn" class="btn-icon" title="Favorites" aria-label="Open favorites">☆ Fav</button>
+
+          <!-- Theme toggle -->
+          <button id="themeToggle" class="btn-icon theme-toggle" title="Toggle light/dark" aria-pressed="false" aria-label="Toggle theme">🌙</button>
+
+          <!-- mobile menu button (visible on small screens) -->
+          <button id="menuBtn" class="mob-menu-btn" aria-expanded="false" aria-controls="mainNav" title="Open menu" style="display:none;">
+            ☰
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero" aria-label="Intro">
+      <div class="hero-left">
+        <h2>Ignite a little sparkle — every day.</h2>
+        <p>Quick generators for quotes, goals, affirmations, ideas and mood boosters. Mobile-first, polished and accessible.</p>
+        <div class="hero-cta">
+          <button id="startNow" class="cta-primary">Open Generators</button>
+          <button id="shareApp" class="cta-ghost">Share</button>
+        </div>
+      </div>
+
+      <div class="mini-screen" aria-hidden="true">
+        <div>
+          <h3 id="heroLine">"Dream big. Start small."</h3>
+          <p id="heroSub" class="muted">Quick sparks that light your day.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Generators -->
+    <main id="generators" class="grid" role="main" aria-label="Generators">
+
+      <!-- Quote -->
+      <section class="card" aria-labelledby="quoteTitle">
+        <h4 id="quoteTitle">Quote</h4>
+        <div class="result" id="quoteResult">Tap Generate to get a motivating quote.</div>
+        <div class="controls">
+          <button class="btn primary" data-gen="quote">Generate</button>
+          <button class="btn" data-copy="quote">Copy</button>
+          <button class="btn" data-speak="quote">Speak</button>
+          <button class="btn" data-fav="quote">☆ Fav</button>
+        </div>
+      </section>
+
+      <!-- Goal -->
+      <section class="card" aria-labelledby="goalTitle">
+        <h4 id="goalTitle">Goal</h4>
+        <div class="result" id="goalResult">Tap Generate for a short actionable goal.</div>
+        <div class="controls">
+          <button class="btn primary" data-gen="goal">Generate</button>
+          <button class="btn" data-copy="goal">Copy</button>
+          <button class="btn" data-speak="goal">Speak</button>
+          <button class="btn" data-fav="goal">☆ Fav</button>
+        </div>
+      </section>
+
+      <!-- Affirmation -->
+      <section class="card" aria-labelledby="affirmTitle">
+        <h4 id="affirmTitle">Affirmation</h4>
+        <div class="result" id="affirmResult">Tap Generate for a confidence boost.</div>
+        <div class="controls">
+          <button class="btn primary" data-gen="affirm">Generate</button>
+          <button class="btn" data-copy="affirm">Copy</button>
+          <button class="btn" data-speak="affirm">Speak</button>
+          <button class="btn" data-fav="affirm">☆ Fav</button>
+        </div>
+      </section>
+
+      <!-- Idea -->
+      <section class="card" aria-labelledby="ideaTitle">
+        <h4 id="ideaTitle">Idea</h4>
+        <div class="result" id="ideaResult">Tap Generate to spark creativity.</div>
+        <div class="controls">
+          <button class="btn primary" data-gen="idea">Generate</button>
+          <button class="btn" data-copy="idea">Copy</button>
+          <button class="btn" data-speak="idea">Speak</button>
+          <button class="btn" data-fav="idea">☆ Fav</button>
+        </div>
+      </section>
+
+      <!-- Mood -->
+      <section class="card" aria-labelledby="moodTitle">
+        <h4 id="moodTitle">Mood Booster</h4>
+        <div class="result" id="moodResult">Tap Generate for a quick mood lift.</div>
+        <div class="controls">
+          <button class="btn primary" data-gen="mood">Generate</button>
+          <button class="btn" data-copy="mood">Copy</button>
+          <button class="btn" data-speak="mood">Speak</button>
+          <button class="btn" data-fav="mood">☆ Fav</button>
+        </div>
+      </section>
+
+      <!-- Modes card -->
+      <section class="card" style="grid-column: 1 / -1;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+          <div>
+            <strong style="color:var(--text);display:block">Theme</strong>
+            <div class="muted" style="margin-top:6px">Switch between Light and Dark themes — preference is saved.</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button id="themeToggleBottom" class="btn">Toggle Theme</button>
+            <button id="resetFavs" class="btn">Reset Favorites</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- About -->
+    <section id="about" class="about" aria-label="About Inspiro">
+      <h3>About Inspiro</h3>
+      <p>
+        Inspiro is a pocket-sized hub of quick inspiration — quotes, micro-goals, affirmations, idea prompts and mood boosters — designed to make small daily progress simple and pleasant.
+      </p>
+      <p style="margin-top:10px" class="muted">
+        Built by Solvoro. Favorites stay in your browser. Contact sends to our Formspree endpoint.
+      </p>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="contact" aria-label="Contact">
+      <h3>Contact</h3>
+      <p class="muted">Feedback, partnership or bugs — send a message and we'll reply to the email you provide.</p>
+
+      <form id="contactForm" action="https://formspree.io/f/xgvndqjr" method="POST" accept-charset="utf-8" novalidate>
+        <input type="hidden" name="_subject" value="New contact from Inspiro site">
+        <input type="text" name="_gotcha" style="display:none">
+
+        <div class="form-row">
+          <input class="form-input" type="text" name="name" id="contactName" placeholder="Your name" required autocomplete="name">
+        </div>
+        <div class="form-row">
+          <input class="form-input" type="email" name="email" id="contactEmail" placeholder="Your email" required autocomplete="email">
+        </div>
+        <div class="form-row">
+          <textarea class="form-textarea" name="message" id="contactMessage" placeholder="Your message" required></textarea>
+        </div>
+        <button class="form-submit" type="submit">Send Message</button>
+        <div id="formStatus" class="form-status" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+      © 2025 Inspiro — Powered by Solvoro
+    </footer>
+
   </div>
-  <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-</div>
 
-<!-- Home Section -->
-<div class="section" id="home">
-  <h2>Your Daily Inspiration</h2>
-
-  <div class="card">
-    <h3>✨ Quote Generator</h3>
-    <div class="output" id="quote"></div>
-    <button class="button" onclick="generate('quote')">Generate</button>
+  <!-- Favorites overlay -->
+  <div id="favOverlay" aria-hidden="true">
+    <div class="panel" role="dialog" aria-modal="true" aria-labelledby="favTitle">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <strong id="favTitle" style="color:var(--text)">Favorites</strong>
+        <div style="display:flex;gap:8px;">
+          <button id="copyAllFavs" class="btn">Copy All</button>
+          <button id="closeFav" class="btn">Close</button>
+        </div>
+      </div>
+      <div id="favList" style="min-height:80px;color:var(--muted)"></div>
+    </div>
   </div>
-
-  <div class="card">
-    <h3>🎯 Goal Generator</h3>
-    <div class="output" id="goal"></div>
-    <button class="button" onclick="generate('goal')">Generate</button>
-  </div>
-
-  <div class="card">
-    <h3>💫 Affirmation Generator</h3>
-    <div class="output" id="affirm"></div>
-    <button class="button" onclick="generate('affirm')">Generate</button>
-  </div>
-
-  <div class="card">
-    <h3>💡 Idea Generator</h3>
-    <div class="output" id="idea"></div>
-    <button class="button" onclick="generate('idea')">Generate</button>
-  </div>
-
-  <div class="card">
-    <h3>😊 Mood Booster</h3>
-    <div class="output" id="mood"></div>
-    <button class="button" onclick="generate('mood')">Generate</button>
-  </div>
-</div>
-
-<!-- About Section -->
-<div class="section" id="about">
-  <h2>About Inspiro</h2>
-  <div class="about-text">
-    Inspiro is your digital pocket of motivation — crafted to give you uplifting quotes,
-    goals, affirmations, and creative sparks anytime you need them.
-    <br><br>
-    Whether you’re chasing dreams, building habits, or just need a boost, Inspiro adapts
-    to your vibe with light and dark modes, mobile-first design, and effortless simplicity.
-    <br><br>
-    Built with ❤️ and powered by <b>Solvoro</b>.
-  </div>
-</div>
-
-<!-- Contact Section -->
-<div class="section" id="contact">
-  <h2>Contact Us</h2>
-  <form action="https://formspree.io/f/xgvndqjr" method="POST">
-    <input type="text" name="name" placeholder="Your Name" required>
-    <input type="email" name="_replyto" placeholder="Your Email" required>
-    <textarea name="message" placeholder="Your Message..." required></textarea>
-    <button type="submit">Send Message</button>
-  </form>
-</div>
-
-<!-- Footer -->
-<div class="footer">© 2025 Inspiro — Powered by Solvoro</div>
 
 <script>
-/* ---------- Generators ---------- */
-const data = {
-  quote: [
-    "The best way to predict the future is to invent it.",
-    "Dream it. Wish it. Do it.",
-    "Great things never come from comfort zones.",
-    "Push yourself, because no one else is going to do it for you."
-  ],
-  goal: [
-    "Start journaling daily 📝",
-    "Learn one new skill this week 🎯",
-    "Read 10 pages of a good book 📘",
-    "Spend 30 minutes exercising 💪"
-  ],
-  affirm: [
-    "I am capable of amazing things.",
-    "I attract positive energy and success.",
-    "I believe in myself and my dreams.",
-    "I am growing and getting better every day."
-  ],
-  idea: [
-    "Start a blog about your passion 💡",
-    "Build a mini portfolio website 🌐",
-    "Create an online challenge series 🎥",
-    "Design motivational wallpapers 🎨"
-  ],
-  mood: [
-    "You're doing great, keep going! 🌟",
-    "Smile — good things are coming! 😊",
-    "Take a deep breath, you’ve got this 💖",
-    "Your energy is magnetic ✨"
-  ]
+/* ============================
+   Data + helpers
+   ============================ */
+const DATA = {
+  quote: ["The best way to predict the future is to invent it. – Alan Kay","Life is 10% what happens and 90% how you react to it. – Charles R. Swindoll","Do what you can, with what you have, where you are. – Theodore Roosevelt","Great things never come from comfort zones.","Dream it. Wish it. Do it.","You are your best investment."],
+  goal: ["Spend 15 minutes planning tomorrow's top 3 tasks.","Write a 200-word idea about something you care about.","Unfollow any 3 accounts that don't add value this week.","Learn one keyboard shortcut and use it daily.","Declutter one small area for 10 minutes today.","Reach out to someone you admire and ask one question."],
+  affirm: ["I grow stronger and wiser every day.","I choose progress over perfection.","I am worthy of my dreams.","I am focused, calm, and capable.","I attract opportunities and positivity."],
+  idea: ["Make a 'how I did it' micro-video about a daily habit.","Start a 7-day prompt challenge on social with a unique twist.","Create a mini checklist product people can download and use.","Design a one-page website showing a side-project idea.","Combine two hobbies to make a new creative product.","Map your morning routine and test one tiny improvement."],
+  mood: ["😊 Take 60 seconds to breathe deeply.","🌤️ Write one thing you're grateful for right now.","🎵 Play a 2-minute upbeat song and move.","☕ Make your favorite drink and enjoy it slowly.","🌿 Step outside for a minute and notice the sky."]
 };
-function generate(type) {
-  const output = document.getElementById(type);
-  const arr = data[type];
-  output.style.opacity = 0;
-  setTimeout(() => {
-    output.innerText = arr[Math.floor(Math.random() * arr.length)];
-    output.style.opacity = 1;
-  }, 300);
+const chooseRandom = (arr) => arr[Math.floor(Math.random()*arr.length)];
+const mapping = {
+  quote: { selector: '[data-gen="quote"]', resultId: 'quoteResult' },
+  goal:  { selector: '[data-gen="goal"]', resultId: 'goalResult' },
+  affirm:{ selector: '[data-gen="affirm"]', resultId: 'affirmResult' },
+  idea:  { selector: '[data-gen="idea"]', resultId: 'ideaResult' },
+  mood:  { selector: '[data-gen="mood"]', resultId: 'moodResult' }
+};
+
+function flashResult(el, text){
+  el.classList.add('fade');
+  setTimeout(()=> {
+    el.textContent = text;
+    el.classList.remove('fade');
+  }, 180);
 }
 
-/* ---------- Theme Toggle ---------- */
-let dark = true;
-function toggleTheme() {
-  dark = !dark;
-  document.body.style.background = dark ? 
-    "linear-gradient(135deg, #1a1a2e, #16213e)" :
-    "linear-gradient(135deg, #d9e4f5, #f6f9ff)";
-  document.body.style.color = dark ? "#fff" : "#1a1a1a";
-  document.querySelector(".theme-toggle").innerText = dark ? "🌙" : "☀️";
+/* Initialize hero rotating lines */
+const heroLines = ['"Dream big. Start small."','"One step today beats perfect tomorrow."','"Make space for ideas."','"Progress is a collection of tiny wins."','"Create something kind for someone."'];
+let heroIndex = 0;
+const heroLineEl = document.getElementById('heroLine'), heroSubEl = document.getElementById('heroSub');
+setInterval(()=> {
+  if(!heroLineEl) return;
+  heroLineEl.style.opacity = 0;
+  setTimeout(()=> {
+    heroLineEl.textContent = heroLines[heroIndex];
+    heroLineEl.style.opacity = 1;
+    heroIndex = (heroIndex + 1) % heroLines.length;
+  }, 300);
+}, 4200);
+
+/* Bind generator buttons */
+Object.keys(mapping).forEach(key => {
+  const btn = document.querySelector(mapping[key].selector);
+  const resultEl = document.getElementById(mapping[key].resultId);
+  // show initial sample
+  if(resultEl && resultEl.textContent && (resultEl.textContent.includes('Tap') || resultEl.textContent.includes('Tap'))) {
+    resultEl.textContent = chooseRandom(DATA[key]);
+  }
+  btn?.addEventListener('click', () => {
+    const text = chooseRandom(DATA[key]);
+    flashResult(resultEl, text);
+    lastGenerated = { type:key, text };
+  });
+});
+
+/* Copy / Speak / Favorite (delegated) */
+document.addEventListener('click', (e) => {
+  const copyKey = e.target.getAttribute('data-copy');
+  const speakKey = e.target.getAttribute('data-speak');
+  const favKey = e.target.getAttribute('data-fav');
+
+  if(copyKey){
+    const text = document.getElementById(mapping[copyKey].resultId).textContent;
+    if(!text) return;
+    navigator.clipboard?.writeText(text).then(()=> showMoment(e.target, 'Copied'));
+  }
+  if(speakKey){
+    const text = document.getElementById(mapping[speakKey].resultId).textContent;
+    if(!text) return;
+    speak(text); showMoment(e.target,'Speaking');
+  }
+  if(favKey){
+    const text = document.getElementById(mapping[favKey].resultId).textContent;
+    if(!text || text.includes('Tap') || text.includes('Generate')) return;
+    saveFavorite({type:favKey, text, time:Date.now()});
+    showMoment(e.target,'Saved');
+  }
+});
+
+function showMoment(el, txt){
+  const orig = el.innerHTML;
+  el.innerHTML = txt;
+  setTimeout(()=> el.innerHTML = orig, 800);
 }
+
+/* Speech */
+function speak(txt){
+  if(!('speechSynthesis' in window)) return;
+  const u = new SpeechSynthesisUtterance(txt);
+  u.lang = 'en-US'; u.rate = 1; u.pitch = 1;
+  window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);
+}
+
+/* Favorites (localStorage) */
+const FAV_KEY = 'inspiro_favs_v2';
+function loadFavorites(){ try{ return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); }catch(e){ return []; } }
+function saveFavorite(item){ const list = loadFavorites(); if(list.some(x=>x.text===item.text)) return; list.unshift(item); localStorage.setItem(FAV_KEY, JSON.stringify(list.slice(0,50))); }
+function clearFavorites(){ localStorage.removeItem(FAV_KEY); }
+
+/* Favorites UI */
+const openFavBtn = document.getElementById('openFavBtn'), favOverlay = document.getElementById('favOverlay'), favList = document.getElementById('favList'), closeFav = document.getElementById('closeFav'), copyAllFavs = document.getElementById('copyAllFavs');
+openFavBtn?.addEventListener('click', openFavs);
+closeFav?.addEventListener('click', closeFavs);
+copyAllFavs?.addEventListener('click', ()=> {
+  const all = loadFavorites().map(f=>`[${f.type}] ${f.text}`).join('\n\n');
+  navigator.clipboard?.writeText(all).then(()=> showMoment(copyAllFavs,'Copied'));
+});
+function openFavs(){
+  const list = loadFavorites();
+  favList.innerHTML = list.length ? list.map(it => `<div style="padding:10px;border-radius:10px;background:rgba(255,255,255,0.02);margin-bottom:8px"><div style="font-weight:700;color:var(--text)">${it.text}</div><div style="font-size:0.85rem;color:var(--muted)">Type: ${it.type}</div></div>`).join('') : '<div class="muted">No favorites yet — save any card by tapping ☆ Fav</div>';
+  favOverlay.style.display = 'flex'; favOverlay.setAttribute('aria-hidden','false');
+}
+function closeFavs(){ favOverlay.style.display = 'none'; favOverlay.setAttribute('aria-hidden','true'); }
+
+/* reset favorites button */
+document.getElementById('resetFavs')?.addEventListener('click', ()=> {
+  if(confirm('Clear all favorites?')){ clearFavorites(); alert('Favorites cleared'); }
+});
+
+/* share / start buttons */
+document.getElementById('startNow')?.addEventListener('click', ()=> {
+  document.getElementById('generators').scrollIntoView({behavior:'smooth', block:'start'});
+});
+document.getElementById('shareApp')?.addEventListener('click', async ()=>{
+  const shareData = { title:'Inspiro', text:'Check Inspiro — pocket-sized inspiration', url:location.href };
+  if(navigator.share){ try{ await navigator.share(shareData); }catch(e){} } else { navigator.clipboard?.writeText(`${shareData.title} — ${shareData.text} ${shareData.url}`); alert('Link copied'); }
+});
+
+/* theme toggle (light/dark) */
+const themeToggle = document.getElementById('themeToggle'), themeToggleBottom = document.getElementById('themeToggleBottom');
+function setThemeLight(isLight){
+  if(isLight){ document.body.classList.add('light-theme'); themeToggle.textContent='☀️'; themeToggle.setAttribute('aria-pressed','true'); themeToggleBottom.textContent='Light'; localStorage.setItem('inspiro_theme','light'); }
+  else { document.body.classList.remove('light-theme'); themeToggle.textContent='🌙'; themeToggle.setAttribute('aria-pressed','false'); themeToggleBottom.textContent='Dark'; localStorage.setItem('inspiro_theme','dark'); }
+}
+themeToggle?.addEventListener('click', ()=> setThemeLight(!document.body.classList.contains('light-theme')));
+themeToggleBottom?.addEventListener('click', ()=> setThemeLight(!document.body.classList.contains('light-theme')));
+// restore theme
+try{ const t = localStorage.getItem('inspiro_theme'); if(t==='light') setThemeLight(true); }catch(e){}
+
+/* mobile menu behavior */
+const menuBtn = document.getElementById('menuBtn'), mainNav = document.getElementById('mainNav');
+function updateMenuVisibility(){
+  // show hamburger only under 720px width
+  if(window.innerWidth < 720){ menuBtn.style.display='inline-flex'; mainNav.style.display='none'; }
+  else { menuBtn.style.display='none'; mainNav.style.display='flex'; }
+}
+updateMenuVisibility();
+window.addEventListener('resize', updateMenuVisibility);
+menuBtn?.addEventListener('click', ()=> {
+  const shown = mainNav.style.display === 'block';
+  mainNav.style.display = shown ? 'none' : 'block';
+});
+
+/* contact form submit to Formspree (AJAX) */
+const CONTACT_URL = 'https://formspree.io/f/xgvndqjr';
+const contactForm = document.getElementById('contactForm'), formStatus = document.getElementById('formStatus');
+contactForm?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  formStatus.textContent = 'Sending…';
+  const fd = new FormData(contactForm);
+  try{
+    const resp = await fetch(CONTACT_URL, { method:'POST', body:fd, headers:{ 'Accept':'application/json' } });
+    if(resp.ok){ formStatus.textContent = 'Thanks — your message was sent.'; contactForm.reset(); }
+    else {
+      let err = 'Could not send message. Please try again.';
+      try{ const data = await resp.json(); if(data?.error) err = data.error; }catch(_) {}
+      formStatus.textContent = err;
+    }
+  }catch(err){
+    formStatus.textContent = 'Network issue — trying fallback...';
+    setTimeout(()=> contactForm.submit(), 600);
+  }
+});
+
+/* small accessibility + init */
+window.addEventListener('load', ()=> {
+  // ensure at least one sample is shown
+  Object.keys(mapping).forEach(k => {
+    const res = document.getElementById(mapping[k].resultId);
+    if(res && (res.textContent.includes('Tap') || res.textContent.includes('Tap'))) res.textContent = chooseRandom(DATA[k]);
+    if(res) { res.setAttribute('role','status'); res.setAttribute('aria-live','polite'); }
+  });
+});
 </script>
 </body>
 </html>
