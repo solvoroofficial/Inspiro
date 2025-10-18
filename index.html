@@ -19,172 +19,185 @@
     --accent-1: #00f0ff;
     --accent-2: #9b5cff;
     --text: #eaf7ff;
-    --muted: rgba(234,247,255,0.8);
-    --muted-weak: rgba(234,247,255,0.6);
+    --muted: rgba(234,247,255,0.82);
+    --muted-weak: rgba(234,247,255,0.55);
     --card-glow: 0 10px 36px rgba(155,92,255,0.06);
     --radius: 14px;
     --trans: 260ms;
     --btn-text-dark: #071226;
+    --mode-label: "Calm";
   }
 
-  /* Light theme override (toggle .light-theme on body) */
-  body.light-theme {
-    --bg-1: #f5f7fb;
-    --bg-2: #eef3fb;
+  /* Energetic (light-ish) */
+  body.energetic {
+    --bg-1: #f6f9ff;
+    --bg-2: #eef4ff;
     --card-bg: #ffffff;
     --card-border: rgba(16,24,40,0.06);
     --glass: rgba(0,0,0,0.04);
     --accent-1: #0066ff;
-    --accent-2: #9b5cff;
+    --accent-2: #ff6ec7;
     --text: #0b1220;
-    --muted: rgba(11,18,32,0.8);
+    --muted: rgba(11,18,32,0.82);
     --muted-weak: rgba(11,18,32,0.55);
     --card-glow: 0 10px 36px rgba(6,80,200,0.06);
-    --btn-text-dark: #ffffff;
+    --btn-text-dark: #fff;
+    --mode-label: "Energetic";
   }
 
   /* -------------------------
-     Base & layout
+     Base (mobile-first)
      ------------------------- */
   *{box-sizing:border-box;margin:0;padding:0;font-family:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,Arial;}
   html,body{height:100%;}
   body{
     background:
-      radial-gradient(circle at 10% 10%, rgba(155,92,255,0.06), transparent 14%),
+      radial-gradient(circle at 10% 10%, rgba(155,92,255,0.05), transparent 14%),
       radial-gradient(circle at 90% 80%, rgba(0,240,255,0.03), transparent 14%),
-      linear-gradient(180deg,var(--bg-1), var(--bg-2));
+      linear-gradient(180deg,var(--bg-1),var(--bg-2));
     color:var(--text);
     -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     transition: background var(--trans), color var(--trans);
-    padding-bottom:44px;
+    padding-bottom:48px;
   }
-
-  .wrap { width:94%; max-width:1200px; margin:12px auto; }
+  .wrap{ width:94%; max-width:1100px; margin:12px auto; }
 
   /* -------------------------
-     Header (translucent boxed)
+     Translucent boxed header
+     - On mobile: position:relative so it scrolls with page
+     - On desktop (>=720px): sticky
      ------------------------- */
   .navbar {
-    width:100%; display:flex; align-items:center; justify-content:space-between;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
     padding:12px 14px; border-radius:12px;
     background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
     border: 1px solid var(--card-border);
     box-shadow: 0 8px 28px rgba(0,0,0,0.18);
     backdrop-filter: blur(8px);
-    gap:12px;
+    margin-bottom:12px;
   }
-  .brand { display:flex; gap:12px; align-items:center; }
-  .brand img { width:44px; height:44px; border-radius:8px; object-fit:cover; box-shadow: 0 8px 22px rgba(155,92,255,0.08); }
-  .brand h1 { font-size:1.05rem; letter-spacing:0.3px; color:var(--text); margin:0; }
-  .brand .tag { font-size:0.78rem; color:var(--muted-weak); margin-top:2px; }
+  /* mobile: header scrolls with page - no sticky */
+  @media (min-width:720px){
+    .navbar { position: sticky; top:12px; z-index:40; margin-bottom:18px; }
+  }
+
+  .brand{ display:flex; gap:12px; align-items:center; }
+  .brand img{ width:44px; height:44px; border-radius:8px; object-fit:cover; box-shadow: 0 8px 22px rgba(155,92,255,0.08); }
+  .brand h1{ font-size:1.05rem; color:var(--text); margin:0; }
+  .brand .tag{ font-size:0.78rem; color:var(--muted-weak); margin-top:4px; }
 
   .navlinks { display:flex; gap:12px; align-items:center; }
   .navlinks a { color:var(--muted); text-decoration:none; font-weight:600; padding:6px 8px; border-radius:8px; }
   .navlinks a:hover { color:var(--text); }
-  .navlinks a::after { content:""; display:block; height:2px; width:0; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); transition: width 240ms; border-radius:2px; margin-top:4px; }
-  .navlinks a:hover::after { width:100%; }
+  .navlinks a::after{ content:""; display:block; height:2px; width:0; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); transition: width 220ms; border-radius:2px; margin-top:4px; }
+  .navlinks a:hover::after{ width:100%; }
 
-  .header-controls { display:flex; gap:10px; align-items:center; }
-  .btn-icon {
-    display:inline-flex; align-items:center; justify-content:center; gap:8px;
-    padding:8px 10px; border-radius:10px; background:var(--glass); border:1px solid var(--card-border);
-    color:var(--muted); cursor:pointer;
+  /* header controls */
+  .header-controls { display:flex; gap:8px; align-items:center; }
+  .mode-toggle {
+    display:inline-flex; align-items:center; gap:8px; padding:6px 10px;
+    border-radius:999px; background:var(--glass); border:1px solid var(--card-border); color:var(--muted);
+    cursor:pointer; user-select:none;
   }
-  .theme-toggle { font-weight:700; }
+  .mode-toggle .track{ width:44px; height:20px; border-radius:999px; background:rgba(0,0,0,0.06); position:relative; display:inline-block; }
+  .mode-toggle .dot{ width:16px; height:16px; border-radius:50%; background:var(--accent-1); position:absolute; left:2px; top:2px; transition: transform 260ms; box-shadow:0 6px 16px rgba(0,0,0,0.08); }
 
-  /* responsive menu button (mobile) */
-  .mob-menu-btn { display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:10px; background:var(--glass); border:1px solid var(--card-border); cursor:pointer; color:var(--muted); }
+  /* when energetic, move dot to right */
+  body.energetic .mode-toggle .dot{ transform: translateX(24px); background: var(--accent-2); }
+
+  /* small label style */
+  .mode-label { font-weight:700; color:var(--text); font-size:0.95rem; letter-spacing:0.2px; }
+
+  /* menu button (mobile): show inline on small screens */
+  .menu-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border-radius:10px; background:var(--glass); border:1px solid var(--card-border); color:var(--muted); cursor:pointer; }
+  @media(min-width:720px){ .menu-btn{ display:none; } }
+
+  /* -------------------------
+     Boxed overlay (menu content)
+     - clicking menu opens an overlay box centered (mobile-friendly)
+     - content is a clone of the section and doesn't push page content
+     ------------------------- */
+  .box-overlay {
+    position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:80;
+    background: rgba(2,2,6,0.45);
+    padding:16px;
+  }
+  .box {
+    width:100%; max-width:760px; max-height:86vh; overflow:auto;
+    border-radius:12px; background:var(--card-bg); border:1px solid var(--card-border);
+    box-shadow: var(--card-glow); padding:16px;
+  }
+  .box header{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; }
+  .box .close { padding:8px 10px; border-radius:8px; background:var(--glass); border:1px solid var(--card-border); color:var(--muted); cursor:pointer; }
 
   /* -------------------------
      Hero
      ------------------------- */
   .hero {
-    margin-top:14px; padding:18px; border-radius:12px;
-    background: var(--card-bg); border:1px solid var(--card-border); box-shadow:var(--card-glow);
-    display:flex; flex-direction:column; gap:12px;
+    padding:16px; border-radius:12px; background:var(--card-bg); border:1px solid var(--card-border); box-shadow:var(--card-glow);
+    display:flex; flex-direction:column; gap:10px;
   }
-  .hero h2 { font-size:1.28rem; color:var(--text); }
-  .hero p { color:var(--muted); font-size:0.95rem; }
-  .hero-cta { display:flex; gap:10px; margin-top:6px; flex-wrap:wrap; }
-  .cta-primary { background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:var(--btn-text-dark); border:none; padding:10px 14px; border-radius:999px; font-weight:700; cursor:pointer; }
-  .cta-ghost { background:transparent; border:1px solid var(--card-border); color:var(--muted); padding:8px 12px; border-radius:10px; }
+  .hero h2{ font-size:1.2rem; color:var(--text); }
+  .hero p{ color:var(--muted); font-size:0.95rem; }
+  .hero-cta{ display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
+  .cta-primary{ background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:var(--btn-text-dark); border:none; padding:10px 12px; border-radius:999px; font-weight:700; cursor:pointer; }
+  .cta-ghost{ background:transparent; border:1px solid var(--card-border); color:var(--muted); padding:8px 10px; border-radius:10px; }
 
-  .mini-screen {
-    margin-top:8px; border-radius:12px; padding:12px; display:flex; align-items:center; justify-content:center;
-    background: linear-gradient(135deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
-    border:1px solid var(--card-border);
-  }
-  .mini-screen h3 { font-size:1rem; color:var(--text); margin-bottom:6px; text-align:center; }
-  .mini-screen p { color:var(--muted); font-size:0.9rem; text-align:center; }
+  .mini-screen { margin-top:8px; border-radius:10px; padding:12px; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border:1px solid var(--card-border); }
+  .mini-screen h3{ font-size:1rem; color:var(--text); text-align:center; }
+  .mini-screen p{ color:var(--muted); font-size:0.9rem; text-align:center; }
 
   /* -------------------------
-     Grid + cards (responsive)
+     Generators grid + cards
      ------------------------- */
-  .grid { display:grid; grid-template-columns: 1fr; gap:12px; margin-top:12px; }
-  .card {
-    padding:12px; border-radius:12px; background:var(--card-bg); border:1px solid var(--card-border);
-    box-shadow:var(--card-glow); display:flex; flex-direction:column; gap:10px;
+  .grid{ margin-top:12px; display:grid; grid-template-columns:1fr; gap:12px; }
+  .card{ padding:12px; border-radius:12px; background:var(--card-bg); border:1px solid var(--card-border); box-shadow:var(--card-glow); display:flex; flex-direction:column; gap:10px; }
+  .card h4{ font-size:1rem; color:var(--text); margin:0; }
+  .result{ min-height:92px; display:flex; align-items:center; justify-content:center; text-align:center; padding:10px; border-radius:10px; font-style:italic; color:var(--text); background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); }
+  .controls{ display:flex; gap:8px; flex-wrap:wrap; }
+  .btn{ flex:1; padding:10px; border-radius:10px; border:none; background:var(--glass); color:var(--muted); font-weight:700; cursor:pointer; min-width:90px; text-align:center; }
+  .btn.primary{ background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:var(--btn-text-dark); box-shadow:0 8px 22px rgba(0,0,0,0.06); }
+
+  /* about & contact */
+  .about, .contact{ margin-top:12px; padding:12px; border-radius:12px; background:var(--card-bg); border:1px solid var(--card-border); box-shadow:var(--card-glow); }
+  .about h3, .contact h3{ color:var(--text); }
+  .about p, .contact p{ color:var(--muted); line-height:1.45; }
+  .form-row{ display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+  .form-input, .form-textarea{ padding:10px; border-radius:10px; border:1px solid var(--card-border); background:transparent; color:var(--text); }
+  .form-textarea{ min-height:120px; resize:vertical; }
+  .form-submit{ margin-top:10px; padding:12px; border-radius:10px; border:none; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:var(--btn-text-dark); font-weight:700; width:100%; cursor:pointer; }
+  .form-status{ margin-top:8px; color:var(--muted); }
+
+  /* footer */
+  footer.footer{ margin-top:14px; padding:12px; text-align:center; color:var(--muted); border-radius:10px; }
+
+  /* responsive: 2/3 cols on larger screens */
+  @media(min-width:720px){
+    .grid{ grid-template-columns: repeat(2,1fr); gap:14px; }
+    .hero{ flex-direction:row; align-items:center; gap:12px; }
+    .mini-screen{ width:40%; height:150px; }
+    .hero-left{ width:58%; }
   }
-  .card h4 { font-size:1rem; color:var(--text); margin:0; }
-  .result {
-    min-height:92px; display:flex; align-items:center; justify-content:center; text-align:center;
-    padding:10px; border-radius:10px; font-style:italic; color:var(--text); background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
-  }
-  .controls { display:flex; gap:8px; flex-wrap:wrap; }
-  .btn { flex:1; padding:10px; border-radius:10px; border:none; background:var(--glass); color:var(--muted); font-weight:700; cursor:pointer; min-width:84px; text-align:center; }
-  .btn.primary { background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:var(--btn-text-dark); box-shadow:0 8px 22px rgba(0,0,0,0.06); }
-
-  .muted { color:var(--muted); font-size:0.92rem; }
-
-  /* Favorites overlay */
-  #favOverlay { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(2,2,6,0.6); z-index:60; padding:14px; }
-  #favOverlay .panel { width:100%; max-width:680px; border-radius:12px; padding:12px; background:var(--card-bg); border:1px solid var(--card-border); box-shadow:var(--card-glow); }
-
-  /* About + Contact */
-  .about, .contact {
-    margin-top:12px; padding:14px; border-radius:12px; background:var(--card-bg); border:1px solid var(--card-border); box-shadow:var(--card-glow);
-  }
-  .about h3, .contact h3 { color:var(--text); }
-  .about p, .contact p { color:var(--muted); line-height:1.45; }
-
-  .form-row { display:flex; gap:8px; flex-direction:column; margin-top:8px; }
-  .form-input, .form-textarea {
-    width:100%; padding:12px; border-radius:10px; border:1px solid var(--card-border); background:transparent; color:var(--text);
-  }
-  .form-textarea { min-height:120px; resize:vertical; }
-  .form-submit { margin-top:10px; padding:12px; border-radius:10px; border:none; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:var(--btn-text-dark); font-weight:700; width:100%; cursor:pointer; }
-
-  .form-status { margin-top:8px; color:var(--muted); }
-
-  /* Footer */
-  footer.footer { margin-top:14px; padding:12px; text-align:center; color:var(--muted); border-radius:10px; }
-
-  /* -------------------------
-     Larger screens: 2 cols and 3 cols
-     ------------------------- */
-  @media (min-width:720px){
-    .grid { grid-template-columns: repeat(2,1fr); gap:14px; }
-    .hero { flex-direction:row; gap:14px; align-items:center; }
-    .mini-screen { width:40%; height:160px; }
-    .hero-left { width:58%; }
-  }
-  @media (min-width:1024px){
-    .grid { grid-template-columns: repeat(3,1fr); gap:18px; }
-    .wrap { width:92%; }
-    .mini-screen { height:200px; }
+  @media(min-width:1024px){
+    .grid{ grid-template-columns: repeat(3,1fr); gap:18px; }
+    .mini-screen{ height:200px; }
   }
 
-  /* small UI helpers */
-  .fade { animation:fadeUp 260ms ease; }
-  @keyframes fadeUp { from{transform:translateY(8px);opacity:0} to{transform:translateY(0);opacity:1} }
-  .sr-only { position:absolute; left:-9999px; }
+  /* boxed overlay close button */
+  .box .close { cursor:pointer; padding:8px 10px; border-radius:8px; background:var(--glass); border:1px solid var(--card-border); color:var(--muted); }
+
+  /* subtle animations */
+  .fade { animation: fadeUp 260ms ease; }
+  @keyframes fadeUp { from{ transform: translateY(6px); opacity:0 } to{ transform: translateY(0); opacity:1 } }
+
+  .sr-only{ position:absolute; left:-9999px; }
 </style>
 </head>
 <body>
   <div class="wrap">
 
-    <!-- Header (translucent box) -->
-    <header class="navbar" role="banner" aria-label="Main header">
+    <!-- HEADER -->
+    <header class="navbar" role="banner" aria-label="Site header">
       <div class="brand">
         <img src="inspiro.png" alt="Inspiro logo">
         <div>
@@ -193,33 +206,29 @@
         </div>
       </div>
 
-      <div style="display:flex; align-items:center; gap:10px;">
-        <nav class="navlinks" id="mainNav" aria-label="Primary navigation">
-          <a href="#generators">Generators</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <nav class="navlinks" aria-label="Primary navigation">
+          <a href="#" data-open="generators">Generators</a>
+          <a href="#" data-open="about">About</a>
+          <a href="#" data-open="contact">Contact</a>
         </nav>
 
-        <!-- header controls -->
-        <div class="header-controls" role="toolbar" aria-label="Header controls">
-          <button id="openFavBtn" class="btn-icon" title="Favorites" aria-label="Open favorites">☆ Fav</button>
+        <div class="header-controls" role="toolbar" aria-label="Controls">
+          <div class="mode-toggle" id="modeToggle" role="switch" aria-checked="false" tabindex="0">
+            <div class="mode-label" id="modeLabel">Calm</div>
+            <div class="track" aria-hidden="true"><div class="dot" aria-hidden="true"></div></div>
+          </div>
 
-          <!-- Theme toggle -->
-          <button id="themeToggle" class="btn-icon theme-toggle" title="Toggle light/dark" aria-pressed="false" aria-label="Toggle theme">🌙</button>
-
-          <!-- mobile menu button (visible on small screens) -->
-          <button id="menuBtn" class="mob-menu-btn" aria-expanded="false" aria-controls="mainNav" title="Open menu" style="display:none;">
-            ☰
-          </button>
+          <button class="menu-btn" id="menuBtn" aria-controls="mobileMenu" aria-expanded="false">Menu</button>
         </div>
       </div>
     </header>
 
-    <!-- Hero -->
+    <!-- HERO -->
     <section class="hero" aria-label="Intro">
       <div class="hero-left">
         <h2>Ignite a little sparkle — every day.</h2>
-        <p>Quick generators for quotes, goals, affirmations, ideas and mood boosters. Mobile-first, polished and accessible.</p>
+        <p>Quick generators (quotes, goals, affirmations, ideas, mood boosters). Mobile-first, calm design, and an energetic mode when you want a brighter vibe.</p>
         <div class="hero-cta">
           <button id="startNow" class="cta-primary">Open Generators</button>
           <button id="shareApp" class="cta-ghost">Share</button>
@@ -229,7 +238,7 @@
       <div class="mini-screen" aria-hidden="true">
         <div>
           <h3 id="heroLine">"Dream big. Start small."</h3>
-          <p id="heroSub" class="muted">Quick sparks that light your day.</p>
+          <p id="heroSub" class="muted">Tiny sparks that brighten your day.</p>
         </div>
       </div>
     </section>
@@ -237,10 +246,9 @@
     <!-- Generators -->
     <main id="generators" class="grid" role="main" aria-label="Generators">
 
-      <!-- Quote -->
-      <section class="card" aria-labelledby="quoteTitle">
-        <h4 id="quoteTitle">Quote</h4>
-        <div class="result" id="quoteResult">Tap Generate to get a motivating quote.</div>
+      <section class="card" id="quoteCard">
+        <h4>Quote</h4>
+        <div class="result" id="quoteResult" role="status" aria-live="polite">Tap Generate to get a motivating quote.</div>
         <div class="controls">
           <button class="btn primary" data-gen="quote">Generate</button>
           <button class="btn" data-copy="quote">Copy</button>
@@ -249,10 +257,9 @@
         </div>
       </section>
 
-      <!-- Goal -->
-      <section class="card" aria-labelledby="goalTitle">
-        <h4 id="goalTitle">Goal</h4>
-        <div class="result" id="goalResult">Tap Generate for a short actionable goal.</div>
+      <section class="card" id="goalCard">
+        <h4>Goal</h4>
+        <div class="result" id="goalResult" role="status" aria-live="polite">Tap Generate for a short actionable goal.</div>
         <div class="controls">
           <button class="btn primary" data-gen="goal">Generate</button>
           <button class="btn" data-copy="goal">Copy</button>
@@ -261,10 +268,9 @@
         </div>
       </section>
 
-      <!-- Affirmation -->
-      <section class="card" aria-labelledby="affirmTitle">
-        <h4 id="affirmTitle">Affirmation</h4>
-        <div class="result" id="affirmResult">Tap Generate for a confidence boost.</div>
+      <section class="card" id="affirmCard">
+        <h4>Affirmation</h4>
+        <div class="result" id="affirmResult" role="status" aria-live="polite">Tap Generate for a confidence boost.</div>
         <div class="controls">
           <button class="btn primary" data-gen="affirm">Generate</button>
           <button class="btn" data-copy="affirm">Copy</button>
@@ -273,10 +279,9 @@
         </div>
       </section>
 
-      <!-- Idea -->
-      <section class="card" aria-labelledby="ideaTitle">
-        <h4 id="ideaTitle">Idea</h4>
-        <div class="result" id="ideaResult">Tap Generate to spark creativity.</div>
+      <section class="card" id="ideaCard">
+        <h4>Idea</h4>
+        <div class="result" id="ideaResult" role="status" aria-live="polite">Tap Generate to spark creativity.</div>
         <div class="controls">
           <button class="btn primary" data-gen="idea">Generate</button>
           <button class="btn" data-copy="idea">Copy</button>
@@ -285,10 +290,9 @@
         </div>
       </section>
 
-      <!-- Mood -->
-      <section class="card" aria-labelledby="moodTitle">
-        <h4 id="moodTitle">Mood Booster</h4>
-        <div class="result" id="moodResult">Tap Generate for a quick mood lift.</div>
+      <section class="card" id="moodCard">
+        <h4>Mood Booster</h4>
+        <div class="result" id="moodResult" role="status" aria-live="polite">Tap Generate for a quick mood lift.</div>
         <div class="controls">
           <button class="btn primary" data-gen="mood">Generate</button>
           <button class="btn" data-copy="mood">Copy</button>
@@ -297,36 +301,31 @@
         </div>
       </section>
 
-      <!-- Modes card -->
       <section class="card" style="grid-column: 1 / -1;">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
           <div>
-            <strong style="color:var(--text);display:block">Theme</strong>
-            <div class="muted" style="margin-top:6px">Switch between Light and Dark themes — preference is saved.</div>
+            <strong style="color:var(--text)">Theme</strong>
+            <div class="muted" style="margin-top:6px">Toggle between Calm and Energetic modes using the header switch (no icons).</div>
           </div>
           <div style="display:flex;gap:8px;align-items:center;">
-            <button id="themeToggleBottom" class="btn">Toggle Theme</button>
             <button id="resetFavs" class="btn">Reset Favorites</button>
           </div>
         </div>
       </section>
+
     </main>
 
-    <!-- About -->
+    <!-- About (inline content; will also be cloned into boxed overlay) -->
     <section id="about" class="about" aria-label="About Inspiro">
       <h3>About Inspiro</h3>
-      <p>
-        Inspiro is a pocket-sized hub of quick inspiration — quotes, micro-goals, affirmations, idea prompts and mood boosters — designed to make small daily progress simple and pleasant.
-      </p>
-      <p style="margin-top:10px" class="muted">
-        Built by Solvoro. Favorites stay in your browser. Contact sends to our Formspree endpoint.
-      </p>
+      <p>Inspiro is a pocket-sized hub of quick inspiration — quotes, micro-goals, affirmations, idea prompts and mood boosters. Designed to give small repeatable moments of progress every day.</p>
+      <p style="margin-top:8px" class="muted">Built by Solvoro. Favorites stay locally; messages go to Formspree.</p>
     </section>
 
     <!-- Contact -->
     <section id="contact" class="contact" aria-label="Contact">
       <h3>Contact</h3>
-      <p class="muted">Feedback, partnership or bugs — send a message and we'll reply to the email you provide.</p>
+      <p class="muted">Feedback, partnerships, or bugs — send a message and we’ll reply to the email you provide.</p>
 
       <form id="contactForm" action="https://formspree.io/f/xgvndqjr" method="POST" accept-charset="utf-8" novalidate>
         <input type="hidden" name="_subject" value="New contact from Inspiro site">
@@ -341,23 +340,31 @@
         <div class="form-row">
           <textarea class="form-textarea" name="message" id="contactMessage" placeholder="Your message" required></textarea>
         </div>
+
         <button class="form-submit" type="submit">Send Message</button>
         <div id="formStatus" class="form-status" aria-live="polite"></div>
       </form>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer" role="contentinfo">
-      © 2025 Inspiro — Powered by Solvoro
-    </footer>
+    <footer class="footer">© 2025 Inspiro — Powered by Solvoro</footer>
+  </div>
 
+  <!-- Boxed overlay for menu content -->
+  <div id="boxOverlay" class="box-overlay" aria-hidden="true">
+    <div class="box" role="dialog" aria-modal="true" aria-label="Panel">
+      <header>
+        <strong id="boxTitle">Panel</strong>
+        <button class="close" id="boxClose">Close</button>
+      </header>
+      <div id="boxContent"></div>
+    </div>
   </div>
 
   <!-- Favorites overlay -->
-  <div id="favOverlay" aria-hidden="true">
-    <div class="panel" role="dialog" aria-modal="true" aria-labelledby="favTitle">
+  <div id="favOverlay" aria-hidden="true" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,2,6,0.6);z-index:90;padding:12px;">
+    <div style="width:100%;max-width:720px;border-radius:12px;padding:12px;background:var(--card-bg);border:1px solid var(--card-border);box-shadow:var(--card-glow);">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <strong id="favTitle" style="color:var(--text)">Favorites</strong>
+        <strong style="color:var(--text)">Favorites</strong>
         <div style="display:flex;gap:8px;">
           <button id="copyAllFavs" class="btn">Copy All</button>
           <button id="closeFav" class="btn">Close</button>
@@ -369,23 +376,49 @@
 
 <script>
 /* ============================
-   Data + helpers
+   Data and helpers
    ============================ */
 const DATA = {
-  quote: ["The best way to predict the future is to invent it. – Alan Kay","Life is 10% what happens and 90% how you react to it. – Charles R. Swindoll","Do what you can, with what you have, where you are. – Theodore Roosevelt","Great things never come from comfort zones.","Dream it. Wish it. Do it.","You are your best investment."],
-  goal: ["Spend 15 minutes planning tomorrow's top 3 tasks.","Write a 200-word idea about something you care about.","Unfollow any 3 accounts that don't add value this week.","Learn one keyboard shortcut and use it daily.","Declutter one small area for 10 minutes today.","Reach out to someone you admire and ask one question."],
-  affirm: ["I grow stronger and wiser every day.","I choose progress over perfection.","I am worthy of my dreams.","I am focused, calm, and capable.","I attract opportunities and positivity."],
-  idea: ["Make a 'how I did it' micro-video about a daily habit.","Start a 7-day prompt challenge on social with a unique twist.","Create a mini checklist product people can download and use.","Design a one-page website showing a side-project idea.","Combine two hobbies to make a new creative product.","Map your morning routine and test one tiny improvement."],
-  mood: ["😊 Take 60 seconds to breathe deeply.","🌤️ Write one thing you're grateful for right now.","🎵 Play a 2-minute upbeat song and move.","☕ Make your favorite drink and enjoy it slowly.","🌿 Step outside for a minute and notice the sky."]
+  quote: [
+    "The best way to predict the future is to invent it. – Alan Kay",
+    "Life is 10% what happens and 90% how you react to it. – Charles R. Swindoll",
+    "Do what you can, with what you have, where you are. – Theodore Roosevelt",
+    "Great things never come from comfort zones.",
+    "Dream it. Wish it. Do it.",
+    "You are your best investment."
+  ],
+  goal: [
+    "Spend 15 minutes planning tomorrow's top 3 tasks.",
+    "Write a 200-word idea about something you care about.",
+    "Unfollow any 3 accounts that don't add value this week.",
+    "Learn one keyboard shortcut and use it daily.",
+    "Declutter one small area for 10 minutes today.",
+    "Reach out to someone you admire and ask one question."
+  ],
+  affirm: [
+    "I grow stronger and wiser every day.",
+    "I choose progress over perfection.",
+    "I am worthy of my dreams.",
+    "I am focused, calm, and capable.",
+    "I attract opportunities and positivity."
+  ],
+  idea: [
+    "Make a 'how I did it' micro-video about a daily habit.",
+    "Start a 7-day prompt challenge on social with a unique twist.",
+    "Create a mini checklist product people can download and use.",
+    "Design a one-page website showing a side-project idea.",
+    "Combine two hobbies to make a new creative product.",
+    "Map your morning routine and test one tiny improvement."
+  ],
+  mood: [
+    "😊 Take 60 seconds to breathe deeply.",
+    "🌤️ Write one thing you're grateful for right now.",
+    "🎵 Play a 2-minute upbeat song and move.",
+    "☕ Make your favorite drink and enjoy it slowly.",
+    "🌿 Step outside for a minute and notice the sky."
+  ]
 };
-const chooseRandom = (arr) => arr[Math.floor(Math.random()*arr.length)];
-const mapping = {
-  quote: { selector: '[data-gen="quote"]', resultId: 'quoteResult' },
-  goal:  { selector: '[data-gen="goal"]', resultId: 'goalResult' },
-  affirm:{ selector: '[data-gen="affirm"]', resultId: 'affirmResult' },
-  idea:  { selector: '[data-gen="idea"]', resultId: 'ideaResult' },
-  mood:  { selector: '[data-gen="mood"]', resultId: 'moodResult' }
-};
+const chooseRandom = arr => arr[Math.floor(Math.random()*arr.length)];
 
 function flashResult(el, text){
   el.classList.add('fade');
@@ -395,37 +428,32 @@ function flashResult(el, text){
   }, 180);
 }
 
-/* Initialize hero rotating lines */
-const heroLines = ['"Dream big. Start small."','"One step today beats perfect tomorrow."','"Make space for ideas."','"Progress is a collection of tiny wins."','"Create something kind for someone."'];
-let heroIndex = 0;
-const heroLineEl = document.getElementById('heroLine'), heroSubEl = document.getElementById('heroSub');
-setInterval(()=> {
-  if(!heroLineEl) return;
-  heroLineEl.style.opacity = 0;
-  setTimeout(()=> {
-    heroLineEl.textContent = heroLines[heroIndex];
-    heroLineEl.style.opacity = 1;
-    heroIndex = (heroIndex + 1) % heroLines.length;
-  }, 300);
-}, 4200);
+/* mapping for generators */
+const mapping = {
+  quote: { btnSelector: '[data-gen="quote"]', resultId: 'quoteResult' },
+  goal:  { btnSelector: '[data-gen="goal"]', resultId: 'goalResult' },
+  affirm:{ btnSelector: '[data-gen="affirm"]', resultId: 'affirmResult' },
+  idea:  { btnSelector: '[data-gen="idea"]', resultId: 'ideaResult' },
+  mood:  { btnSelector: '[data-gen="mood"]', resultId: 'moodResult' }
+};
 
-/* Bind generator buttons */
+/* init: attach generate buttons */
 Object.keys(mapping).forEach(key => {
-  const btn = document.querySelector(mapping[key].selector);
-  const resultEl = document.getElementById(mapping[key].resultId);
-  // show initial sample
-  if(resultEl && resultEl.textContent && (resultEl.textContent.includes('Tap') || resultEl.textContent.includes('Tap'))) {
-    resultEl.textContent = chooseRandom(DATA[key]);
+  const btn = document.querySelector(mapping[key].btnSelector);
+  const resEl = document.getElementById(mapping[key].resultId);
+  // seed a sample if default text is present
+  if(resEl && (resEl.textContent.includes('Tap') || resEl.textContent.includes('Tap'))) {
+    resEl.textContent = chooseRandom(DATA[key]);
   }
   btn?.addEventListener('click', () => {
     const text = chooseRandom(DATA[key]);
-    flashResult(resultEl, text);
+    flashResult(resEl, text);
     lastGenerated = { type:key, text };
   });
 });
 
-/* Copy / Speak / Favorite (delegated) */
-document.addEventListener('click', (e) => {
+/* copy/speak/fav - delegated */
+document.addEventListener('click', (e)=>{
   const copyKey = e.target.getAttribute('data-copy');
   const speakKey = e.target.getAttribute('data-speak');
   const favKey = e.target.getAttribute('data-fav');
@@ -433,125 +461,207 @@ document.addEventListener('click', (e) => {
   if(copyKey){
     const text = document.getElementById(mapping[copyKey].resultId).textContent;
     if(!text) return;
-    navigator.clipboard?.writeText(text).then(()=> showMoment(e.target, 'Copied'));
+    navigator.clipboard?.writeText(text).then(()=> showMoment(e.target,'Copied'));
   }
   if(speakKey){
     const text = document.getElementById(mapping[speakKey].resultId).textContent;
     if(!text) return;
-    speak(text); showMoment(e.target,'Speaking');
+    speakText(text); showMoment(e.target,'Speaking');
   }
   if(favKey){
     const text = document.getElementById(mapping[favKey].resultId).textContent;
     if(!text || text.includes('Tap') || text.includes('Generate')) return;
-    saveFavorite({type:favKey, text, time:Date.now()});
+    saveFavorite({ type: favKey, text, time: Date.now() });
     showMoment(e.target,'Saved');
   }
 });
 
-function showMoment(el, txt){
+function showMoment(el, msg){
   const orig = el.innerHTML;
-  el.innerHTML = txt;
+  el.innerHTML = msg;
   setTimeout(()=> el.innerHTML = orig, 800);
 }
-
-/* Speech */
-function speak(txt){
+function speakText(txt){
   if(!('speechSynthesis' in window)) return;
-  const u = new SpeechSynthesisUtterance(txt);
-  u.lang = 'en-US'; u.rate = 1; u.pitch = 1;
-  window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);
+  const s = new SpeechSynthesisUtterance(txt);
+  s.lang = 'en-US'; s.rate = 1; s.pitch = 1;
+  window.speechSynthesis.cancel(); window.speechSynthesis.speak(s);
 }
 
-/* Favorites (localStorage) */
-const FAV_KEY = 'inspiro_favs_v2';
+/* favorites localStorage */
+const FAV_KEY = 'inspiro_favs_v3';
 function loadFavorites(){ try{ return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); }catch(e){ return []; } }
 function saveFavorite(item){ const list = loadFavorites(); if(list.some(x=>x.text===item.text)) return; list.unshift(item); localStorage.setItem(FAV_KEY, JSON.stringify(list.slice(0,50))); }
 function clearFavorites(){ localStorage.removeItem(FAV_KEY); }
 
-/* Favorites UI */
-const openFavBtn = document.getElementById('openFavBtn'), favOverlay = document.getElementById('favOverlay'), favList = document.getElementById('favList'), closeFav = document.getElementById('closeFav'), copyAllFavs = document.getElementById('copyAllFavs');
+/* favorites UI */
+const openFavBtn = document.getElementById('openFavBtn') || document.getElementById('openFavBtn');
+const favOverlay = document.getElementById('favOverlay');
+const favListEl = document.getElementById('favList');
+const closeFav = document.getElementById('closeFav');
+const copyAllFavs = document.getElementById('copyAllFavs');
+
 openFavBtn?.addEventListener('click', openFavs);
 closeFav?.addEventListener('click', closeFavs);
 copyAllFavs?.addEventListener('click', ()=> {
   const all = loadFavorites().map(f=>`[${f.type}] ${f.text}`).join('\n\n');
   navigator.clipboard?.writeText(all).then(()=> showMoment(copyAllFavs,'Copied'));
 });
+
 function openFavs(){
   const list = loadFavorites();
-  favList.innerHTML = list.length ? list.map(it => `<div style="padding:10px;border-radius:10px;background:rgba(255,255,255,0.02);margin-bottom:8px"><div style="font-weight:700;color:var(--text)">${it.text}</div><div style="font-size:0.85rem;color:var(--muted)">Type: ${it.type}</div></div>`).join('') : '<div class="muted">No favorites yet — save any card by tapping ☆ Fav</div>';
-  favOverlay.style.display = 'flex'; favOverlay.setAttribute('aria-hidden','false');
+  favListEl.innerHTML = list.length ? list.map(it => `<div style="padding:10px;border-radius:10px;background:rgba(255,255,255,0.02);margin-bottom:8px"><div style="font-weight:700;color:var(--text)">${it.text}</div><div style="font-size:0.85rem;color:var(--muted)">Type: ${it.type}</div></div>`).join('') : '<div class="muted">No favorites yet — save any card by tapping ☆ Fav</div>';
+  favOverlay.style.display = 'flex';
+  favOverlay.setAttribute('aria-hidden','false');
 }
-function closeFavs(){ favOverlay.style.display = 'none'; favOverlay.setAttribute('aria-hidden','true'); }
+function closeFavs(){
+  favOverlay.style.display = 'none';
+  favOverlay.setAttribute('aria-hidden','true');
+}
 
-/* reset favorites button */
+/* reset favorites */
 document.getElementById('resetFavs')?.addEventListener('click', ()=> {
   if(confirm('Clear all favorites?')){ clearFavorites(); alert('Favorites cleared'); }
 });
 
-/* share / start buttons */
+/* start button scroll */
 document.getElementById('startNow')?.addEventListener('click', ()=> {
-  document.getElementById('generators').scrollIntoView({behavior:'smooth', block:'start'});
+  document.getElementById('generators').scrollIntoView({ behavior:'smooth', block:'start' });
 });
+
+/* share button */
 document.getElementById('shareApp')?.addEventListener('click', async ()=>{
   const shareData = { title:'Inspiro', text:'Check Inspiro — pocket-sized inspiration', url:location.href };
   if(navigator.share){ try{ await navigator.share(shareData); }catch(e){} } else { navigator.clipboard?.writeText(`${shareData.title} — ${shareData.text} ${shareData.url}`); alert('Link copied'); }
 });
 
-/* theme toggle (light/dark) */
-const themeToggle = document.getElementById('themeToggle'), themeToggleBottom = document.getElementById('themeToggleBottom');
-function setThemeLight(isLight){
-  if(isLight){ document.body.classList.add('light-theme'); themeToggle.textContent='☀️'; themeToggle.setAttribute('aria-pressed','true'); themeToggleBottom.textContent='Light'; localStorage.setItem('inspiro_theme','light'); }
-  else { document.body.classList.remove('light-theme'); themeToggle.textContent='🌙'; themeToggle.setAttribute('aria-pressed','false'); themeToggleBottom.textContent='Dark'; localStorage.setItem('inspiro_theme','dark'); }
+/* Theme (Calm / Energetic) toggle — textual no icons */
+const modeToggle = document.getElementById('modeToggle');
+const modeLabelEl = document.getElementById('modeLabel');
+function setModeEnergetic(isEnergetic){
+  if(isEnergetic){
+    document.body.classList.add('energetic');
+    modeLabelEl.textContent = 'Energetic';
+    modeToggle.setAttribute('aria-checked','true');
+    try{ localStorage.setItem('inspiro_mode','energetic'); }catch(e){}
+  } else {
+    document.body.classList.remove('energetic');
+    modeLabelEl.textContent = 'Calm';
+    modeToggle.setAttribute('aria-checked','false');
+    try{ localStorage.setItem('inspiro_mode','calm'); }catch(e){}
+  }
 }
-themeToggle?.addEventListener('click', ()=> setThemeLight(!document.body.classList.contains('light-theme')));
-themeToggleBottom?.addEventListener('click', ()=> setThemeLight(!document.body.classList.contains('light-theme')));
-// restore theme
-try{ const t = localStorage.getItem('inspiro_theme'); if(t==='light') setThemeLight(true); }catch(e){}
+modeToggle?.addEventListener('click', ()=> setModeEnergetic(!document.body.classList.contains('energetic')));
+modeToggle?.addEventListener('keydown', (e)=> { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); modeToggle.click(); } });
+// restore mode
+try{
+  const saved = localStorage.getItem('inspiro_mode');
+  if(saved === 'energetic') setModeEnergetic(true);
+} catch(e){}
 
-/* mobile menu behavior */
-const menuBtn = document.getElementById('menuBtn'), mainNav = document.getElementById('mainNav');
-function updateMenuVisibility(){
-  // show hamburger only under 720px width
-  if(window.innerWidth < 720){ menuBtn.style.display='inline-flex'; mainNav.style.display='none'; }
-  else { menuBtn.style.display='none'; mainNav.style.display='flex'; }
+/* boxed overlay logic for menu links */
+const boxOverlay = document.getElementById('boxOverlay');
+const boxContent = document.getElementById('boxContent');
+const boxTitle = document.getElementById('boxTitle');
+const boxClose = document.getElementById('boxClose');
+
+function openBoxWithSection(id){
+  const section = document.getElementById(id);
+  if(!section) return;
+  boxTitle.textContent = section.querySelector('h3') ? section.querySelector('h3').textContent : (id[0].toUpperCase()+id.slice(1));
+  // clone content to avoid moving it
+  const clone = section.cloneNode(true);
+  // remove forms' native behavior in clone (if contact)
+  const forms = clone.querySelectorAll('form');
+  forms.forEach(f => f.removeAttribute('id'));
+  boxContent.innerHTML = '';
+  boxContent.appendChild(clone);
+  boxOverlay.style.display = 'flex';
+  boxOverlay.setAttribute('aria-hidden','false');
+  // allow internal interactions inside box: e.g., copy buttons within clone will not work (they don't map) — clear controls
+  // but we can ensure the box's contact form is handled: simply keep static info — main contact remains on page
 }
-updateMenuVisibility();
-window.addEventListener('resize', updateMenuVisibility);
-menuBtn?.addEventListener('click', ()=> {
-  const shown = mainNav.style.display === 'block';
-  mainNav.style.display = shown ? 'none' : 'block';
+
+document.querySelectorAll('[data-open]').forEach(el => {
+  el.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = el.getAttribute('data-open');
+    // for generators, show a quick menu with buttons to jump to the section within the box
+    if(target === 'generators'){
+      boxTitle.textContent = 'Generators';
+      boxContent.innerHTML = '';
+      // build a compact view listing generator cards (clone results from page)
+      const frag = document.createElement('div');
+      frag.innerHTML = `
+        <div style="display:grid;gap:10px;">
+          <div style="padding:10px;border-radius:10px;border:1px solid var(--card-border);background:var(--card-bg)"><strong>Quote</strong><div style="margin-top:8px">${document.getElementById('quoteResult').textContent}</div></div>
+          <div style="padding:10px;border-radius:10px;border:1px solid var(--card-border);background:var(--card-bg)"><strong>Goal</strong><div style="margin-top:8px">${document.getElementById('goalResult').textContent}</div></div>
+          <div style="padding:10px;border-radius:10px;border:1px solid var(--card-border);background:var(--card-bg)"><strong>Affirmation</strong><div style="margin-top:8px">${document.getElementById('affirmResult').textContent}</div></div>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn primary" id="boxGenQuote">Generate Quote</button>
+          <button class="btn" id="boxCloseBtn">Close</button>
+        </div>
+      `;
+      boxContent.appendChild(frag);
+      // bind generate inside box
+      setTimeout(()=> {
+        document.getElementById('boxGenQuote')?.addEventListener('click', ()=> {
+          const text = chooseRandom(DATA.quote);
+          // update the actual page result and the box
+          flashResult(document.getElementById('quoteResult'), text);
+          // update box first card
+          boxContent.querySelectorAll('div')[1].innerHTML = `<strong>Quote</strong><div style="margin-top:8px">${text}</div>`;
+        });
+        document.getElementById('boxCloseBtn')?.addEventListener('click', closeBox);
+      }, 30);
+      boxOverlay.style.display = 'flex'; boxOverlay.setAttribute('aria-hidden','false');
+      return;
+    }
+    openBoxWithSection(target);
+  });
 });
 
-/* contact form submit to Formspree (AJAX) */
+boxClose.addEventListener('click', closeBox);
+boxOverlay.addEventListener('click', (e) => { if(e.target === boxOverlay) closeBox(); });
+function closeBox(){ boxOverlay.style.display = 'none'; boxOverlay.setAttribute('aria-hidden','true'); boxContent.innerHTML = ''; }
+
+/* keyboard: close with Escape */
+document.addEventListener('keydown', (e)=> { if(e.key === 'Escape'){ if(document.getElementById('boxOverlay').style.display === 'flex') closeBox(); if(favOverlay.style.display === 'flex') closeFavs(); } });
+
+/* contact form submit (Formspree AJAX) */
 const CONTACT_URL = 'https://formspree.io/f/xgvndqjr';
-const contactForm = document.getElementById('contactForm'), formStatus = document.getElementById('formStatus');
-contactForm?.addEventListener('submit', async (e) => {
-  e.preventDefault();
+const contactForm = document.getElementById('contactForm');
+const formStatus = document.getElementById('formStatus');
+contactForm?.addEventListener('submit', async (ev) => {
+  ev.preventDefault();
   formStatus.textContent = 'Sending…';
-  const fd = new FormData(contactForm);
-  try{
-    const resp = await fetch(CONTACT_URL, { method:'POST', body:fd, headers:{ 'Accept':'application/json' } });
+  const formData = new FormData(contactForm);
+  try {
+    const resp = await fetch(CONTACT_URL, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
     if(resp.ok){ formStatus.textContent = 'Thanks — your message was sent.'; contactForm.reset(); }
     else {
       let err = 'Could not send message. Please try again.';
-      try{ const data = await resp.json(); if(data?.error) err = data.error; }catch(_) {}
+      try{ const d = await resp.json(); if(d?.error) err = d.error; }catch(e){}
       formStatus.textContent = err;
     }
-  }catch(err){
+  } catch(e){
     formStatus.textContent = 'Network issue — trying fallback...';
     setTimeout(()=> contactForm.submit(), 600);
   }
 });
 
-/* small accessibility + init */
+/* small initial samples so cards aren't empty */
 window.addEventListener('load', ()=> {
-  // ensure at least one sample is shown
   Object.keys(mapping).forEach(k => {
-    const res = document.getElementById(mapping[k].resultId);
-    if(res && (res.textContent.includes('Tap') || res.textContent.includes('Tap'))) res.textContent = chooseRandom(DATA[k]);
-    if(res) { res.setAttribute('role','status'); res.setAttribute('aria-live','polite'); }
+    const el = document.getElementById(mapping[k].resultId);
+    if(el && (el.textContent.includes('Tap') || el.textContent.includes('Tap'))) el.textContent = chooseRandom(DATA[k]);
+    if(el) { el.setAttribute('role','status'); el.setAttribute('aria-live','polite'); }
   });
 });
+
+/* accessibility: focus trap not added (kept simple). */
+/* end of script */
 </script>
 </body>
 </html>
