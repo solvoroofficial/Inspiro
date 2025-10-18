@@ -7,47 +7,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="icon" href="inspiro.png" type="image/png">
 <style>
-  /* -------------------------
-     Theme variables (dark default)
-     ------------------------- */
   :root{
-    --bg-1: #07060a;
-    --bg-2: #0d0d1a;
+    --bg-1:#07060a; --bg-2:#0d0d1a;
     --card-bg: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     --card-border: rgba(255,255,255,0.03);
     --glass: rgba(255,255,255,0.04);
-    --accent-1: #00f0ff;
-    --accent-2: #9b5cff;
-    --text: #eaf7ff;
-    --muted: rgba(234,247,255,0.82);
-    --muted-weak: rgba(234,247,255,0.55);
+    --accent-1:#00f0ff; --accent-2:#9b5cff;
+    --text:#eaf7ff; --muted: rgba(234,247,255,0.82);
     --card-glow: 0 10px 36px rgba(155,92,255,0.06);
-    --radius: 14px;
-    --trans: 260ms;
-    --btn-text-dark: #071226;
-    --mode-label: "Calm";
+    --radius:14px; --trans:260ms; --btn-text-dark:#071226;
+  }
+  body.energetic{
+    --bg-1:#f6f9ff; --bg-2:#eef4ff;
+    --card-bg:#fff; --card-border:rgba(16,24,40,0.06);
+    --glass:rgba(0,0,0,0.04); --accent-1:#0066ff; --accent-2:#ff6ec7;
+    --text:#0b1220; --muted: rgba(11,18,32,0.82); --card-glow:0 10px 36px rgba(6,80,200,0.06);
+    --btn-text-dark:#fff;
   }
 
-  /* Energetic (light-ish) */
-  body.energetic {
-    --bg-1: #f6f9ff;
-    --bg-2: #eef4ff;
-    --card-bg: #ffffff;
-    --card-border: rgba(16,24,40,0.06);
-    --glass: rgba(0,0,0,0.04);
-    --accent-1: #0066ff;
-    --accent-2: #ff6ec7;
-    --text: #0b1220;
-    --muted: rgba(11,18,32,0.82);
-    --muted-weak: rgba(11,18,32,0.55);
-    --card-glow: 0 10px 36px rgba(6,80,200,0.06);
-    --btn-text-dark: #fff;
-    --mode-label: "Energetic";
-  }
-
-  /* -------------------------
-     Base (mobile-first)
-     ------------------------- */
   *{box-sizing:border-box;margin:0;padding:0;font-family:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,Arial;}
   html,body{height:100%;}
   body{
@@ -55,224 +32,468 @@
       radial-gradient(circle at 10% 10%, rgba(155,92,255,0.05), transparent 14%),
       radial-gradient(circle at 90% 80%, rgba(0,240,255,0.03), transparent 14%),
       linear-gradient(180deg,var(--bg-1),var(--bg-2));
-    color:var(--text);
-    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-    transition: background var(--trans), color var(--trans);
-    padding-bottom:48px;
+    color:var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    transition: background var(--trans), color var(--trans); padding-bottom:48px;
   }
   .wrap{ width:94%; max-width:1100px; margin:12px auto; }
 
-  /* -------------------------
-     Translucent boxed header
-     ------------------------- */
-  .navbar {
+  /* Translucent boxed header — mobile: relative, desktop: sticky */
+  .navbar{
     display:flex; align-items:center; justify-content:space-between; gap:12px;
-    padding:12px 14px; border-radius:12px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-    border: 1px solid var(--card-border);
-    box-shadow: 0 8px 28px rgba(0,0,0,0.18);
-    backdrop-filter: blur(8px);
+    padding:12px 14px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border:1px solid var(--card-border); box-shadow:0 8px 28px rgba(0,0,0,0.18); backdrop-filter:blur(8px);
     margin-bottom:12px;
   }
-  @media (min-width:720px){
-    .navbar { position: sticky; top:12px; z-index:40; margin-bottom:18px; }
-  }
+  @media(min-width:720px){ .navbar{ position:sticky; top:12px; z-index:40; margin-bottom:18px; } }
 
   .brand{ display:flex; gap:12px; align-items:center; }
   .brand img{ width:44px; height:44px; border-radius:8px; object-fit:cover; box-shadow: 0 8px 22px rgba(155,92,255,0.08); }
   .brand h1{ font-size:1.05rem; color:var(--text); margin:0; }
-  .brand .tag{ font-size:0.78rem; color:var(--muted-weak); margin-top:4px; }
+  .brand .tag{ font-size:0.78rem; color:var(--muted); margin-top:4px; }
 
-  .navlinks { display:flex; gap:12px; align-items:center; }
-  .navlinks a { color:var(--muted); text-decoration:none; font-weight:600; padding:6px 8px; border-radius:8px; }
-  .navlinks a:hover { color:var(--text); }
-  .navlinks a::after{ content:""; display:block; height:2px; width:0; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); transition: width 220ms; border-radius:2px; margin-top:4px; }
-  .navlinks a:hover::after{ width:100%; }
+  /* NAVLINKS hidden on small screens so header never grows */
+  .navlinks{ display:none; gap:12px; align-items:center; }
+  .navlinks a{ color:var(--muted); text-decoration:none; font-weight:600; padding:6px 8px; border-radius:8px; white-space:nowrap; }
+  .navlinks a:hover{ color:var(--text); }
+  @media(min-width:720px){ .navlinks{ display:flex; } }
 
-  /* header controls */
-  .header-controls { display:flex; gap:8px; align-items:center; }
-  .mode-toggle {
-    display:inline-flex; align-items:center; gap:8px; padding:6px 10px;
-    border-radius:999px; background:var(--glass); border:1px solid var(--card-border); color:var(--muted);
-    cursor:pointer; user-select:none;
+  .header-controls{ display:flex; gap:8px; align-items:center; }
+  .mode-toggle{
+    display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:var(--glass);
+    border:1px solid var(--card-border); color:var(--muted); cursor:pointer; user-select:none;
   }
   .mode-toggle .track{ width:44px; height:20px; border-radius:999px; background:rgba(0,0,0,0.06); position:relative; display:inline-block; }
   .mode-toggle .dot{ width:16px; height:16px; border-radius:50%; background:var(--accent-1); position:absolute; left:2px; top:2px; transition: transform 260ms; box-shadow:0 6px 16px rgba(0,0,0,0.08); }
-
   body.energetic .mode-toggle .dot{ transform: translateX(24px); background: var(--accent-2); }
+  .mode-label{ font-weight:700; color:var(--text); font-size:0.95rem; }
 
-  .mode-label { font-weight:700; color:var(--text); font-size:0.95rem; letter-spacing:0.2px; }
-
-  /* menu button (mobile) */
-  .menu-btn { display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border-radius:10px; background:var(--glass); border:1px solid var(--card-border); color:var(--muted); cursor:pointer; }
+  /* Menu button visible on small screens, hidden on desktop */
+  .menu-btn{ display:inline-flex; align-items:center; gap:6px; padding:8px 10px; border-radius:10px; background:var(--glass); border:1px solid var(--card-border); color:var(--muted); cursor:pointer; }
   @media(min-width:720px){ .menu-btn{ display:none; } }
 
-  /* -------------------------
-     Boxed overlay (menu content)
-     ------------------------- */
-  .box-overlay {
-    position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:80;
-    background: rgba(2,2,6,0.45);
-    padding:16px;
-  }
-  .box {
-    width:100%; max-width:760px; max-height:86vh; overflow:auto;
-    border-radius:12px; background:var(--card-bg); border:1px solid var(--card-border);
-    box-shadow: var(--card-glow); padding:16px;
-  }
+  /* boxed overlay (menu content) */
+  .box-overlay{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:80; background: rgba(2,2,6,0.45); padding:16px; }
+  .box{ width:100%; max-width:760px; max-height:86vh; overflow:auto; border-radius:12px; background:var(--card-bg); border:1px solid var(--card-border); box-shadow:var(--card-glow); padding:16px; }
   .box header{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; }
-  .box .close { padding:8px 10px; border-radius:8px; background:var(--glass); border:1px solid var(--card-border); color:var(--muted); cursor:pointer; }
+  .box .close{ padding:8px 10px; border-radius:8px; background:var(--glass); border:1px solid var(--card-border); color:var(--muted); cursor:pointer; }
 
-  /* Hide nav links on mobile */
-  @media(max-width:719px){
-    .navlinks { display:none; }
-  }
+  /* Hero */
+  .hero{ padding:16px; border-radius:12px; background:var(--card-bg); border:1px solid var(--card-border); box-shadow:var(--card-glow); display:flex; flex-direction:column; gap:10px; }
+  .hero h2{ font-size:1.2rem; color:var(--text); } .hero p{ color:var(--muted); }
+  .mini-screen{ margin-top:8px; border-radius:10px; padding:12px; background: linear-gradient(135deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border:1px solid var(--card-border); }
 
-  /* Desktop nav: hide menu button */
-  @media(min-width:720px){
-    .menu-btn { display:none; }
-  }
-
-  /* -------------------------
-     HERO
-     ------------------------- */
-  .hero { padding:16px; border-radius:12px; background:var(--card-bg); border:1px solid var(--card-border); box-shadow:var(--card-glow); display:flex; flex-direction:column; gap:10px; }
-  .hero h2{ font-size:1.2rem; color:var(--text); }
-  .hero p{ color:var(--muted); font-size:0.95rem; }
-  .hero-cta{ display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
-  .cta-primary{ background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:var(--btn-text-dark); border:none; padding:10px 12px; border-radius:999px; font-weight:700; cursor:pointer; }
-  .cta-ghost{ background:transparent; border:1px solid var(--card-border); color:var(--muted); padding:8px 10px; border-radius:10px; }
-
-  .mini-screen { margin-top:8px; border-radius:10px; padding:12px; display:flex; align-items:center; justify-content:center; background: linear-gradient(135deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); border:1px solid var(--card-border); }
-  .mini-screen h3{ font-size:1rem; color:var(--text); text-align:center; }
-  .mini-screen p{ color:var(--muted); font-size:0.9rem; text-align:center; }
-
-  /* -------------------------
-     Generators grid + cards
-     ------------------------- */
+  /* grid + cards */
   .grid{ margin-top:12px; display:grid; grid-template-columns:1fr; gap:12px; }
   .card{ padding:12px; border-radius:12px; background:var(--card-bg); border:1px solid var(--card-border); box-shadow:var(--card-glow); display:flex; flex-direction:column; gap:10px; }
-  .card h4{ font-size:1rem; color:var(--text); margin:0; }
   .result{ min-height:92px; display:flex; align-items:center; justify-content:center; text-align:center; padding:10px; border-radius:10px; font-style:italic; color:var(--text); background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); }
   .controls{ display:flex; gap:8px; flex-wrap:wrap; }
-  .btn{ flex:1; padding:10px; border-radius:10px; border:none; background:var(--glass); color:var(--muted); font-weight:700; cursor:pointer; min-width:90px; text-align:center; }
-  .btn.primary{ background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:var(--btn-text-dark); box-shadow:0 8px 22px rgba(0,0,0,0.08); }
+  .btn{ flex:1; padding:10px; border-radius:10px; background:var(--glass); color:var(--muted); border:none; font-weight:700; cursor:pointer; min-width:90px; }
+  .btn.primary{ background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:var(--btn-text-dark); box-shadow:0 8px 22px rgba(0,0,0,0.06); }
 
-  /* Scrollable for mobile overlay */
-  .box::-webkit-scrollbar{ width:6px; }
-  .box::-webkit-scrollbar-thumb{ background: var(--accent-1); border-radius:8px; }
+  /* about/contact */
+  .about, .contact{ margin-top:12px; padding:12px; border-radius:12px; background:var(--card-bg); border:1px solid var(--card-border); box-shadow:var(--card-glow); }
+  .form-row{ display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+  .form-input, .form-textarea{ padding:10px; border-radius:10px; border:1px solid var(--card-border); background:transparent; color:var(--text); }
+  .form-submit{ margin-top:10px; padding:12px; border-radius:10px; border:none; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:var(--btn-text-dark); font-weight:700; width:100%; cursor:pointer; }
+
+  footer.footer{ margin-top:14px; padding:12px; text-align:center; color:var(--muted); border-radius:10px; }
+
+  @media(min-width:720px){ .grid{ grid-template-columns:repeat(2,1fr); gap:14px; } .hero{ flex-direction:row; align-items:center; gap:12px; } .mini-screen{ width:40%; height:150px; } .hero-left{ width:58%; } }
+  @media(min-width:1024px){ .grid{ grid-template-columns:repeat(3,1fr); gap:18px; } .mini-screen{ height:200px; } }
+
+  .fade{ animation:fadeUp 260ms ease; } @keyframes fadeUp{ from{ transform:translateY(6px); opacity:0 } to{ transform:translateY(0); opacity:1 } }
+  .sr-only{ position:absolute; left:-9999px; }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <!-- HEADER -->
-  <header class="navbar" role="banner">
-    <div class="brand">
-      <img src="inspiro.png" alt="Inspiro logo">
-      <div>
-        <h1>Inspiro</h1>
-        <div class="tag">Pocket Inspiration Hub</div>
+  <div class="wrap">
+
+    <!-- Header -->
+    <header class="navbar" role="banner" aria-label="Site header">
+      <div class="brand">
+        <img src="inspiro.png" alt="Inspiro logo">
+        <div>
+          <h1>Inspiro</h1>
+          <div class="tag">Pocket Inspiration Hub</div>
+        </div>
       </div>
-    </div>
 
-    <nav class="navlinks" aria-label="Primary navigation">
-      <a href="#" data-open="generators">Generators</a>
-      <a href="#" data-open="about">About</a>
-      <a href="#" data-open="contact">Contact</a>
-    </nav>
+      <!-- NOTE: navlinks hidden on small screens so header doesn't expand -->
+      <nav class="navlinks" aria-label="Primary navigation">
+        <a href="#" data-open="generators">Generators</a>
+        <a href="#" data-open="about">About</a>
+        <a href="#" data-open="contact">Contact</a>
+      </nav>
 
-    <div class="header-controls">
-      <div class="mode-toggle" id="modeToggle" role="switch" aria-checked="false" tabindex="0">
-        <div class="mode-label" id="modeLabel">Calm</div>
-        <div class="track"><div class="dot"></div></div>
+      <div class="header-controls" role="toolbar" aria-label="Header controls">
+        <div class="mode-toggle" id="modeToggle" role="switch" aria-checked="false" tabindex="0">
+          <div class="mode-label" id="modeLabel">Calm</div>
+          <div class="track" aria-hidden="true"><div class="dot" aria-hidden="true"></div></div>
+        </div>
+
+        <button class="menu-btn" id="menuBtn" aria-controls="boxOverlay" aria-expanded="false">Menu</button>
       </div>
-      <button class="menu-btn" id="menuBtn" aria-controls="mobileMenu" aria-expanded="false">Menu</button>
-    </div>
-  </header>
+    </header>
 
-  <!-- MOBILE OVERLAY -->
-  <div id="mobileMenu" class="box-overlay" aria-hidden="true">
-    <div class="box">
+    <!-- Hero -->
+    <section class="hero" aria-label="Intro">
+      <div class="hero-left">
+        <h2>Ignite a little sparkle — every day.</h2>
+        <p>Quick generators (quotes, goals, affirmations, ideas, mood boosters). Mobile-first, calm design, with an energetic mode when you want a brighter vibe.</p>
+        <div class="hero-cta" style="margin-top:8px;">
+          <button id="startNow" class="cta-primary">Open Generators</button>
+          <button id="shareApp" class="cta-ghost">Share</button>
+        </div>
+      </div>
+
+      <div class="mini-screen" aria-hidden="true">
+        <div>
+          <h3 id="heroLine">"Dream big. Start small."</h3>
+          <p id="heroSub" class="muted">Tiny sparks that brighten your day.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Generators -->
+    <main id="generators" class="grid" role="main" aria-label="Generators">
+
+      <section class="card" id="quoteCard">
+        <h4>Quote</h4>
+        <div class="result" id="quoteResult" role="status" aria-live="polite">Tap Generate to get a motivating quote.</div>
+        <div class="controls">
+          <button class="btn primary" data-gen="quote">Generate</button>
+          <button class="btn" data-copy="quote">Copy</button>
+          <button class="btn" data-speak="quote">Speak</button>
+          <button class="btn" data-fav="quote">☆ Fav</button>
+        </div>
+      </section>
+
+      <section class="card" id="goalCard">
+        <h4>Goal</h4>
+        <div class="result" id="goalResult" role="status" aria-live="polite">Tap Generate for a short actionable goal.</div>
+        <div class="controls">
+          <button class="btn primary" data-gen="goal">Generate</button>
+          <button class="btn" data-copy="goal">Copy</button>
+          <button class="btn" data-speak="goal">Speak</button>
+          <button class="btn" data-fav="goal">☆ Fav</button>
+        </div>
+      </section>
+
+      <section class="card" id="affirmCard">
+        <h4>Affirmation</h4>
+        <div class="result" id="affirmResult" role="status" aria-live="polite">Tap Generate for a confidence boost.</div>
+        <div class="controls">
+          <button class="btn primary" data-gen="affirm">Generate</button>
+          <button class="btn" data-copy="affirm">Copy</button>
+          <button class="btn" data-speak="affirm">Speak</button>
+          <button class="btn" data-fav="affirm">☆ Fav</button>
+        </div>
+      </section>
+
+      <section class="card" id="ideaCard">
+        <h4>Idea</h4>
+        <div class="result" id="ideaResult" role="status" aria-live="polite">Tap Generate to spark creativity.</div>
+        <div class="controls">
+          <button class="btn primary" data-gen="idea">Generate</button>
+          <button class="btn" data-copy="idea">Copy</button>
+          <button class="btn" data-speak="idea">Speak</button>
+          <button class="btn" data-fav="idea">☆ Fav</button>
+        </div>
+      </section>
+
+      <section class="card" id="moodCard">
+        <h4>Mood Booster</h4>
+        <div class="result" id="moodResult" role="status" aria-live="polite">Tap Generate for a quick mood lift.</div>
+        <div class="controls">
+          <button class="btn primary" data-gen="mood">Generate</button>
+          <button class="btn" data-copy="mood">Copy</button>
+          <button class="btn" data-speak="mood">Speak</button>
+          <button class="btn" data-fav="mood">☆ Fav</button>
+        </div>
+      </section>
+
+      <section class="card" style="grid-column:1 / -1;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;">
+          <div>
+            <strong style="color:var(--text)">Theme</strong>
+            <div class="muted" style="margin-top:6px">Toggle between Calm and Energetic modes with the header switch. Preference is remembered.</div>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button id="resetFavs" class="btn">Reset Favorites</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- About -->
+    <section id="about" class="about" aria-label="About Inspiro">
+      <h3>About Inspiro</h3>
+      <p>Inspiro is a pocket-sized hub of quick inspiration — quotes, micro-goals, affirmations, idea prompts and mood boosters. Designed for mobile-first moments of progress.</p>
+      <p style="margin-top:8px" class="muted">Built by Solvoro. Favorites stay in your browser; messages are sent to Formspree.</p>
+    </section>
+
+    <!-- Contact -->
+    <section id="contact" class="contact" aria-label="Contact">
+      <h3>Contact</h3>
+      <p class="muted">Feedback, partnerships, or bugs — send a message and we'll reply to the email you provide.</p>
+
+      <form id="contactForm" action="https://formspree.io/f/xgvndqjr" method="POST" accept-charset="utf-8" novalidate>
+        <input type="hidden" name="_subject" value="New contact from Inspiro site">
+        <input type="text" name="_gotcha" style="display:none">
+
+        <div class="form-row"><input class="form-input" type="text" name="name" id="contactName" placeholder="Your name" required autocomplete="name"></div>
+        <div class="form-row"><input class="form-input" type="email" name="email" id="contactEmail" placeholder="Your email" required autocomplete="email"></div>
+        <div class="form-row"><textarea class="form-textarea" name="message" id="contactMessage" placeholder="Your message" required></textarea></div>
+        <button class="form-submit" type="submit">Send Message</button>
+        <div id="formStatus" class="form-status" aria-live="polite"></div>
+      </form>
+    </section>
+
+    <footer class="footer">© 2025 Inspiro — Powered by Solvoro</footer>
+  </div>
+
+  <!-- Box overlay (menu content) -->
+  <div id="boxOverlay" class="box-overlay" aria-hidden="true">
+    <div class="box" role="dialog" aria-modal="true" aria-label="Menu panel" id="boxPanel">
       <header>
         <strong id="boxTitle">Menu</strong>
         <button class="close" id="boxClose">Close</button>
       </header>
-      <div id="boxContent">
-        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:12px;">
-          <li><a href="#" data-open="generators">Generators</a></li>
-          <li><a href="#" data-open="about">About</a></li>
-          <li><a href="#" data-open="contact">Contact</a></li>
-        </ul>
-      </div>
+      <div id="boxContent"></div>
     </div>
   </div>
 
-  <!-- HERO -->
-  <div class="hero">
-    <h2>Welcome to Inspiro</h2>
-    <p>Your pocket hub for generating creative inspiration anytime, anywhere.</p>
-    <div class="hero-cta">
-      <button class="cta-primary">Get Started</button>
-      <button class="cta-ghost">Learn More</button>
+  <!-- Favorites overlay -->
+  <div id="favOverlay" aria-hidden="true" style="position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(2,2,6,0.6);z-index:90;padding:12px;">
+    <div style="width:100%;max-width:720px;border-radius:12px;padding:12px;background:var(--card-bg);border:1px solid var(--card-border);box-shadow:var(--card-glow);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <strong style="color:var(--text)">Favorites</strong>
+        <div style="display:flex;gap:8px;">
+          <button id="copyAllFavs" class="btn">Copy All</button>
+          <button id="closeFav" class="btn">Close</button>
+        </div>
+      </div>
+      <div id="favList" style="min-height:80px;color:var(--muted)"></div>
     </div>
   </div>
-
-  <!-- Example grid of cards -->
-  <div class="grid">
-    <div class="card">
-      <h4>Example Generator</h4>
-      <div class="result">Your generated result appears here.</div>
-      <div class="controls">
-        <button class="btn primary">Generate</button>
-        <button class="btn">Reset</button>
-      </div>
-    </div>
-    <div class="card">
-      <h4>Another Generator</h4>
-      <div class="result">Your generated result appears here.</div>
-      <div class="controls">
-        <button class="btn primary">Generate</button>
-        <button class="btn">Reset</button>
-      </div>
-    </div>
-  </div>
-
-</div>
 
 <script>
-/* Theme toggle */
-const body = document.body;
-const modeToggle = document.getElementById('modeToggle');
-const modeLabel = document.getElementById('modeLabel');
-modeToggle.addEventListener('click',()=>{
-  body.classList.toggle('energetic');
-  modeLabel.innerText = getComputedStyle(document.documentElement).getPropertyValue('--mode-label').replace(/"/g,'');
+/* ---------------------------
+   Data & helpers (unchanged)
+   --------------------------- */
+const DATA = {
+  quote: ["The best way to predict the future is to invent it. – Alan Kay","Life is 10% what happens and 90% how you react to it. – Charles R. Swindoll","Do what you can, with what you have, where you are. – Theodore Roosevelt","Great things never come from comfort zones.","Dream it. Wish it. Do it.","You are your best investment."],
+  goal: ["Spend 15 minutes planning tomorrow's top 3 tasks.","Write a 200-word idea about something you care about.","Unfollow any 3 accounts that don't add value this week.","Learn one keyboard shortcut and use it daily.","Declutter one small area for 10 minutes today.","Reach out to someone you admire and ask one question."],
+  affirm: ["I grow stronger and wiser every day.","I choose progress over perfection.","I am worthy of my dreams.","I am focused, calm, and capable.","I attract opportunities and positivity."],
+  idea: ["Make a 'how I did it' micro-video about a daily habit.","Start a 7-day prompt challenge on social with a unique twist.","Create a mini checklist product people can download and use.","Design a one-page website showing a side-project idea.","Combine two hobbies to make a new creative product.","Map your morning routine and test one tiny improvement."],
+  mood: ["😊 Take 60 seconds to breathe deeply.","🌤️ Write one thing you're grateful for right now.","🎵 Play a 2-minute upbeat song and move.","☕ Make your favorite drink and enjoy it slowly.","🌿 Step outside for a minute and notice the sky."]
+};
+const chooseRandom = arr => arr[Math.floor(Math.random()*arr.length)];
+function flashResult(el,text){ el.classList.add('fade'); setTimeout(()=> { el.textContent = text; el.classList.remove('fade'); },180); }
+
+/* bind generators */
+const mapping = {
+  quote:{btnSel:'[data-gen="quote"]',resId:'quoteResult'},
+  goal:{btnSel:'[data-gen="goal"]',resId:'goalResult'},
+  affirm:{btnSel:'[data-gen="affirm"]',resId:'affirmResult'},
+  idea:{btnSel:'[data-gen="idea"]',resId:'ideaResult'},
+  mood:{btnSel:'[data-gen="mood"]',resId:'moodResult'}
+};
+Object.keys(mapping).forEach(k=>{
+  const btn = document.querySelector(mapping[k].btnSel);
+  const res = document.getElementById(mapping[k].resId);
+  if(res && (res.textContent.includes('Tap') || res.textContent.includes('Tap'))) res.textContent = chooseRandom(DATA[k]);
+  btn?.addEventListener('click', ()=> { const t = chooseRandom(DATA[k]); flashResult(res, t); lastGenerated = {type:k, text:t}; });
 });
 
-/* Mobile menu */
-const menuBtn = document.getElementById('menuBtn');
-const mobileMenu = document.getElementById('mobileMenu');
-const menuClose = document.getElementById('boxClose');
+/* copy/speak/fav delegation */
+document.addEventListener('click',(e)=>{
+  const copyKey = e.target.getAttribute('data-copy');
+  const speakKey = e.target.getAttribute('data-speak');
+  const favKey = e.target.getAttribute('data-fav');
 
-menuBtn.addEventListener('click', () => {
-  const isOpen = mobileMenu.style.display === 'flex';
-  mobileMenu.style.display = isOpen ? 'none' : 'flex';
-  menuBtn.setAttribute('aria-expanded', !isOpen);
-  mobileMenu.setAttribute('aria-hidden', isOpen);
-});
-
-menuClose.addEventListener('click', () => {
-  mobileMenu.style.display = 'none';
-  menuBtn.setAttribute('aria-expanded', false);
-  mobileMenu.setAttribute('aria-hidden', true);
-});
-
-mobileMenu.addEventListener('click', e => {
-  if(e.target === mobileMenu){
-    mobileMenu.style.display = 'none';
-    menuBtn.setAttribute('aria-expanded', false);
-    mobileMenu.setAttribute('aria-hidden', true);
+  if(copyKey){
+    const text = document.getElementById(mapping[copyKey].resId).textContent;
+    if(!text) return;
+    navigator.clipboard?.writeText(text).then(()=> showMoment(e.target,'Copied'));
   }
+  if(speakKey){
+    const text = document.getElementById(mapping[speakKey].resId).textContent;
+    if(!text) return;
+    speakText(text); showMoment(e.target,'Speaking');
+  }
+  if(favKey){
+    const text = document.getElementById(mapping[favKey].resId).textContent;
+    if(!text || text.includes('Tap') || text.includes('Generate')) return;
+    saveFavorite({type:favKey,text,time:Date.now()}); showMoment(e.target,'Saved');
+  }
+});
+function showMoment(el,msg){ const orig = el.innerHTML; el.innerHTML = msg; setTimeout(()=> el.innerHTML = orig, 800); }
+function speakText(txt){ if(!('speechSynthesis' in window)) return; const u=new SpeechSynthesisUtterance(txt); u.lang='en-US'; u.rate=1; u.pitch=1; window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); }
+
+/* favorites */
+const FAV_KEY='inspiro_favs_v3';
+function loadFavorites(){ try{return JSON.parse(localStorage.getItem(FAV_KEY)||'[]');}catch(e){return[]} }
+function saveFavorite(item){ const list = loadFavorites(); if(list.some(x=>x.text===item.text)) return; list.unshift(item); localStorage.setItem(FAV_KEY, JSON.stringify(list.slice(0,50))); }
+function clearFavorites(){ localStorage.removeItem(FAV_KEY); }
+
+/* favorites UI */
+const openFavBtn = document.getElementById('openFavBtn') || document.querySelector('#openFavBtn');
+const favOverlay = document.getElementById('favOverlay');
+const favListEl = document.getElementById('favList');
+const closeFavBtn = document.getElementById('closeFav');
+const copyAllFavsBtn = document.getElementById('copyAllFavs');
+
+document.getElementById('openFavBtn')?.addEventListener('click', openFavs);
+closeFavBtn?.addEventListener('click', closeFavs);
+copyAllFavsBtn?.addEventListener('click', ()=> {
+  const all = loadFavorites().map(f=>`[${f.type}] ${f.text}`).join('\n\n');
+  navigator.clipboard?.writeText(all).then(()=> showMoment(copyAllFavsBtn,'Copied'));
+});
+
+function openFavs(){ const list = loadFavorites(); favListEl.innerHTML = list.length ? list.map(it=>`<div style="padding:10px;border-radius:10px;background:rgba(255,255,255,0.02);margin-bottom:8px"><div style="font-weight:700;color:var(--text)">${it.text}</div><div style="font-size:0.85rem;color:var(--muted)">Type: ${it.type}</div></div>`).join('') : '<div class="muted">No favorites yet — save any card by tapping ☆ Fav</div>'; favOverlay.style.display='flex'; favOverlay.setAttribute('aria-hidden','false'); }
+function closeFavs(){ favOverlay.style.display='none'; favOverlay.setAttribute('aria-hidden','true'); }
+
+/* reset favorites */
+document.getElementById('resetFavs')?.addEventListener('click', ()=> { if(confirm('Clear all favorites?')){ clearFavorites(); alert('Favorites cleared'); } });
+
+/* start & share */
+document.getElementById('startNow')?.addEventListener('click', ()=> document.getElementById('generators').scrollIntoView({behavior:'smooth', block:'start'}));
+document.getElementById('shareApp')?.addEventListener('click', async ()=>{ const shareData={title:'Inspiro',text:'Check Inspiro — pocket-sized inspiration',url:location.href}; if(navigator.share){ try{ await navigator.share(shareData); }catch(e){} } else { navigator.clipboard?.writeText(`${shareData.title} — ${shareData.text} ${shareData.url}`); alert('Link copied'); } });
+
+/* Theme toggle (Calm/Energetic) */
+const modeToggle = document.getElementById('modeToggle'), modeLabelEl = document.getElementById('modeLabel');
+function setModeEnergetic(isEnergetic){
+  if(isEnergetic){ document.body.classList.add('energetic'); modeLabelEl.textContent='Energetic'; modeToggle.setAttribute('aria-checked','true'); try{ localStorage.setItem('inspiro_mode','energetic'); }catch(e){} }
+  else { document.body.classList.remove('energetic'); modeLabelEl.textContent='Calm'; modeToggle.setAttribute('aria-checked','false'); try{ localStorage.setItem('inspiro_mode','calm'); }catch(e){} }
+}
+modeToggle?.addEventListener('click', ()=> setModeEnergetic(!document.body.classList.contains('energetic')));
+modeToggle?.addEventListener('keydown', (e)=> { if(e.key==='Enter' || e.key===' ') { e.preventDefault(); modeToggle.click(); } });
+try{ const saved = localStorage.getItem('inspiro_mode'); if(saved==='energetic') setModeEnergetic(true); }catch(e){}
+
+/* BOXED overlay logic (menu content) */
+const boxOverlay = document.getElementById('boxOverlay');
+const boxContent = document.getElementById('boxContent');
+const boxTitle = document.getElementById('boxTitle');
+const boxClose = document.getElementById('boxClose');
+
+function openBoxWithSection(id){
+  const section = document.getElementById(id);
+  if(!section) return;
+  boxTitle.textContent = section.querySelector('h3') ? section.querySelector('h3').textContent : (id[0].toUpperCase()+id.slice(1));
+  const clone = section.cloneNode(true);
+  // remove id's in clone that could conflict (forms etc.)
+  clone.querySelectorAll('[id]').forEach(n=>n.removeAttribute('id'));
+  boxContent.innerHTML = '';
+  boxContent.appendChild(clone);
+  boxOverlay.style.display = 'flex';
+  boxOverlay.setAttribute('aria-hidden','false');
+  // lock body scroll
+  document.body.style.overflow = 'hidden';
+}
+
+// special case: generators menu (compact clone + action buttons)
+function openGeneratorsBox(){
+  boxTitle.textContent = 'Generators';
+  boxContent.innerHTML = '';
+  const frag = document.createElement('div');
+  frag.innerHTML = `
+    <div style="display:grid;gap:10px;">
+      <div style="padding:10px;border-radius:10px;border:1px solid var(--card-border);background:var(--card-bg)"><strong>Quote</strong><div style="margin-top:8px" id="boxQuoteText">${document.getElementById('quoteResult').textContent}</div></div>
+      <div style="padding:10px;border-radius:10px;border:1px solid var(--card-border);background:var(--card-bg)"><strong>Goal</strong><div style="margin-top:8px" id="boxGoalText">${document.getElementById('goalResult').textContent}</div></div>
+      <div style="padding:10px;border-radius:10px;border:1px solid var(--card-border);background:var(--card-bg)"><strong>Affirmation</strong><div style="margin-top:8px" id="boxAffText">${document.getElementById('affirmResult').textContent}</div></div>
+    </div>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn primary" id="boxGenQuote">Generate Quote</button>
+      <button class="btn" id="boxCloseBtn">Close</button>
+    </div>
+  `;
+  boxContent.appendChild(frag);
+  boxOverlay.style.display = 'flex'; boxOverlay.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+
+  // bind generate inside box
+  setTimeout(()=> {
+    document.getElementById('boxGenQuote')?.addEventListener('click', ()=> {
+      const text = chooseRandom(DATA.quote);
+      flashResult(document.getElementById('quoteResult'), text);
+      const boxQuoteText = document.getElementById('boxQuoteText');
+      if(boxQuoteText) boxQuoteText.textContent = text;
+    });
+    document.getElementById('boxCloseBtn')?.addEventListener('click', closeBox);
+  }, 20);
+}
+
+/* header link click behavior (desktop + mobile nav) */
+document.querySelectorAll('[data-open]').forEach(el=>{
+  el.addEventListener('click', (ev)=>{
+    ev.preventDefault();
+    const target = el.getAttribute('data-open');
+    if(target === 'generators'){ openGeneratorsBox(); return; }
+    openBoxWithSection(target);
+  });
+});
+
+/* menu button (explicit) — opens menu box with options */
+const menuBtn = document.getElementById('menuBtn');
+menuBtn?.addEventListener('click', ()=> {
+  // Build a simple menu inside the box to jump to sections or open clones
+  boxTitle.textContent = 'Menu';
+  boxContent.innerHTML = '';
+  const menu = document.createElement('div');
+  menu.innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:10px;">
+      <button class="btn primary" id="m_gen">Open Generators</button>
+      <button class="btn" id="m_about">About</button>
+      <button class="btn" id="m_contact">Contact</button>
+      <div style="margin-top:8px;color:var(--muted)">Tap any item — the content opens inside this box without moving the page.</div>
+      <div style="margin-top:12px;display:flex;justify-content:flex-end;"><button class="close" id="m_close">Close</button></div>
+    </div>
+  `;
+  boxContent.appendChild(menu);
+  boxOverlay.style.display='flex';
+  boxOverlay.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+
+  // bind
+  setTimeout(()=>{
+    document.getElementById('m_gen')?.addEventListener('click', ()=> openGeneratorsBox());
+    document.getElementById('m_about')?.addEventListener('click', ()=> openBoxWithSection('about'));
+    document.getElementById('m_contact')?.addEventListener('click', ()=> openBoxWithSection('contact'));
+    document.getElementById('m_close')?.addEventListener('click', closeBox);
+  },20);
+});
+
+boxClose.addEventListener('click', closeBox);
+boxOverlay.addEventListener('click', (e)=> { if(e.target === boxOverlay) closeBox(); });
+function closeBox(){ boxOverlay.style.display='none'; boxOverlay.setAttribute('aria-hidden','true'); boxContent.innerHTML=''; document.body.style.overflow=''; }
+
+/* contact form (Formspree AJAX) */
+const CONTACT_URL='https://formspree.io/f/xgvndqjr';
+const contactForm = document.getElementById('contactForm');
+const formStatus = document.getElementById('formStatus');
+contactForm?.addEventListener('submit', async (ev)=> {
+  ev.preventDefault();
+  formStatus.textContent='Sending…';
+  const formData = new FormData(contactForm);
+  try{
+    const resp = await fetch(CONTACT_URL, { method:'POST', body:formData, headers:{ 'Accept':'application/json' } });
+    if(resp.ok){ formStatus.textContent='Thanks — your message was sent.'; contactForm.reset(); }
+    else { let err='Could not send message. Please try again.'; try{ const d=await resp.json(); if(d?.error) err=d.error; }catch(_){} formStatus.textContent=err; }
+  } catch(e){ formStatus.textContent='Network issue — attempting fallback...'; setTimeout(()=> contactForm.submit(),600); }
+});
+
+/* keyboard: close overlays with Esc */
+document.addEventListener('keydown', (e)=> {
+  if(e.key === 'Escape'){ if(boxOverlay.style.display === 'flex') closeBox(); if(favOverlay.style.display === 'flex') closeFavs(); }
+});
+
+/* small init: ensure sample text */
+window.addEventListener('load', ()=> {
+  Object.keys(mapping).forEach(k=>{
+    const el = document.getElementById(mapping[k].resId);
+    if(el && (el.textContent.includes('Tap')||el.textContent.includes('Tap'))) el.textContent = chooseRandom(DATA[k]);
+    if(el) { el.setAttribute('role','status'); el.setAttribute('aria-live','polite'); }
+  });
 });
 </script>
 </body>
