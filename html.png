@@ -1,125 +1,744 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inspiro — Home</title>
-<link rel="icon" href="inspiro.png" type="image/png">
-<style>
-/* Reset & Base */
-* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
-body { background: linear-gradient(135deg, #6a11cb, #2575fc); color:#fff; scroll-behavior: smooth;}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Inspiro — Pocket Inspiration Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="inspiro.png" type="image/png">
 
-/* Header / Navbar */
-.navbar {
-  width:100%; background: rgba(0,0,0,0.3);
-  display:flex; justify-content: space-between; align-items:center;
-  padding:15px 20px; position: sticky; top:0; z-index:100; backdrop-filter: blur(5px);
-  flex-wrap: wrap;
-}
-.navbar h1 {
-  display:flex; align-items:center; gap:10px; font-size:1.8rem;
-}
-.navbar h1 img { height:35px; width:35px; border-radius:5px; }
-.navbar .links { display:flex; flex-wrap:wrap; margin-top:5px; }
-.navbar .links a { color:#fff; margin-left:15px; text-decoration:none; font-size:1rem; transition:0.3s; }
-.navbar .links a:hover { color:#ffd700; }
+  <style>
+    :root{
+      --bg-1: #07060a;
+      --bg-2: #0d0d1a;
+      --glass: rgba(255,255,255,0.04);
+      --accent-1: #00f0ff;
+      --accent-2: #9b5cff;
+      --muted: rgba(255,255,255,0.72);
+      --card-glow: 0 8px 30px rgba(155,92,255,0.08);
+      --radius: 16px;
+      --trans: 300ms;
+      --text-color: #ffffff;
+      --card-bg: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      --card-border: rgba(255,255,255,0.03);
+    }
 
-/* Sections */
-.section { padding: 60px 20px; max-width:900px; margin:0 auto; }
-.quote-card {
-  background: rgba(255,255,255,0.1); padding:35px 25px; border-radius:20px;
-  text-align:center; font-size:1.4rem; font-style:italic; margin-bottom:25px;
-  box-shadow:0 8px 20px rgba(0,0,0,0.3); backdrop-filter: blur(5px);
-  transition: opacity 1s ease-in-out; min-height:120px; display:flex;
-  align-items:center; justify-content:center;
-}
-.button { padding:12px 22px; font-size:1rem; border:none; border-radius:50px;
-  cursor:pointer; background:#fff; color:#2575fc; box-shadow:0 4px 10px rgba(0,0,0,0.2);
-  transition:0.3s; }
-.button:hover { transform: scale(1.05); background:#f0f0f0; }
+    /* Light-ish / energetic mode (used by the toggle) */
+    body.energetic {
+      --bg-1: #fafafa;
+      --bg-2: #f2f2f8;
+      --glass: rgba(0, 0, 0, 0.05);
+      --accent-1: #0066ff;
+      --accent-2: #9b5cff;
+      --muted: rgba(10, 10, 10, 0.85);
+      --card-glow: 0 8px 30px rgba(0,102,255,0.08);
+      --text-color: #111111;
+      --card-bg: #ffffff;
+      --card-border: rgba(0,0,0,0.08);
+    }
 
-/* Info Section */
-.about-text { background: rgba(0,0,0,0.2); padding:25px; border-radius:20px; line-height:1.6; font-size:1.1rem; }
+    /* base */
+    *{box-sizing:border-box; margin:0; padding:0; font-family:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,Arial;}
+    html,body{height:100%;}
+    body{
+      background: radial-gradient(circle at 10% 10%, rgba(155,92,255,0.06), transparent 15%),
+                  radial-gradient(circle at 90% 80%, rgba(0,240,255,0.04), transparent 15%),
+                  linear-gradient(180deg,var(--bg-1), var(--bg-2));
+      color:var(--muted);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow-x:hidden;
+      transition: background var(--trans), color var(--trans);
+      padding-bottom:40px;
+    }
 
-/* Footer */
-.footer { text-align:center; margin-top:50px; padding:20px; opacity:0.8; font-size:0.9rem; }
+    /* Header (glassy) */
+    .navbar{
+      position:sticky; top:12px; margin:12px auto 0; z-index:40;
+      width:92%; max-width:1200px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
+      border-radius:14px; display:flex; align-items:center; justify-content:space-between;
+      padding:12px 18px; gap:12px; backdrop-filter: blur(8px);
+      box-shadow: 0 6px 30px rgba(0,0,0,0.5);
+      border: 1px solid var(--card-border);
+    }
+    .brand{ display:flex; gap:12px; align-items:center; }
+    .brand img{width:44px; height:44px; border-radius:8px; object-fit:cover; box-shadow:0 6px 18px rgba(155,92,255,0.12);}
+    .brand h1{font-size:1.1rem; letter-spacing:0.6px; color: var(--text-color); margin:0;}
+    .nav-links{display:flex; gap:14px; align-items:center;}
+    .nav-links a{
+      color:var(--text-color); text-decoration:none; font-weight:600; font-size:0.95rem; position:relative;
+      padding:6px 6px; border-radius:8px;
+    }
+    .nav-links a::after{
+      content:""; position:absolute; left:10%; right:10%; bottom:-6px; height:2px;
+      background: linear-gradient(90deg,var(--accent-1),var(--accent-2));
+      transform:scaleX(0); transform-origin:left center; transition:transform var(--trans);
+      opacity:0.95;
+    }
+    .nav-links a:hover{ color:#fff; }
+    .nav-links a:hover::after{ transform:scaleX(1); }
 
-/* Mobile Responsive */
-@media(max-width:600px){
-  .navbar h1{ font-size:1.5rem; justify-content:center; width:100%; margin-bottom:5px; }
-  .navbar .links { justify-content:center; width:100%; }
-  .navbar .links a{ margin-left:10px; font-size:0.9rem; margin-bottom:5px; }
-  .quote-card{ font-size:1.2rem; padding:25px 20px; }
-  .section{ padding:50px 15px; }
-  .about-text{ padding:20px; font-size:1rem; }
-  .button{ padding:10px 20px; font-size:0.95rem; }
-}
-</style>
+    /* Mode toggle */
+    .controls{display:flex; gap:12px; align-items:center;}
+    .toggle {
+      display:inline-flex; align-items:center; gap:8px; background:var(--glass);
+      padding:6px 10px; border-radius:999px; border:1px solid var(--card-border);
+      cursor:pointer; user-select:none;
+    }
+    .toggle .dot{
+      width:16px; height:16px; border-radius:50%; background:var(--accent-1); box-shadow:0 6px 18px rgba(0,240,255,0.07);
+      transition: transform 260ms;
+    }
+    .toggle small{ font-size:0.8rem; color:var(--text-color); letter-spacing:0.2px; }
+
+    /* Hero */
+    .hero {
+      width:92%; max-width:1200px; margin:28px auto 18px; display:flex; gap:18px; align-items:center;
+      padding:30px; border-radius:18px; position:relative; overflow:visible;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--card-glow);
+    }
+    .hero-left{flex:1; min-width:220px;}
+    .hero-left h2{font-size:1.9rem; color:var(--text-color); letter-spacing:0.2px; margin-bottom:6px;}
+    .hero-left p{opacity:0.9; margin-bottom:12px; color:var(--text-color);}
+    .hero-cta{display:flex; gap:10px; align-items:center; margin-top:6px;}
+    .btn-cta{background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#071226; border:none; padding:10px 16px; border-radius:999px; font-weight:700; cursor:pointer; box-shadow:0 10px 30px rgba(155,92,255,0.12);}
+
+    /* Animated display mock screen on right */
+    .hero-right{width:360px; max-width:42%; display:flex; justify-content:center; align-items:center; position:relative;}
+    .screen {
+      width:320px; height:200px; border-radius:18px; overflow:hidden;
+      background: linear-gradient(180deg, rgba(0,0,0,0.12), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.04);
+      display:flex; align-items:center; justify-content:center; text-align:center; padding:18px;
+      box-shadow: 0 18px 48px rgba(0,0,0,0.12), 0 0 40px rgba(0,240,255,0.03) inset;
+      position:relative;
+    }
+    .screen .screen-inner{
+      width:100%; height:100%; border-radius:12px; background: linear-gradient(120deg, rgba(0,0,0,0.06), rgba(255,255,255,0.01));
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:12px;
+      position:relative; overflow:hidden;
+    }
+    .screen .glow-ring{
+      position:absolute; width:220px; height:220px; left:50%; top:50%; transform:translate(-50%,-50%) rotate(0deg);
+      border-radius:50%; background: conic-gradient(from 120deg, rgba(0,240,255,0.12), rgba(155,92,255,0.12));
+      filter: blur(28px); opacity:0.6; mix-blend-mode:screen; animation:spin 14s linear infinite;
+    }
+    .screen h3{font-size:1.06rem; color:var(--text-color); letter-spacing:0.2px; text-shadow: 0 0 8px rgba(0,240,255,0.04); }
+    .screen p{font-size:0.95rem; opacity:0.95; font-style:italic; color:var(--text-color);}
+
+    @keyframes spin { from{transform:translate(-50%,-50%) rotate(0deg)} to{transform:translate(-50%,-50%) rotate(360deg)} }
+
+    /* Particles (decorative) */
+    .particle {
+      position:absolute; width:10px; height:10px; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,0.2));
+      opacity:0.12; pointer-events:none; filter:blur(2px);
+      animation: floaty 8s ease-in-out infinite;
+    }
+    @keyframes floaty {
+      0%{transform:translateY(0) translateX(0); opacity:0.12;}
+      50%{transform:translateY(-40px) translateX(20px); opacity:0.18;}
+      100%{transform:translateY(0) translateX(0); opacity:0.12;}
+    }
+
+    /* Generators grid */
+    .grid {
+      width:92%; max-width:1200px; margin:22px auto 8px;
+      display:grid; gap:18px; grid-template-columns: repeat(3, 1fr);
+      align-items:start;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius:var(--radius); padding:16px; min-height:140px;
+      border:1px solid var(--card-border); box-shadow: var(--card-glow);
+      display:flex; flex-direction:column; gap:12px;
+    }
+    .card h4{margin:0; color:var(--text-color);}
+    .result {
+      flex:1; display:flex; align-items:center; justify-content:center; text-align:center;
+      padding:12px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+      font-style:italic; font-size:1rem; line-height:1.3; color:var(--text-color);
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.05);
+      transition: transform 340ms, opacity 340ms;
+      position:relative;
+    }
+    .result.fade { transform: translateY(-8px); opacity:0; }
+    .card .controls { display:flex; gap:8px; align-items:center; justify-content:center; }
+
+    .btn { padding:8px 12px; border-radius:10px; border:none; cursor:pointer; font-weight:600; background:var(--glass); color:var(--muted); }
+    .btn.primary { background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#071226; box-shadow:0 8px 22px rgba(155,92,255,0.08); }
+    .btn.ghost { background:transparent; border:1px solid var(--card-border); color:var(--muted); }
+
+    .small{font-size:0.82rem; color:var(--muted); text-align:center; margin-top:6px;}
+
+    /* About & Contact specific */
+    .about {
+      width:92%; max-width:1200px; margin:22px auto 8px; padding:18px; border-radius:14px; background: var(--card-bg); border:1px solid var(--card-border); box-shadow: var(--card-glow);
+    }
+    .about h3{ color:var(--text-color); margin-bottom:8px; }
+    .about p{ color:var(--text-color); opacity:0.95; line-height:1.45; }
+
+    .contact {
+      width:92%; max-width:900px; margin:22px auto 24px; padding:18px; border-radius:14px; background: var(--card-bg); border:1px solid var(--card-border); box-shadow: var(--card-glow);
+    }
+    .form-row{ display:flex; gap:12px; margin-bottom:12px; flex-wrap:wrap; }
+    .form-input, .form-textarea {
+      width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--card-border);
+      background: transparent; color: var(--text-color); outline:none;
+    }
+    body.energetic .form-input, body.energetic .form-textarea { background: #fff; color:var(--text-color); }
+
+    .form-textarea { min-height:120px; resize:vertical; }
+    .form-submit { padding:10px 16px; border-radius:10px; border:none; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#071226; font-weight:700; cursor:pointer; }
+
+    .form-message { margin-top:10px; color:var(--text-color); opacity:0.95; }
+
+    /* footer */
+    .footer {
+      width:92%; max-width:1200px; margin:28px auto; padding:14px 18px; border-radius:12px;
+      display:flex; justify-content:space-between; align-items:center; gap:12px;
+      background: var(--card-bg);
+      border:1px solid var(--card-border); color:var(--text-color);
+    }
+    .footer .brand{display:flex; gap:8px; align-items:center;}
+    .footer .links{display:flex; gap:12px; align-items:center;}
+
+    /* responsive */
+    @media (max-width:1024px){
+      .grid{ grid-template-columns: repeat(2, 1fr); }
+      .hero-right{ display:none; }
+    }
+    @media (max-width:720px){
+      .grid{ grid-template-columns: 1fr; }
+      .navbar{ padding:12px; width:95%;}
+      .hero{ flex-direction:column; align-items:flex-start; gap:14px; padding:16px; width:95%;}
+      .hero-left h2{font-size:1.4rem;}
+      .brand img{width:36px; height:36px;}
+      .form-row { flex-direction:column; }
+    }
+
+    /* tiny */
+    .muted{ color: rgba(255,255,255,0.6); font-size:0.9rem; }
+    .fav { color: var(--accent-2); font-weight:700; }
+  </style>
 </head>
 <body>
 
-  <!-- Header -->
-  <div class="navbar">
-    <h1><img src="inspiro.png" alt="Inspiro Logo"> Inspiro</h1>
-    <div class="links">
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
+  <!-- HEADER -->
+  <header class="navbar" role="banner">
+    <div class="brand" aria-hidden="false">
+      <img src="inspiro.png" alt="Inspiro logo">
+      <div>
+        <h1>Inspiro</h1>
+        <div class="muted" style="font-size:0.78rem">Pocket Inspiration Hub</div>
+      </div>
     </div>
-  </div>
 
-  <!-- Quote Section -->
-  <div class="section" id="quotes">
-    <h2 style="text-align:center; margin-bottom:30px;">Your Daily Inspiration</h2>
-    <div class="quote-card" id="quoteCard">Click the button to get inspired!</div>
-    <div style="text-align:center;">
-      <button class="button" onclick="nextQuote()">Next Quote</button>
-    </div>
-  </div>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="#generators">Generators</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
 
-  <!-- Info Section -->
-  <div class="section" id="info">
-    <h2 style="text-align:center; margin-bottom:20px;">Why Inspiro?</h2>
-    <div class="about-text">
-      Inspiro is designed to give you a daily dose of motivation and wisdom. Scroll through 10 hand-picked quotes and keep your mind inspired.
-      <br><br>
-      Enjoy the smooth scrollable interface and auto-updating quotes. Perfect for quick inspiration breaks or starting your day positively.
+    <div class="controls">
+      <div id="modeToggle" class="toggle" title="Toggle Inspiration Mode" role="button" tabindex="0" aria-pressed="false">
+        <div class="dot" id="modeDot"></div>
+        <small id="modeLabel">Calm</small>
+      </div>
+      <button class="btn ghost" id="favoritesBtn" title="View Favorites">Favorites</button>
     </div>
-  </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero" role="region" aria-label="Intro">
+    <div class="hero-left">
+      <h2>Ignite a little sparkle — every day.</h2>
+      <p>Multiple quick generators for quotes, goals, affirmations, ideas, and mood boosters — all mobile-friendly and ready to lift your spirit.</p>
+      <div class="hero-cta">
+        <button class="btn-cta" id="startNow">Open Generators</button>
+        <button class="btn" id="shareApp" title="Share">Share</button>
+      </div>
+      <div class="small">Tip: Tap <strong>Copy</strong> to quickly save a generated line to your clipboard. Use <strong>Speak</strong> for voice playback.</div>
+    </div>
+
+    <div class="hero-right" aria-hidden="true">
+      <div class="screen" aria-hidden="true">
+        <div class="glow-ring" aria-hidden="true"></div>
+        <div class="screen-inner">
+          <h3 id="heroLine">"Dream big. Start small."</h3>
+          <p id="heroSub">Quick sparks that light your day.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- decorative -->
+    <div class="particle" style="left:6%; top:14%; width:12px; height:12px; animation-duration:9s;"></div>
+    <div class="particle" style="left:88%; top:66%; width:10px; height:10px; animation-duration:11s; opacity:0.08;"></div>
+    <div class="particle" style="left:50%; top:84%; width:14px; height:14px; animation-duration:12s; opacity:0.06;"></div>
+  </section>
+
+  <!-- Generators Grid -->
+  <main id="generators" class="grid" role="main" aria-label="Generators">
+    <!-- Quote Generator -->
+    <div class="card" id="quoteCard">
+      <h4>Quote Generator</h4>
+      <div class="result" id="quoteResult">Tap <strong>Generate</strong> to get a motivating quote.</div>
+      <div class="controls">
+        <button class="btn primary" data-gen="quote">Generate</button>
+        <button class="btn" data-copy="quote">Copy</button>
+        <button class="btn" data-speak="quote">Speak</button>
+        <button class="btn" data-fav="quote">☆ Fav</button>
+      </div>
+    </div>
+
+    <!-- Goal Generator -->
+    <div class="card" id="goalCard">
+      <h4>Goal Generator</h4>
+      <div class="result" id="goalResult">Get a short, actionable goal to try today.</div>
+      <div class="controls">
+        <button class="btn primary" data-gen="goal">Generate</button>
+        <button class="btn" data-copy="goal">Copy</button>
+        <button class="btn" data-speak="goal">Speak</button>
+        <button class="btn" data-fav="goal">☆ Fav</button>
+      </div>
+    </div>
+
+    <!-- Affirmation Generator -->
+    <div class="card" id="affirmCard">
+      <h4>Affirmation Generator</h4>
+      <div class="result" id="affirmResult">Short affirmations to boost confidence.</div>
+      <div class="controls">
+        <button class="btn primary" data-gen="affirm">Generate</button>
+        <button class="btn" data-copy="affirm">Copy</button>
+        <button class="btn" data-speak="affirm">Speak</button>
+        <button class="btn" data-fav="affirm">☆ Fav</button>
+      </div>
+    </div>
+
+    <!-- Idea Generator -->
+    <div class="card" id="ideaCard">
+      <h4>Idea Generator</h4>
+      <div class="result" id="ideaResult">Creative prompts or micro-project ideas to explore.</div>
+      <div class="controls">
+        <button class="btn primary" data-gen="idea">Generate</button>
+        <button class="btn" data-copy="idea">Copy</button>
+        <button class="btn" data-speak="idea">Speak</button>
+        <button class="btn" data-fav="idea">☆ Fav</button>
+      </div>
+    </div>
+
+    <!-- Mood Booster -->
+    <div class="card" id="moodCard">
+      <h4>Mood Booster</h4>
+      <div class="result" id="moodResult">A quick emoji + line to brighten your mood.</div>
+      <div class="controls">
+        <button class="btn primary" data-gen="mood">Generate</button>
+        <button class="btn" data-copy="mood">Copy</button>
+        <button class="btn" data-speak="mood">Speak</button>
+        <button class="btn" data-fav="mood">☆ Fav</button>
+      </div>
+    </div>
+
+    <!-- Inspiration Mode quick card -->
+    <div class="card" id="modeInfo" style="grid-column: 1/-1;">
+      <h4>Inspiration Mode</h4>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <div class="muted">Calm — soft, reflective prompts. </div>
+        <div class="muted">Energetic — punchy, high-energy prompts and brighter accents.</div>
+        <button class="btn" id="resetFavs" title="Clear favorites">Reset Favorites</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ABOUT (new) -->
+  <section id="about" class="about" aria-label="About Inspiro">
+    <h3>About Inspiro</h3>
+    <p>
+      Inspiro is your pocket-sized inspiration hub — a place to generate quick motivational quotes,
+      actionable micro-goals, confidence-boosting affirmations, and creative sparks. Built with a
+      mobile-first mindset and a focus on calm, usable design.
+    </p>
+    <p style="margin-top:12px;">
+      <strong>Mission:</strong> Help people find small, repeatable moments of progress every day.
+      <br>
+      <strong>Built by:</strong> Solvoro — <span class="muted">design-forward micro-tools</span>
+    </p>
+
+    <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap;">
+      <div style="flex:1; min-width:200px; padding:14px; border-radius:12px; background:rgba(255,255,255,0.02); border:1px solid var(--card-border);">
+        <strong style="color:var(--text-color)">How it works</strong>
+        <div class="muted" style="margin-top:8px">Tap generate on any card to get a fresh line. Save favorites and review them later.</div>
+      </div>
+      <div style="flex:1; min-width:200px; padding:14px; border-radius:12px; background:rgba(255,255,255,0.02); border:1px solid var(--card-border);">
+        <strong style="color:var(--text-color)">Privacy</strong>
+        <div class="muted" style="margin-top:8px">No tracking. Favorites are stored locally in your browser.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT (new) -->
+  <section id="contact" class="contact" aria-label="Contact Inspiro">
+    <h3>Contact</h3>
+    <p class="muted" style="margin-bottom:12px">Have feedback, a partnership idea, or a bug to report? Send us a message — we'll reply to the email you provide.</p>
+
+    <form id="contactForm" action="https://formspree.io/f/xgvndqjr" method="POST" accept-charset="utf-8" >
+      <!-- Hidden subject, optional honeypot -->
+      <input type="hidden" name="_subject" value="New contact from Inspiro site">
+      <input type="hidden" name="_gotcha" style="display:none">
+
+      <div class="form-row">
+        <input class="form-input" type="text" name="name" id="contactName" placeholder="Your name" required>
+        <input class="form-input" type="email" name="email" id="contactEmail" placeholder="Your email" required>
+      </div>
+
+      <div>
+        <textarea class="form-textarea" name="message" id="contactMessage" placeholder="Your message" required></textarea>
+      </div>
+
+      <div style="display:flex; gap:10px; align-items:center; margin-top:12px;">
+        <button type="submit" class="form-submit">Send Message</button>
+        <div id="formStatus" class="form-message" aria-live="polite"></div>
+      </div>
+    </form>
+  </section>
 
   <!-- Footer -->
-  <div class="footer">
-    © 2025 Inspiro — Powered by Solvoro
+  <footer class="footer" role="contentinfo">
+    <div class="brand">
+      <img src="inspiro.png" alt="" style="width:30px;height:30px;border-radius:6px;opacity:0.9">
+      <div>
+        <div style="font-weight:700;color:var(--text-color)">Inspiro</div>
+        <div class="muted" style="font-size:0.85rem">Small tools. Big sparks.</div>
+      </div>
+    </div>
+    <div class="links muted">
+      © <strong>Inspiro</strong> — Powered by Solvoro • <a href="#contact" style="color:inherit; text-decoration:underline;">Contact</a>
+    </div>
+  </footer>
+
+  <!-- Favorites overlay (unchanged) -->
+  <div id="favOverlay" aria-hidden="true" style="position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(2,2,6,0.6); z-index:60;">
+    <div style="width:92%; max-width:520px; background:rgba(255,255,255,0.02); padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.03);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <strong style="color:var(--text-color)">Favorites</strong>
+        <button class="btn" id="closeFav">Close</button>
+      </div>
+      <div id="favList" style="min-height:80px; color:var(--muted)"></div>
+      <div style="text-align:right; margin-top:12px;">
+        <button class="btn primary" id="copyAllFavs">Copy All</button>
+      </div>
+    </div>
   </div>
 
 <script>
-const quotes = [
-  "The best way to predict the future is to invent it. – Alan Kay",
-  "Life is 10% what happens to us and 90% how we react to it. – Charles R. Swindoll",
-  "Do not watch the clock. Do what it does. Keep going. – Sam Levenson",
-  "Success is not in what you have, but who you are. – Bo Bennett",
-  "Your limitation—it’s only your imagination.",
-  "Push yourself, because no one else is going to do it for you.",
-  "Great things never come from comfort zones.",
-  "Dream it. Wish it. Do it.",
-  "Little things make big days.",
-  "Don’t stop when you’re tired. Stop when you’re done."
-];
+/* ---------------------------
+   Existing generator data + helpers (unchanged)
+   --------------------------- */
+const DATA = {
+  quote: [
+    "The best way to predict the future is to invent it. – Alan Kay",
+    "Life is 10% what happens and 90% how you react to it. – Charles R. Swindoll",
+    "Do what you can, with what you have, where you are. – Theodore Roosevelt",
+    "Great things never come from comfort zones.",
+    "Dream it. Wish it. Do it.",
+    "You are your best investment."
+  ],
+  goal: [
+    "Spend 15 minutes planning tomorrow's top 3 tasks.",
+    "Write a 200-word idea about something you care about.",
+    "Unfollow any 3 accounts that don't add value this week.",
+    "Learn one keyboard shortcut and use it daily.",
+    "Declutter one small area for 10 minutes today.",
+    "Reach out to someone you admire and ask one question."
+  ],
+  affirm: [
+    "I grow stronger and wiser every day.",
+    "I choose progress over perfection.",
+    "I am worthy of my dreams.",
+    "I am focused, calm, and capable.",
+    "I attract opportunities and positivity."
+  ],
+  idea: [
+    "Make a 'how I did it' micro-video about a daily habit.",
+    "Start a 7-day prompt challenge on social with a unique twist.",
+    "Create a mini checklist product people can download and use.",
+    "Design a one-page website showing a side-project idea.",
+    "Combine two hobbies to make a new creative product.",
+    "Map your morning routine and test one tiny improvement."
+  ],
+  mood: [
+    "😊 Take 60 seconds to breathe deeply.",
+    "🌤️ Write one thing you're grateful for right now.",
+    "🎵 Play a 2-minute upbeat song and move.",
+    "☕ Make your favorite drink and enjoy it slowly.",
+    "🌿 Step outside for a minute and notice the sky."
+  ]
+};
 
-let index = 0;
-function nextQuote() {
-  const quoteCard = document.getElementById('quoteCard');
-  quoteCard.style.opacity = 0;
-  setTimeout(() => {
-    quoteCard.innerText = quotes[index];
-    quoteCard.style.opacity = 1;
-    index = (index + 1) % quotes.length;
-  }, 500);
+function chooseRandom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function flashResult(el, text){ el.classList.add('fade'); setTimeout(()=> { el.textContent = text; el.classList.remove('fade'); }, 260); }
+
+const mapping = {
+  quote: { btn: document.querySelector('[data-gen="quote"]'), result: document.getElementById('quoteResult') },
+  goal:  { btn: document.querySelector('[data-gen="goal"]'),  result: document.getElementById('goalResult') },
+  affirm:{ btn: document.querySelector('[data-gen="affirm"]'), result: document.getElementById('affirmResult') },
+  idea:  { btn: document.querySelector('[data-gen="idea"]'),  result: document.getElementById('ideaResult') },
+  mood:  { btn: document.querySelector('[data-gen="mood"]'),  result: document.getElementById('moodResult') }
+};
+
+/* hero rotating text */
+const heroLines = [
+  '"Dream big. Start small."',
+  '"One step today beats perfect tomorrow."',
+  '"Make space for ideas."',
+  '"Progress is a collection of tiny wins."',
+  '"Create something kind for someone."'
+];
+let heroIndex = 0;
+const heroH = document.getElementById('heroLine');
+setInterval(()=> {
+  if(!heroH) return;
+  heroH.style.opacity = 0;
+  setTimeout(()=> {
+    heroH.textContent = heroLines[heroIndex];
+    heroH.style.opacity = 1;
+    heroIndex = (heroIndex+1) % heroLines.length;
+  }, 360);
+}, 4200);
+
+/* Core: bind generate buttons */
+Object.keys(mapping).forEach(key => {
+  const obj = mapping[key];
+  if(!obj || !obj.btn) return;
+  obj.btn.addEventListener('click', ()=> {
+    const candidate = chooseRandom(DATA[key]);
+    flashResult(obj.result, candidate);
+    lastGenerated = { type:key, text:candidate };
+  });
+});
+
+/* Copy / Speak / Fav controls (delegation) */
+document.addEventListener('click', (e)=>{
+  const copyKey = e.target.getAttribute('data-copy');
+  const speakKey = e.target.getAttribute('data-speak');
+  const favKey = e.target.getAttribute('data-fav');
+
+  if(copyKey){
+    const sel = mapping[copyKey].result.textContent;
+    if(!sel) return;
+    navigator.clipboard?.writeText(sel).then(()=> { showTinyFeedback(e.target, 'Copied'); }).catch(()=> showTinyFeedback(e.target,'Copy'));
+  }
+
+  if(speakKey){
+    const text = mapping[speakKey].result.textContent;
+    if(!text) return;
+    speakText(text);
+    showTinyFeedback(e.target, 'Speaking');
+  }
+
+  if(favKey){
+    const text = mapping[favKey].result.textContent;
+    if(!text || text.includes('Generate') || text.includes('Tap')) return;
+    saveFavorite({type:favKey, text, time:Date.now()});
+    showTinyFeedback(e.target, 'Saved');
+  }
+});
+
+function showTinyFeedback(btn, msg){
+  const orig = btn.innerHTML;
+  btn.innerHTML = msg;
+  setTimeout(()=> btn.innerHTML = orig, 900);
 }
 
-// Automatic quote update every 7 seconds
-setInterval(nextQuote, 7000);
-</script>
+/* Speech */
+function speakText(txt){
+  if(!('speechSynthesis' in window)) return;
+  const s = new SpeechSynthesisUtterance(txt);
+  s.rate = 1; s.pitch = 1; s.lang = 'en-US';
+  window.speechSynthesis.cancel(); window.speechSynthesis.speak(s);
+}
 
+/* Favorites (localStorage) */
+const FAV_KEY = 'inspiro_favs_v1';
+function loadFavorites(){ try{ return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); }catch(e){ return []; } }
+function saveFavorite(item){ const list = loadFavorites(); if(list.some(x=>x.text === item.text)) return; list.unshift(item); localStorage.setItem(FAV_KEY, JSON.stringify(list.slice(0,50))); }
+function clearFavorites(){ localStorage.removeItem(FAV_KEY); }
+
+/* Favorites overlay UI */
+const favBtn = document.getElementById('favoritesBtn');
+const favOverlay = document.getElementById('favOverlay');
+const favList = document.getElementById('favList');
+const closeFav = document.getElementById('closeFav');
+const copyAllFavs = document.getElementById('copyAllFavs');
+
+favBtn?.addEventListener('click', ()=> openFavs());
+closeFav?.addEventListener('click', ()=> closeFavs());
+copyAllFavs?.addEventListener('click', ()=> {
+  const all = loadFavorites().map(f=>`[${f.type}] ${f.text}`).join('\n\n');
+  navigator.clipboard?.writeText(all).then(()=> showTinyFeedback(copyAllFavs,'Copied'));
+});
+
+function openFavs(){
+  const list = loadFavorites();
+  favList.innerHTML = list.length ? list.map(it => `<div style="margin-bottom:10px;padding:8px;border-radius:8px;background:rgba(255,255,255,0.02)"><div style="font-weight:700;color:var(--text-color)">${it.text}</div><div style="font-size:0.8rem;color:var(--muted)">Type: ${it.type}</div></div>`).join('') : '<div class="muted">No favorites yet — save any card by tapping ☆ Fav</div>';
+  favOverlay.style.display = 'flex';
+  favOverlay.setAttribute('aria-hidden','false');
+}
+function closeFavs(){ favOverlay.style.display = 'none'; favOverlay.setAttribute('aria-hidden','true'); }
+
+document.getElementById('resetFavs')?.addEventListener('click', ()=> {
+  if(confirm('Clear all favorites?')){ clearFavorites(); alert('Favorites cleared'); }
+});
+
+/* quick start button scroll */
+document.getElementById('startNow')?.addEventListener('click', ()=> {
+  document.getElementById('generators').scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+/* share button (web-share fallback) */
+document.getElementById('shareApp')?.addEventListener('click', async ()=>{
+  const shareData = { title:'Inspiro — Pocket Inspiration', text:'Check out Inspiro: quick quote + idea generators to lift your day.', url:location.href };
+  if(navigator.share){
+    try{ await navigator.share(shareData); }catch(e){}
+  } else {
+    navigator.clipboard?.writeText(`${shareData.title} — ${shareData.text} ${shareData.url}`);
+    alert('Link copied to clipboard');
+  }
+});
+
+/* initialization: show sample lines so cards aren't blank */
+setTimeout(()=> {
+  mapping.quote && flashResult(mapping.quote.result, chooseRandom(DATA.quote));
+  mapping.goal && flashResult(mapping.goal.result, chooseRandom(DATA.goal));
+}, 700);
+
+/* mode toggle (uses body.energetic) */
+const modeToggle = document.getElementById('modeToggle');
+const modeDot = document.getElementById('modeDot');
+const modeLabel = document.getElementById('modeLabel');
+
+function setMode(energetic){
+  if(energetic){
+    document.body.classList.add('energetic');
+    modeLabel.textContent = 'Energetic';
+    modeToggle.setAttribute('aria-pressed','true');
+    modeDot.style.transform = 'translateX(6px)';
+  } else {
+    document.body.classList.remove('energetic');
+    modeLabel.textContent = 'Calm';
+    modeToggle.setAttribute('aria-pressed','false');
+    modeDot.style.transform = 'translateX(0px)';
+  }
+}
+modeToggle?.addEventListener('click', ()=> {
+  const is = document.body.classList.contains('energetic');
+  setMode(!is);
+});
+modeToggle?.addEventListener('keydown', (e)=> { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); modeToggle.click(); } });
+document.addEventListener('keydown', (e)=> { if(e.key.toLowerCase() === 'm'){ modeToggle.click(); } });
+
+/* hero small text rotation */
+const heroTextPool = [
+  "Start small. Keep going.",
+  "One idea a day.",
+  "Tiny habits, huge gains.",
+  "A drop of progress is progress.",
+  "You are making something beautiful."
+];
+let heroRot = 0;
+setInterval(()=> {
+  const el = document.getElementById('heroSub');
+  if(!el) return;
+  el.style.opacity = 0;
+  setTimeout(()=> {
+    el.textContent = heroTextPool[heroRot];
+    el.style.opacity = 1;
+    heroRot = (heroRot + 1) % heroTextPool.length;
+  }, 320);
+}, 5200);
+
+/* animate decorative particles */
+(function animateParticles(){
+  const parts = document.querySelectorAll('.particle');
+  parts.forEach((p,i)=> {
+    const dur = 8 + (i%3)*2;
+    p.style.animationDuration = dur + 's';
+    p.style.left = (5 + Math.random()*90) + '%';
+    p.style.top = (5 + Math.random()*80) + '%';
+  });
+})();
+
+/* accessibility live region for results */
+Object.values(mapping).forEach(m => {
+  if(m && m.result){
+    m.result.setAttribute('role','status');
+    m.result.setAttribute('aria-live','polite');
+  }
+});
+
+/* restore saved mode (if any) */
+try{
+  const savedMode = localStorage.getItem('inspiro_mode');
+  if(savedMode === 'energetic') setMode(true);
+} catch(e){}
+modeToggle?.addEventListener('click', ()=> {
+  try{ localStorage.setItem('inspiro_mode', document.body.classList.contains('energetic') ? 'energetic' : 'calm'); }catch(e){}
+});
+
+/* show first sample on load for each generator */
+window.addEventListener('load', ()=> {
+  Object.keys(mapping).forEach(k => {
+    const el = mapping[k].result;
+    if(el && el.textContent && (el.textContent.includes('Tap') || el.textContent.includes('Get a'))) {
+      const txt = chooseRandom(DATA[k]);
+      el.textContent = txt;
+    }
+  });
+});
+
+/* ---------------------------
+   Contact form AJAX submit to Formspree
+   --------------------------- */
+const CONTACT_URL = 'https://formspree.io/f/xgvndqjr';
+const contactForm = document.getElementById('contactForm');
+const formStatus = document.getElementById('formStatus');
+
+contactForm?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  formStatus.textContent = 'Sending…';
+  const formData = new FormData(contactForm);
+
+  try {
+    const resp = await fetch(CONTACT_URL, {
+      method: 'POST',
+      body: formData,
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (resp.ok) {
+      formStatus.textContent = 'Thanks — your message was sent.';
+      contactForm.reset();
+    } else {
+      // Try to parse JSON error
+      let errText = 'Could not send message. Please try again.';
+      try {
+        const data = await resp.json();
+        if (data?.error) errText = data.error;
+      } catch(_) {}
+      formStatus.textContent = errText;
+    }
+  } catch (err) {
+    // network fallback: attempt native submit (will redirect) as fallback
+    formStatus.textContent = 'Network issue — attempting fallback...';
+    setTimeout(()=> {
+      contactForm.submit();
+    }, 600);
+  }
+});
+</script>
 </body>
 </html>
+
