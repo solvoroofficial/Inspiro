@@ -1,583 +1,293 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Inspiro — Pocket Inspiration Hub</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" href="inspiro.png" type="image/png">
-  <style>
-    /* -------------------------
-       Mobile-first base styles
-       ------------------------- */
-    :root{
-      --bg-1:#07060a; --bg-2:#0d0d1a;
-      --glass: rgba(255,255,255,0.04);
-      --accent-1:#00f0ff; --accent-2:#9b5cff;
-      --muted: rgba(255,255,255,0.88);
-      --card-glow: 0 10px 36px rgba(155,92,255,0.08);
-      --radius:14px; --trans:260ms; --text-color:#fff;
-    }
-    body.energetic {
-      --bg-1:#fafafa; --bg-2:#f2f5fb;
-      --glass: rgba(0,0,0,0.05);
-      --accent-1:#0066ff; --accent-2:#ff6ec7;
-      --muted: rgba(20,20,20,0.88);
-      --card-glow: 0 12px 36px rgba(0,102,255,0.08);
-      --text-color:#111;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inspiro — Your Pocket Inspiration</title>
+<link rel="icon" href="inspiro.png" type="image/png">
+<style>
+/* ---------------- Base & Theme ---------------- */
+* {
+  margin: 0; padding: 0; box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: background 0.3s, color 0.3s;
+}
+:root {
+  --bg-dark: linear-gradient(135deg, #1a1a2e, #16213e);
+  --bg-light: linear-gradient(135deg, #d9e4f5, #f6f9ff);
+  --text-dark: #fff;
+  --text-light: #1a1a1a;
+  --accent: #6a11cb;
+}
+body {
+  background: var(--bg-dark);
+  color: var(--text-dark);
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
 
-    *{box-sizing:border-box;margin:0;padding:0;font-family:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,Arial;}
-    html,body{height:100%;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
-    body{
-      background:
-        radial-gradient(circle at 10% 10%, rgba(155,92,255,0.06), transparent 15%),
-        radial-gradient(circle at 90% 80%, rgba(0,240,255,0.04), transparent 15%),
-        linear-gradient(180deg,var(--bg-1),var(--bg-2));
-      color:var(--muted);
-      transition: background var(--trans), color var(--trans);
-      padding-bottom:48px;
-      -webkit-text-size-adjust:100%;
-    }
+/* ---------------- Header ---------------- */
+.navbar {
+  width: 95%;
+  max-width: 1100px;
+  background: rgba(255,255,255,0.1);
+  margin: 15px auto;
+  border-radius: 15px;
+  padding: 15px 25px;
+  display: flex; justify-content: space-between; align-items: center;
+  backdrop-filter: blur(10px);
+  position: sticky; top: 10px; z-index: 100;
+}
+.navbar h1 {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 1.6rem;
+}
+.navbar h1 img {
+  height: 35px; width: 35px; border-radius: 8px;
+}
+.nav-links a {
+  margin-left: 15px; text-decoration: none; color: inherit;
+  font-size: 1rem; transition: 0.3s;
+}
+.nav-links a:hover { color: #ffd700; }
 
-    /* -------------------------
-       Header (mobile-first)
-       ------------------------- */
-    .site-wrap{ width:100%; max-width:1100px; margin:0 auto; padding:10px 14px; }
-    header.topbar{
-      width:100%; display:flex; align-items:center; justify-content:space-between;
-      gap:10px; margin-top:8px;
-    }
-    .brand { display:flex; align-items:center; gap:10px; }
-    .brand img{ width:44px; height:44px; border-radius:9px; object-fit:cover; box-shadow: 0 6px 18px rgba(155,92,255,0.10); }
-    .brand h1{ font-size:1.05rem; color:var(--text-color); line-height:1; font-weight:700;}
-    .brand p { font-size:0.75rem; color:var(--muted); margin-top:2px; }
+.theme-toggle {
+  background: none; border: 2px solid rgba(255,255,255,0.3);
+  border-radius: 50%; width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 1.2rem; color: inherit;
+}
 
-    /* hamburger + nav */
-    .menu-toggle{ width:44px; height:44px; display:flex; align-items:center; justify-content:center; border-radius:10px; background:var(--glass); border:1px solid rgba(255,255,255,0.04); cursor:pointer; }
-    .menu-toggle svg { width:20px; height:20px; color:var(--text-color); }
-    nav.mobile-nav{ display:none; width:100%; margin-top:10px; }
-    nav.mobile-nav.open{ display:block; }
-    nav.mobile-nav a{ display:block; padding:12px 14px; background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01)); border-radius:10px; margin-bottom:8px; color:var(--text-color); text-decoration:none; font-weight:600; }
+/* ---------------- Sections ---------------- */
+.section {
+  padding: 60px 20px;
+  max-width: 900px;
+  margin: auto;
+  text-align: center;
+}
+.section h2 { margin-bottom: 25px; font-size: 1.6rem; }
 
-    /* hero */
-    .hero {
-      margin:14px 0; padding:18px; border-radius:16px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border:1px solid rgba(255,255,255,0.03); box-shadow: var(--card-glow);
-    }
-    .hero-top { display:flex; gap:12px; align-items:center; justify-content:space-between; }
-    .hero-title { font-size:1.4rem; color:var(--text-color); font-weight:700; }
-    .hero-sub { font-size:0.95rem; color:var(--muted); margin-top:8px; }
-    .hero-cta { margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; }
-    .btn-cta{ padding:12px 14px; border-radius:12px; border:none; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#071226; font-weight:700; cursor:pointer; flex:1; text-align:center; }
+/* ---------------- Cards ---------------- */
+.card {
+  background: rgba(255,255,255,0.1);
+  padding: 25px;
+  border-radius: 15px;
+  margin-bottom: 25px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  backdrop-filter: blur(5px);
+}
+.output {
+  min-height: 70px;
+  font-size: 1.2rem;
+  font-style: italic;
+  margin-bottom: 15px;
+  transition: opacity 0.5s;
+}
+.button {
+  background: #fff;
+  color: #2575fc;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.button:hover { transform: scale(1.05); background: #f0f0f0; }
 
-    /* small hero screen display to impress users on mobile */
-    .mini-screen {
-      margin-top:14px; border-radius:12px; overflow:hidden; height:140px; display:flex; align-items:center; justify-content:center;
-      background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.005)); border:1px solid rgba(255,255,255,0.03);
-      padding:12px;
-    }
-    .mini-screen h3 { font-size:1rem; color:var(--text-color); text-align:center; margin-bottom:6px; }
-    .mini-screen p { font-size:0.85rem; color:var(--muted); text-align:center; }
+/* ---------------- About ---------------- */
+.about-text {
+  background: rgba(255,255,255,0.1);
+  padding: 25px;
+  border-radius: 15px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  text-align: left;
+}
 
-    /* particles hidden on very small devices for clarity */
-    .particle { display:none; }
+/* ---------------- Contact ---------------- */
+form {
+  display: flex; flex-direction: column; gap: 15px;
+  background: rgba(255,255,255,0.1);
+  padding: 25px;
+  border-radius: 15px;
+}
+input, textarea {
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 100%;
+}
+input:focus, textarea:focus {
+  outline: 2px solid #6a11cb;
+}
+textarea { resize: none; height: 120px; }
+form button {
+  background: #6a11cb;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+form button:hover { transform: scale(1.05); background: #580fa9; }
 
-    /* generators: stacked single-column mobile-first */
-    .grid { display:grid; gap:14px; margin-top:12px; }
-    .card {
-      border-radius:14px; padding:14px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border:1px solid rgba(255,255,255,0.03); box-shadow: var(--card-glow);
-      display:flex; flex-direction:column; gap:10px;
-    }
-    .card h4 { font-size:1rem; color:var(--text-color); margin-bottom:4px; }
-    .result {
-      min-height:92px; display:flex; align-items:center; justify-content:center; text-align:center;
-      padding:12px; border-radius:10px; font-style:italic; font-size:1rem; color:var(--text-color);
-      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
-    }
-    .controls { display:flex; gap:8px; margin-top:6px; flex-wrap:wrap; }
-    .btn { flex:1; padding:12px; border-radius:12px; border:none; background:var(--glass); color:var(--muted); font-weight:700; cursor:pointer; min-width:96px; text-align:center; }
-    .btn.primary { background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#071226; box-shadow:0 8px 20px rgba(0,0,0,0.08); }
+/* ---------------- Footer ---------------- */
+.footer {
+  text-align: center;
+  padding: 25px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
 
-    /* favorites small overlay */
-    #favOverlay { position:fixed; inset:0; display:none; align-items:flex-end; justify-content:center; background:linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.6)); padding:12px; z-index:60; }
-    #favOverlay .fav-panel { width:100%; max-width:720px; background:var(--card-bg, rgba(255,255,255,0.02)); border-radius:12px 12px 0 0; padding:14px; border:1px solid rgba(255,255,255,0.03); }
-
-    /* about & contact - mobile optimized */
-    .about, .contact { margin-top:12px; padding:14px; border-radius:12px; background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.03); box-shadow: var(--card-glow); }
-    .about h3, .contact h3 { font-size:1.05rem; color:var(--text-color); margin-bottom:8px; }
-    .about p, .contact p { color:var(--muted); line-height:1.45; font-size:0.95rem; }
-
-    .form-row { display:flex; gap:8px; flex-direction:column; margin-top:8px; }
-    .form-input, .form-textarea { width:100%; padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); background:transparent; color:var(--text-color); font-size:0.95rem; }
-    .form-textarea { min-height:120px; resize:vertical; }
-
-    .form-submit { margin-top:10px; padding:12px; border-radius:10px; border:none; background: linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:#071226; font-weight:700; width:100%; }
-
-    .form-message { margin-top:8px; color:var(--text-color); font-size:0.92rem; }
-
-    /* footer - compact */
-    footer.footer { margin-top:18px; padding:12px; display:flex; flex-direction:column; gap:8px; align-items:center; color:var(--muted); }
-    footer .brand { display:flex; gap:8px; align-items:center; }
-    footer .brand img{ width:28px;height:28px;border-radius:8px; }
-
-    /* -------------------------
-       Larger screens (tablet & up)
-       ------------------------- */
-    @media(min-width:720px){
-      .site-wrap{ padding:18px; }
-      header.topbar{ margin-top:12px; }
-      nav.mobile-nav{ display:block; width:auto; background:transparent; margin-top:0; }
-      nav.mobile-nav a{ display:inline-block; padding:6px 8px; background:transparent; margin:0 6px; border-radius:8px; }
-      .menu-toggle{ display:none; }
-
-      /* hero becomes two-column */
-      .hero{ display:flex; align-items:center; gap:18px; }
-      .mini-screen{ width:42%; height:180px; margin-top:0; }
-      .hero-left{ width:58%; }
-      .particle { display:block; position:absolute; width:10px; height:10px; border-radius:50%; background: radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,0.2)); opacity:0.12; filter:blur(2px); }
-      .grid { display:grid; grid-template-columns: repeat(3, 1fr); gap:18px; }
-      .btn { min-width:unset; }
-      footer.footer{ flex-direction:row; justify-content:space-between; padding:14px 18px; }
-      #favOverlay { align-items:center; }
-      #favOverlay .fav-panel { border-radius:12px; }
-    }
-
-    @media(min-width:1024px){
-      .site-wrap{ max-width:1100px; margin:0 auto; }
-      .hero-title{ font-size:1.6rem; }
-      .mini-screen h3{ font-size:1.12rem; }
-    }
-
-    /* helper classes */
-    .muted{ color:var(--muted); font-size:0.92rem; }
-    .sr-only{ position:absolute; left:-9999px; }
-    .fade{ animation: fadeUp 260ms ease; }
-    @keyframes fadeUp{ from{transform:translateY(6px);opacity:0} to{transform:translateY(0);opacity:1} }
-  </style>
+/* ---------------- Responsive ---------------- */
+@media (max-width: 700px) {
+  .navbar {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+  .nav-links {
+    display: flex; justify-content: center; flex-wrap: wrap;
+  }
+  .nav-links a { margin: 5px 10px; }
+  .section { padding: 45px 15px; }
+  .card { padding: 20px; }
+  .button { padding: 9px 18px; font-size: 0.95rem; }
+}
+</style>
 </head>
+
 <body>
-  <div class="site-wrap">
+<!-- Header -->
+<div class="navbar">
+  <h1><img src="inspiro.png" alt="logo"> Inspiro</h1>
+  <div class="nav-links">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+</div>
 
-    <!-- HEADER -->
-    <header class="topbar" role="banner" aria-label="Top Bar">
-      <div class="brand" aria-hidden="false">
-        <img src="inspiro.png" alt="Inspiro logo">
-        <div>
-          <h1>Inspiro</h1>
-          <p class="muted" style="margin-top:2px">Pocket Inspiration Hub</p>
-        </div>
-      </div>
+<!-- Home Section -->
+<div class="section" id="home">
+  <h2>Your Daily Inspiration</h2>
 
-      <div style="display:flex; gap:10px; align-items:center;">
-        <nav id="nav" class="mobile-nav" aria-label="Primary">
-          <a href="#generators">Generators</a>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
-        </nav>
-
-        <button id="favoritesBtn" class="menu-toggle" title="Favorites" aria-label="Open favorites">
-          <!-- star icon -->
-          <svg viewBox="0 0 24 24" fill="none"><path d="M12 17.3l6.18 3.73-1.64-7.03L21 9.24l-7.19-.62L12 2.5 10.19 8.62 3 9.24l4.46 4.76L5.82 21z" fill="currentColor"/></svg>
-        </button>
-
-        <button id="hamburger" class="menu-toggle" aria-label="Open menu" title="Menu">
-          <!-- hamburger -->
-          <svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
-    </header>
-
-    <!-- HERO -->
-    <section class="hero" role="region" aria-label="Intro">
-      <div class="hero-left">
-        <div class="hero-top">
-          <div>
-            <div class="hero-title">Ignite a little sparkle — every day.</div>
-            <div class="hero-sub">Quick generators for quotes, goals, affirmations, creative ideas and mood boosters — made for phones first.</div>
-          </div>
-        </div>
-
-        <div class="hero-cta">
-          <button id="startNow" class="btn-cta">Open Generators</button>
-          <button id="shareApp" class="btn" style="background:var(--glass); color:var(--muted);">Share</button>
-        </div>
-      </div>
-
-      <div class="mini-screen" aria-hidden="true">
-        <div style="width:100%">
-          <h3 id="heroLine">"Dream big. Start small."</h3>
-          <p id="heroSub" class="muted">Quick sparks that light your day.</p>
-        </div>
-      </div>
-
-      <!-- decorative particles (appear on wider screens) -->
-      <div class="particle" style="left:8%; top:12%;"></div>
-      <div class="particle" style="left:84%; top:62%;"></div>
-    </section>
-
-    <!-- Generators Grid -->
-    <main id="generators" class="grid" role="main" aria-label="Generators">
-
-      <!-- Quote Generator -->
-      <section class="card" id="quoteCard" aria-labelledby="quoteTitle">
-        <h4 id="quoteTitle">Quote</h4>
-        <div class="result" id="quoteResult">Tap Generate to get a motivating quote.</div>
-        <div class="controls">
-          <button class="btn primary" data-gen="quote">Generate</button>
-          <button class="btn" data-copy="quote">Copy</button>
-          <button class="btn" data-speak="quote">Speak</button>
-          <button class="btn" data-fav="quote">☆ Fav</button>
-        </div>
-      </section>
-
-      <!-- Goal Generator -->
-      <section class="card" id="goalCard" aria-labelledby="goalTitle">
-        <h4 id="goalTitle">Goal</h4>
-        <div class="result" id="goalResult">Tap Generate for a short actionable goal.</div>
-        <div class="controls">
-          <button class="btn primary" data-gen="goal">Generate</button>
-          <button class="btn" data-copy="goal">Copy</button>
-          <button class="btn" data-speak="goal">Speak</button>
-          <button class="btn" data-fav="goal">☆ Fav</button>
-        </div>
-      </section>
-
-      <!-- Affirmation -->
-      <section class="card" id="affirmCard" aria-labelledby="affirmTitle">
-        <h4 id="affirmTitle">Affirmation</h4>
-        <div class="result" id="affirmResult">Tap Generate for a confidence boost.</div>
-        <div class="controls">
-          <button class="btn primary" data-gen="affirm">Generate</button>
-          <button class="btn" data-copy="affirm">Copy</button>
-          <button class="btn" data-speak="affirm">Speak</button>
-          <button class="btn" data-fav="affirm">☆ Fav</button>
-        </div>
-      </section>
-
-      <!-- Idea -->
-      <section class="card" id="ideaCard" aria-labelledby="ideaTitle">
-        <h4 id="ideaTitle">Idea</h4>
-        <div class="result" id="ideaResult">Tap Generate to spark creativity.</div>
-        <div class="controls">
-          <button class="btn primary" data-gen="idea">Generate</button>
-          <button class="btn" data-copy="idea">Copy</button>
-          <button class="btn" data-speak="idea">Speak</button>
-          <button class="btn" data-fav="idea">☆ Fav</button>
-        </div>
-      </section>
-
-      <!-- Mood -->
-      <section class="card" id="moodCard" aria-labelledby="moodTitle">
-        <h4 id="moodTitle">Mood Booster</h4>
-        <div class="result" id="moodResult">Tap Generate for a quick mood lift.</div>
-        <div class="controls">
-          <button class="btn primary" data-gen="mood">Generate</button>
-          <button class="btn" data-copy="mood">Copy</button>
-          <button class="btn" data-speak="mood">Speak</button>
-          <button class="btn" data-fav="mood">☆ Fav</button>
-        </div>
-      </section>
-
-      <!-- Mode & extras -->
-      <section class="card" id="modeInfo" style="display:flex; flex-direction:column; gap:10px; align-items:stretch;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <div>
-            <strong style="color:var(--text-color); font-size:0.98rem">Inspiration Mode</strong>
-            <div class="muted" style="font-size:0.88rem">Calm or Energetic — change tone and accents.</div>
-          </div>
-          <div style="display:flex; gap:8px; align-items:center;">
-            <div id="modeToggle" class="menu-toggle" title="Toggle mode" role="button" tabindex="0" aria-pressed="false" style="width:auto;padding:8px 10px;border-radius:999px;">
-              <span id="modeLabel" style="font-weight:700;color:var(--text-color)">Calm</span>
-            </div>
-            <button id="resetFavs" class="btn" style="padding:10px 12px;">Reset Favorites</button>
-          </div>
-        </div>
-        <div class="muted" style="font-size:0.9rem">Tip: Use Copy to save lines, Speak for voice playback, and ☆ Fav to collect favorites.</div>
-      </section>
-    </main>
-
-    <!-- About -->
-    <section id="about" class="about" aria-label="About">
-      <h3>About Inspiro</h3>
-      <p>
-        Inspiro is a pocket-sized hub of quick inspiration — quotes, micro-goals, affirmations, idea prompts and mood boosters — designed for people who mostly open on mobile.
-      </p>
-      <p style="margin-top:8px" class="muted">
-        Built by Solvoro. Favorites are stored locally and your messages are sent to the contact email via Formspree.
-      </p>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact" class="contact" aria-label="Contact">
-      <h3>Contact</h3>
-      <p class="muted">Feedback, partnership ideas, bugs or press — send us a message and we'll reply to your email.</p>
-
-      <form id="contactForm" action="https://formspree.io/f/xgvndqjr" method="POST" accept-charset="utf-8" novalidate>
-        <input type="hidden" name="_subject" value="New contact from Inspiro site">
-        <input type="text" name="_gotcha" style="display:none">
-
-        <div class="form-row">
-          <input class="form-input" type="text" name="name" id="contactName" placeholder="Your name" required autocomplete="name">
-        </div>
-        <div class="form-row">
-          <input class="form-input" type="email" name="email" id="contactEmail" placeholder="Your email" required autocomplete="email">
-        </div>
-        <div class="form-row">
-          <textarea class="form-textarea" name="message" id="contactMessage" placeholder="Your message" required></textarea>
-        </div>
-
-        <button class="form-submit" type="submit">Send Message</button>
-        <div id="formStatus" class="form-message" aria-live="polite"></div>
-      </form>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer" role="contentinfo">
-      <div class="brand" style="gap:8px;">
-        <img src="inspiro.png" alt="">
-        <div style="text-align:left;">
-          <div style="font-weight:700;color:var(--text-color)">Inspiro</div>
-          <div class="muted" style="font-size:0.85rem">Small tools. Big sparks.</div>
-        </div>
-      </div>
-      <div style="font-size:0.9rem; color:var(--muted); margin-top:6px;">© Inspiro — Powered by Solvoro</div>
-    </footer>
-
-    <!-- Favorites overlay -->
-    <div id="favOverlay" aria-hidden="true">
-      <div class="fav-panel">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <strong style="color:var(--text-color)">Favorites</strong>
-          <div style="display:flex; gap:8px;">
-            <button id="copyAllFavs" class="btn">Copy All</button>
-            <button id="closeFav" class="btn">Close</button>
-          </div>
-        </div>
-        <div id="favList" style="min-height:80px; color:var(--muted)"></div>
-      </div>
-    </div>
-
+  <div class="card">
+    <h3>✨ Quote Generator</h3>
+    <div class="output" id="quote"></div>
+    <button class="button" onclick="generate('quote')">Generate</button>
   </div>
 
-  <!-- ---------------------------
-       Scripts (generators, UI)
-       --------------------------- -->
-  <script>
-    /* Data */
-    const DATA = {
-      quote: [
-        "The best way to predict the future is to invent it. – Alan Kay",
-        "Life is 10% what happens and 90% how you react to it. – Charles R. Swindoll",
-        "Do what you can, with what you have, where you are. – Theodore Roosevelt",
-        "Great things never come from comfort zones.",
-        "Dream it. Wish it. Do it.",
-        "You are your best investment."
-      ],
-      goal: [
-        "Spend 15 minutes planning tomorrow's top 3 tasks.",
-        "Write a 200-word idea about something you care about.",
-        "Unfollow any 3 accounts that don't add value this week.",
-        "Learn one keyboard shortcut and use it daily.",
-        "Declutter one small area for 10 minutes today.",
-        "Reach out to someone you admire and ask one question."
-      ],
-      affirm: [
-        "I grow stronger and wiser every day.",
-        "I choose progress over perfection.",
-        "I am worthy of my dreams.",
-        "I am focused, calm, and capable.",
-        "I attract opportunities and positivity."
-      ],
-      idea: [
-        "Make a 'how I did it' micro-video about a daily habit.",
-        "Start a 7-day prompt challenge on social with a unique twist.",
-        "Create a mini checklist product people can download and use.",
-        "Design a one-page website showing a side-project idea.",
-        "Combine two hobbies to make a new creative product.",
-        "Map your morning routine and test one tiny improvement."
-      ],
-      mood: [
-        "😊 Take 60 seconds to breathe deeply.",
-        "🌤️ Write one thing you're grateful for right now.",
-        "🎵 Play a 2-minute upbeat song and move.",
-        "☕ Make your favorite drink and enjoy it slowly.",
-        "🌿 Step outside for a minute and notice the sky."
-      ]
-    };
+  <div class="card">
+    <h3>🎯 Goal Generator</h3>
+    <div class="output" id="goal"></div>
+    <button class="button" onclick="generate('goal')">Generate</button>
+  </div>
 
-    function chooseRandom(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-    function flashResult(el,text){ el.classList.add('fade'); setTimeout(()=> { el.textContent = text; el.classList.remove('fade'); }, 220); }
+  <div class="card">
+    <h3>💫 Affirmation Generator</h3>
+    <div class="output" id="affirm"></div>
+    <button class="button" onclick="generate('affirm')">Generate</button>
+  </div>
 
-    /* mapping */
-    const mapping = {
-      quote: { btn: document.querySelector('[data-gen="quote"]'), result: document.getElementById('quoteResult') },
-      goal:  { btn: document.querySelector('[data-gen="goal"]'),  result: document.getElementById('goalResult') },
-      affirm:{ btn: document.querySelector('[data-gen="affirm"]'), result: document.getElementById('affirmResult') },
-      idea:  { btn: document.querySelector('[data-gen="idea"]'),  result: document.getElementById('ideaResult') },
-      mood:  { btn: document.querySelector('[data-gen="mood"]'),  result: document.getElementById('moodResult') }
-    };
+  <div class="card">
+    <h3>💡 Idea Generator</h3>
+    <div class="output" id="idea"></div>
+    <button class="button" onclick="generate('idea')">Generate</button>
+  </div>
 
-    /* init hero rotation */
-    const heroLines = [
-      '"Dream big. Start small."',
-      '"One step today beats perfect tomorrow."',
-      '"Make space for ideas."',
-      '"Progress is a collection of tiny wins."',
-      '"Create something kind for someone."'
-    ];
-    let heroIndex = 0;
-    const heroH = document.getElementById('heroLine');
-    setInterval(()=> {
-      if(!heroH) return;
-      heroH.style.opacity = 0;
-      setTimeout(()=> {
-        heroH.textContent = heroLines[heroIndex];
-        heroH.style.opacity = 1;
-        heroIndex = (heroIndex+1) % heroLines.length;
-      }, 320);
-    }, 4200);
+  <div class="card">
+    <h3>😊 Mood Booster</h3>
+    <div class="output" id="mood"></div>
+    <button class="button" onclick="generate('mood')">Generate</button>
+  </div>
+</div>
 
-    /* bind generator events */
-    Object.keys(mapping).forEach(key=>{
-      const obj = mapping[key];
-      if(!obj || !obj.btn) return;
-      obj.btn.addEventListener('click', ()=>{
-        const candidate = chooseRandom(DATA[key]);
-        flashResult(obj.result, candidate);
-        lastGenerated = { type:key, text:candidate };
-      });
-    });
+<!-- About Section -->
+<div class="section" id="about">
+  <h2>About Inspiro</h2>
+  <div class="about-text">
+    Inspiro is your digital pocket of motivation — crafted to give you uplifting quotes,
+    goals, affirmations, and creative sparks anytime you need them.
+    <br><br>
+    Whether you’re chasing dreams, building habits, or just need a boost, Inspiro adapts
+    to your vibe with light and dark modes, mobile-first design, and effortless simplicity.
+    <br><br>
+    Built with ❤️ and powered by <b>Solvoro</b>.
+  </div>
+</div>
 
-    /* copy / speak / fav */
-    document.addEventListener('click', (e)=>{
-      const copyKey = e.target.getAttribute('data-copy');
-      const speakKey = e.target.getAttribute('data-speak');
-      const favKey = e.target.getAttribute('data-fav');
+<!-- Contact Section -->
+<div class="section" id="contact">
+  <h2>Contact Us</h2>
+  <form action="https://formspree.io/f/xgvndqjr" method="POST">
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="email" name="_replyto" placeholder="Your Email" required>
+    <textarea name="message" placeholder="Your Message..." required></textarea>
+    <button type="submit">Send Message</button>
+  </form>
+</div>
 
-      if(copyKey){
-        const sel = mapping[copyKey].result.textContent;
-        if(!sel) return;
-        navigator.clipboard?.writeText(sel).then(()=> showTinyFeedback(e.target,'Copied')).catch(()=> showTinyFeedback(e.target,'Copied'));
-      }
-      if(speakKey){
-        const text = mapping[speakKey].result.textContent;
-        if(!text) return; speakText(text); showTinyFeedback(e.target,'Speaking');
-      }
-      if(favKey){
-        const text = mapping[favKey].result.textContent;
-        if(!text || text.includes('Generate') || text.includes('Tap')) return;
-        saveFavorite({type:favKey, text, time:Date.now()}); showTinyFeedback(e.target,'Saved');
-      }
-    });
+<!-- Footer -->
+<div class="footer">© 2025 Inspiro — Powered by Solvoro</div>
 
-    function showTinyFeedback(btn,msg){
-      const orig = btn.innerHTML;
-      btn.innerHTML = msg;
-      setTimeout(()=> btn.innerHTML = orig, 900);
-    }
+<script>
+/* ---------- Generators ---------- */
+const data = {
+  quote: [
+    "The best way to predict the future is to invent it.",
+    "Dream it. Wish it. Do it.",
+    "Great things never come from comfort zones.",
+    "Push yourself, because no one else is going to do it for you."
+  ],
+  goal: [
+    "Start journaling daily 📝",
+    "Learn one new skill this week 🎯",
+    "Read 10 pages of a good book 📘",
+    "Spend 30 minutes exercising 💪"
+  ],
+  affirm: [
+    "I am capable of amazing things.",
+    "I attract positive energy and success.",
+    "I believe in myself and my dreams.",
+    "I am growing and getting better every day."
+  ],
+  idea: [
+    "Start a blog about your passion 💡",
+    "Build a mini portfolio website 🌐",
+    "Create an online challenge series 🎥",
+    "Design motivational wallpapers 🎨"
+  ],
+  mood: [
+    "You're doing great, keep going! 🌟",
+    "Smile — good things are coming! 😊",
+    "Take a deep breath, you’ve got this 💖",
+    "Your energy is magnetic ✨"
+  ]
+};
+function generate(type) {
+  const output = document.getElementById(type);
+  const arr = data[type];
+  output.style.opacity = 0;
+  setTimeout(() => {
+    output.innerText = arr[Math.floor(Math.random() * arr.length)];
+    output.style.opacity = 1;
+  }, 300);
+}
 
-    /* speech */
-    function speakText(txt){
-      if(!('speechSynthesis' in window)) return;
-      const s = new SpeechSynthesisUtterance(txt);
-      s.rate = 1; s.pitch = 1; s.lang = 'en-US';
-      window.speechSynthesis.cancel(); window.speechSynthesis.speak(s);
-    }
-
-    /* favorites */
-    const FAV_KEY = 'inspiro_favs_v1';
-    function loadFavorites(){ try{ return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); }catch(e){ return []; } }
-    function saveFavorite(item){ const list = loadFavorites(); if(list.some(x=>x.text===item.text)) return; list.unshift(item); localStorage.setItem(FAV_KEY, JSON.stringify(list.slice(0,50))); }
-    function clearFavorites(){ localStorage.removeItem(FAV_KEY); }
-
-    const favBtn = document.getElementById('favoritesBtn'), favOverlay = document.getElementById('favOverlay'), favList = document.getElementById('favList'), closeFav = document.getElementById('closeFav'), copyAllFavs = document.getElementById('copyAllFavs');
-
-    favBtn?.addEventListener('click', ()=> openFavs());
-    closeFav?.addEventListener('click', ()=> closeFavs());
-    copyAllFavs?.addEventListener('click', ()=> {
-      const all = loadFavorites().map(f=>`[${f.type}] ${f.text}`).join('\n\n');
-      navigator.clipboard?.writeText(all).then(()=> showTinyFeedback(copyAllFavs,'Copied'));
-    });
-
-    function openFavs(){
-      const list = loadFavorites();
-      favList.innerHTML = list.length ? list.map(it => `<div style="padding:10px;border-radius:10px;background:rgba(255,255,255,0.02);margin-bottom:8px"><div style="font-weight:700;color:var(--text-color)">${it.text}</div><div style="font-size:0.85rem;color:var(--muted)">Type: ${it.type}</div></div>`).join('') : '<div class="muted">No favorites yet — save any card by tapping ☆ Fav</div>';
-      favOverlay.style.display = 'flex'; favOverlay.setAttribute('aria-hidden','false');
-    }
-    function closeFavs(){ favOverlay.style.display = 'none'; favOverlay.setAttribute('aria-hidden','true'); }
-
-    document.getElementById('resetFavs')?.addEventListener('click', ()=> {
-      if(confirm('Clear all favorites?')){ clearFavorites(); alert('Favorites cleared'); }
-    });
-
-    /* start now */
-    document.getElementById('startNow')?.addEventListener('click', ()=> { document.getElementById('generators').scrollIntoView({behavior:'smooth', block:'start'}); });
-
-    /* share button */
-    document.getElementById('shareApp')?.addEventListener('click', async ()=>{
-      const shareData = { title:'Inspiro', text:'Check Inspiro — pocket-sized inspiration', url:location.href };
-      if(navigator.share){ try{ await navigator.share(shareData); }catch(e){} } else { navigator.clipboard?.writeText(`${shareData.title} — ${shareData.text} ${shareData.url}`); alert('Link copied'); }
-    });
-
-    /* populate initial samples so cards aren't empty */
-    setTimeout(()=> {
-      mapping.quote && flashResult(mapping.quote.result, chooseRandom(DATA.quote));
-      mapping.goal && flashResult(mapping.goal.result, chooseRandom(DATA.goal));
-      mapping.affirm && flashResult(mapping.affirm.result, chooseRandom(DATA.affirm));
-    }, 620);
-
-    /* mode toggle logic (uses body.energetic) */
-    const modeToggle = document.getElementById('modeToggle'), modeLabel = document.getElementById('modeLabel');
-    function setMode(energetic){
-      if(energetic){ document.body.classList.add('energetic'); modeLabel.textContent = 'Energetic'; modeToggle.setAttribute('aria-pressed','true'); } else { document.body.classList.remove('energetic'); modeLabel.textContent = 'Calm'; modeToggle.setAttribute('aria-pressed','false'); }
-      try{ localStorage.setItem('inspiro_mode', document.body.classList.contains('energetic') ? 'energetic' : 'calm'); }catch(e){}
-    }
-    // restore saved mode
-    try{ if(localStorage.getItem('inspiro_mode') === 'energetic') setMode(true); }catch(e){}
-    modeToggle?.addEventListener('click', ()=> { setMode(!document.body.classList.contains('energetic')); });
-
-    /* small hero text rotation */
-    const heroTextPool = ["Start small. Keep going.","One idea a day.","Tiny habits, huge gains.","A drop of progress is progress.","You are making something beautiful."];
-    let heroRot = 0; setInterval(()=> { const el = document.getElementById('heroSub'); if(!el) return; el.style.opacity=0; setTimeout(()=>{ el.textContent = heroTextPool[heroRot]; el.style.opacity=1; heroRot=(heroRot+1)%heroTextPool.length; },320); }, 5200);
-
-    /* hamburger menu toggle */
-    const hamburger = document.getElementById('hamburger'), nav = document.getElementById('nav');
-    hamburger?.addEventListener('click', ()=> { if(nav.classList.contains('open')) nav.classList.remove('open'); else nav.classList.add('open'); });
-
-    /* particles random placement on larger screens (non-critical) */
-    (function animateParticles(){ const parts = document.querySelectorAll('.particle'); parts.forEach((p,i)=> { p.style.animationDuration = (8 + (i%3)*2) + 's'; p.style.left = (5 + Math.random()*90) + '%'; p.style.top = (5 + Math.random()*80) + '%'; }); })();
-
-    /* aria-live for screen readers */
-    Object.values(mapping).forEach(m => { if(m && m.result){ m.result.setAttribute('role','status'); m.result.setAttribute('aria-live','polite'); } });
-
-    /* Contact form AJAX submit to Formspree */
-    const CONTACT_URL = 'https://formspree.io/f/xgvndqjr';
-    const contactForm = document.getElementById('contactForm'), formStatus = document.getElementById('formStatus');
-    contactForm?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      formStatus.textContent = 'Sending…';
-      const formData = new FormData(contactForm);
-      try {
-        const resp = await fetch(CONTACT_URL, { method:'POST', body:formData, headers:{ 'Accept':'application/json' } });
-        if (resp.ok) { formStatus.textContent = 'Thanks — your message was sent.'; contactForm.reset(); }
-        else {
-          let errText = 'Could not send message. Please try again later.';
-          try{ const data = await resp.json(); if(data?.error) errText = data.error; } catch(_){}
-          formStatus.textContent = errText;
-        }
-      } catch(err){
-        formStatus.textContent = 'Network issue — trying fallback...';
-        setTimeout(()=> contactForm.submit(), 600);
-      }
-    });
-
-    /* favorites overlay close on outside click */
-    favOverlay?.addEventListener('click', (e)=> { if(e.target === favOverlay) closeFavs(); });
-
-    /* small keyboard accessibility */
-    document.addEventListener('keydown', (e)=> { if(e.key === 'm') { setMode(!document.body.classList.contains('energetic')); } });
-  </script>
+/* ---------- Theme Toggle ---------- */
+let dark = true;
+function toggleTheme() {
+  dark = !dark;
+  document.body.style.background = dark ? 
+    "linear-gradient(135deg, #1a1a2e, #16213e)" :
+    "linear-gradient(135deg, #d9e4f5, #f6f9ff)";
+  document.body.style.color = dark ? "#fff" : "#1a1a1a";
+  document.querySelector(".theme-toggle").innerText = dark ? "🌙" : "☀️";
+}
+</script>
 </body>
 </html>
